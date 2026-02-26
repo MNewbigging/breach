@@ -5,9 +5,9 @@ $bg-color: black;
 $font-colour: white;
 
 // Borders
-$border-muted: rgba(255, 255, 255, 0.15);
-$border-default: rgba(255, 255, 255, 0.3);
-$border-strong: rgba(255, 255, 255, 0.85);
+$border-muted: 1px solid rgba(255, 255, 255, 0.15);
+$border-default: 1px solid rgba(255, 255, 255, 0.3);
+$border-strong: 1px solid rgba(255, 255, 255, 0.85);
 
 // Glow box-shadows
 $glow-0: none;
