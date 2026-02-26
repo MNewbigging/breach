@@ -1,11 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap");
 
-body {
-  font-family: "Oxanium", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-}
-
 // Colours
 $bg-color: black;
 $font-colour: white;
@@ -30,3 +24,11 @@ $glow-4:
 
 $text-glow-1: 0 0 4px rgba(255, 255, 255, 0.25);
 $text-glow-2: 0 0 6px rgba(255, 255, 255, 0.4);
+
+// Globally applied font properties
+body {
+  font-family: "Oxanium", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: $font-colour;
+}
