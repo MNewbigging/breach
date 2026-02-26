@@ -1,0 +1,45 @@
+@use "../common-styles.scss" as *;
+
+.system-select-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.heading-block {
+  border: $border-muted;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.system-options {
+  display: flex;
+  gap: 20px;
+
+  .system-option {
+    border: $border-default;
+    padding: 20px;
+    transition: all 0.15s ease-out;
+
+    cursor: pointer;
+    user-select: none;
+
+    display: flex;
+    flex-direction: column;
+
+    &.selected,
+    &:hover {
+      box-shadow: $glow-2;
+      border: $border-strong;
+    }
+
+    &:active {
+      box-shadow: $glow-3;
+    }
+  }
+}

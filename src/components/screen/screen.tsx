@@ -6,7 +6,7 @@ const screenVariants: Variants = {
   initial: {},
   animate: {
     transition: {
-      delayChildren: stagger(0.2, { startDelay: 0.6, from: "first" }),
+      delayChildren: stagger(0.2, { startDelay: 0.4, from: "first" }),
     },
   },
   exit: {
@@ -24,7 +24,6 @@ export function Screen({
   children,
   className,
 }: PropsWithChildren<ScreenProps>) {
-  console.log("got classname", className);
   return (
     <motion.div
       className={[styles["screen"], className].join(" ")}
