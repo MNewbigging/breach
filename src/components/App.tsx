@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import "./app.scss";
+import "./common-styles.scss";
 
 export function App() {
   // Put version in title

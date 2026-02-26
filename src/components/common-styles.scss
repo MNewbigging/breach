@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap");
+
+body {
+  font-family: "Oxanium", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+// Colours
+$bg-color: black;
+$font-colour: white;
+
+// Borders
+$border-muted: rgba(255, 255, 255, 0.15);
+$border-default: rgba(255, 255, 255, 0.3);
+$border-strong: rgba(255, 255, 255, 0.85);
+
+// Glow box-shadows
+$glow-0: none;
+$glow-1: 0 0 6px rgba(255, 255, 255, 0.18);
+$glow-2:
+  0 0 8px rgba(255, 255, 255, 0.28),
+  0 0 16px rgba(255, 255, 255, 0.12);
+$glow-3:
+  0 0 12px rgba(255, 255, 255, 0.4),
+  0 0 24px rgba(255, 255, 255, 0.18);
+$glow-4:
+  0 0 18px rgba(255, 255, 255, 0.55),
+  0 0 36px rgba(255, 255, 255, 0.25);
+
+$text-glow-1: 0 0 4px rgba(255, 255, 255, 0.25);
+$text-glow-2: 0 0 6px rgba(255, 255, 255, 0.4);
