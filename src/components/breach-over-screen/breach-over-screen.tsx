@@ -5,11 +5,20 @@ import { Screen } from "../screen/screen";
 import styles from "./breach-over-screen.module.scss";
 
 export function BreachOverScreen() {
+  const breach = game.currentBreach;
+  if (!breach) return null;
+
+  const totalXp = breach.securityLayerStats.reduce(
+    (sum, layer) => (sum += layer.xp),
+    0,
+  );
+
   return (
     <Screen className={styles["breach-over-screen"]}>
       <AnimatedBlock className={styles["breach-info"]}>
         <span>{`>BREACH OVER<`}</span>
         <span>YOU WON</span>
+        <span>{`XP gained: ${totalXp}`}</span>
       </AnimatedBlock>
 
       <AnimatedBlock>

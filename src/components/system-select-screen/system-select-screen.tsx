@@ -44,6 +44,13 @@ export function SystemSelectScreen() {
           >
             <span> {option.systemName}</span>
             <span>Security Layers: {option.securityLayers.length}</span>
+            <span>
+              XP:{" "}
+              {option.securityLayers.reduce(
+                (sum, layer) => (sum += layer.xp),
+                0,
+              )}
+            </span>
           </div>
         ))}
       </AnimatedBlock>

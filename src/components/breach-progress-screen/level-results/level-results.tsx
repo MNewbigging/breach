@@ -12,13 +12,15 @@ export function LevelResults() {
 
   return (
     <div className={styles["level-results"]}>
-      {lastStats && (
-        <div className={styles["level-stats"]}>
-          <span>{`>LAST LAYER RESULTS<`}</span>
-          <span>{`You ${lastStats.result === "win" ? "succeeded" : "failed"}`}</span>
-        </div>
-      )}
-      {!lastStats && <div>{`>LAST LAYER STATS<`}</div>}
+      <div className={styles["level-stats"]}>
+        <span>{`>LAST LAYER RESULTS<`}</span>
+        {lastStats && (
+          <>
+            <span>{`You ${lastStats.result === "win" ? "succeeded" : "failed"}`}</span>
+            <span>{`XP Gained: ${lastStats.xp}`}</span>
+          </>
+        )}
+      </div>
     </div>
   );
 }

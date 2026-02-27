@@ -13,10 +13,12 @@ export type VictoryResult = "win" | "lose";
 
 export interface SecurityLayerStats {
   result: VictoryResult;
+  xp: number; // not the same as layer xp; if you failed you get 0 or if you did well you might get more
 }
 
 export interface SecurityLayer {
   name: string;
+  xp: number;
 }
 
 export interface BreachOption {
@@ -60,12 +62,15 @@ class Game {
     const securityLayers: SecurityLayer[] = [
       {
         name: "Layer 1",
+        xp: 1,
       },
       {
         name: "Layer 2",
+        xp: 1,
       },
       {
         name: "Layer 3",
+        xp: 1,
       },
     ];
 
