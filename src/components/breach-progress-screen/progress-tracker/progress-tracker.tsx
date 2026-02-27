@@ -8,14 +8,14 @@ export function ProgressTracker() {
   if (!breach) return null;
 
   const layers = breach.securityLayers;
-  const stats = breach.securityLayerStats;
+  const results = breach.securityLayerResults;
 
   // Work out which icon to use for each layer
   const icons: ReactElement[] = [];
   for (let i = 0; i < layers.length; i++) {
     // If stats exist for this layer, it is completed
-    if (i < stats.length) {
-      const layerStats = stats[i];
+    if (i < results.length) {
+      const layerStats = results[i];
       icons.push(
         <LayerCompletedIcon
           key={`layer-icon-${i}`}

@@ -6,8 +6,8 @@ export function LevelResults() {
   if (!breach) return null;
 
   // Grab last level stats
-  const lastStats = breach.securityLayerStats.length
-    ? breach.securityLayerStats[breach.securityLayerStats.length - 1]
+  const lastStats = breach.securityLayerResults.length
+    ? breach.securityLayerResults[breach.securityLayerResults.length - 1]
     : undefined;
 
   return (

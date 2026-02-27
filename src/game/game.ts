@@ -20,7 +20,7 @@ type SceenName =
 export type VictoryResult = "win" | "lose";
 export type BreachResult = VictoryResult | "abandoned";
 
-export interface SecurityLayerStats {
+export interface SecurityLayerResult {
   result: VictoryResult;
   gainedXp: number;
 }
@@ -37,9 +37,10 @@ export interface BreachOption {
 
 export interface Breach extends BreachOption {
   nextLayerPointer: number;
-  securityLayerStats: SecurityLayerStats[];
+  securityLayerResults: SecurityLayerResult[];
   corePasswordMeta: CorePasswordMetadata;
-  slimVulnerabilities: SlimVulnerability[];
+  vulnPool: SlimVulnerability[];
+  awardedVulns: SlimVulnerability[];
   breachResult?: BreachResult;
 }
 
@@ -83,14 +84,14 @@ class Game {
         name: "Layer 1",
         baseXp: 1,
       },
-      // {
-      //   name: "Layer 2",
-      //   baseXp: 1,
-      // },
-      // {
-      //   name: "Layer 3",
-      //   baseXp: 1,
-      // },
+      {
+        name: "Layer 2",
+        baseXp: 1,
+      },
+      {
+        name: "Layer 3",
+        baseXp: 1,
+      },
     ];
 
     const options: BreachOption[] = [
@@ -113,18 +114,19 @@ class Game {
 
   initiateBreach(breachOption: BreachOption) {
     const corePasswordMeta = generateCorePassword();
-    const slimVulnerabilities = getSlimVulnerabilities(corePasswordMeta);
+    const vulnPool = getSlimVulnerabilities(corePasswordMeta);
 
     console.log(corePasswordMeta);
-    console.log(slimVulnerabilities);
+    console.log(vulnPool);
 
     // Setup the full breach object using selected option
     this.currentBreach = {
       ...breachOption,
       nextLayerPointer: 0,
-      securityLayerStats: [],
+      securityLayerResults: [],
       corePasswordMeta,
-      slimVulnerabilities,
+      vulnPool,
+      awardedVulns: [],
     };
 
     this.saveBreach();
@@ -140,15 +142,20 @@ class Game {
     this.changeScreen("level");
   }
 
-  concludeLayer(stats: SecurityLayerStats) {
+  concludeLayer(stats: SecurityLayerResult) {
     const breach = this.currentBreach;
     if (!breach) return;
 
     // Save stats of the finished layer
-    breach.securityLayerStats.push(stats);
+    breach.securityLayerResults.push(stats);
 
     // Point to next layer
     breach.nextLayerPointer++;
+
+    // Award a vulnerability if won
+    if (stats.result === "win") {
+      this.awardVulnerability(breach);
+    }
 
     // Save progress
     this.saveBreach();
@@ -214,6 +221,13 @@ class Game {
 
   private clearSavedBreach() {
     localStorage.removeItem("savedBreach");
+  }
+
+  private awardVulnerability(breach: Breach) {
+    // Remove a v from the pool and add to awarded list
+    const rnd = Math.floor(Math.random() * breach.vulnPool.length);
+    const removed = breach.vulnPool.splice(rnd, 1);
+    breach.awardedVulns.push(removed[0]);
   }
 }
 

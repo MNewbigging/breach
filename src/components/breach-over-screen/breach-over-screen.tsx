@@ -10,7 +10,7 @@ export function BreachOverScreen() {
 
   const resultString = getBreachResultString(breach);
 
-  const totalXp = breach.securityLayerStats.reduce(
+  const totalXp = breach.securityLayerResults.reduce(
     (sum, layer) => (sum += layer.gainedXp),
     0,
   );

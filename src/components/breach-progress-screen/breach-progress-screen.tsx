@@ -3,7 +3,7 @@ import { AnimatedBlock } from "../animated-block/animated-block";
 import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
 import styles from "./breach-progress-screen.module.scss";
-import { KeyConstraints } from "./key-constraints/key-constraints";
+import { VulnerabilityDisplay } from "./vulnerability-display/vulnerability-display";
 import { LevelResults } from "./level-results/level-results";
 import { ProgressTracker } from "./progress-tracker/progress-tracker";
 
@@ -40,7 +40,7 @@ export function BreachProgressScreen() {
           <LevelResults />
         </AnimatedBlock>
         <AnimatedBlock className={styles["block"]}>
-          <KeyConstraints />
+          <VulnerabilityDisplay />
         </AnimatedBlock>
       </AnimatedBlock>
 

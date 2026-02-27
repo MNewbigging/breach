@@ -1,4 +1,4 @@
-import { game, SecurityLayerStats } from "../../game/game";
+import { game, SecurityLayerResult } from "../../game/game";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
@@ -7,7 +7,7 @@ import styles from "./level.module.scss";
 // Temporary! Using as placeholder for implementing flow, will replace with specific level comps later
 export function Level() {
   function onWin() {
-    const stats: SecurityLayerStats = {
+    const stats: SecurityLayerResult = {
       result: "win",
       gainedXp: 1,
     };
@@ -15,7 +15,7 @@ export function Level() {
   }
 
   function onLose() {
-    const stats: SecurityLayerStats = {
+    const stats: SecurityLayerResult = {
       result: "lose",
       gainedXp: 0,
     };
