@@ -1,5 +1,13 @@
 import { eventDispatcher } from "../events/event-dispatcher";
+import {
+  CorePasswordMetadata,
+  generateCorePassword,
+} from "./core-password-generator";
 import { loadDictionary } from "./load-dictionary";
+import {
+  getSlimVulnerabilities,
+  SlimVulnerability,
+} from "./vulnerability-generator";
 
 type SceenName =
   | "loading"
@@ -30,6 +38,8 @@ export interface BreachOption {
 export interface Breach extends BreachOption {
   nextLayerPointer: number;
   securityLayerStats: SecurityLayerStats[];
+  corePasswordMeta: CorePasswordMetadata;
+  slimVulnerabilities: SlimVulnerability[];
   breachResult?: BreachResult;
 }
 
@@ -102,11 +112,19 @@ class Game {
   }
 
   initiateBreach(breachOption: BreachOption) {
+    const corePasswordMeta = generateCorePassword();
+    const slimVulnerabilities = getSlimVulnerabilities(corePasswordMeta);
+
+    console.log(corePasswordMeta);
+    console.log(slimVulnerabilities);
+
     // Setup the full breach object using selected option
     this.currentBreach = {
       ...breachOption,
       nextLayerPointer: 0,
       securityLayerStats: [],
+      corePasswordMeta,
+      slimVulnerabilities,
     };
 
     this.saveBreach();
@@ -176,8 +194,12 @@ class Game {
     const breach = this.currentBreach;
     if (!breach) return;
 
-    const data = JSON.stringify(breach);
-    localStorage.setItem("savedBreach", data);
+    try {
+      const data = JSON.stringify(breach);
+      localStorage.setItem("savedBreach", data);
+    } catch (e) {
+      console.error(`Failed to save breach data: ${e}`);
+    }
   }
 
   private getSavedBreach() {
