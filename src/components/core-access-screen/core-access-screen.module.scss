@@ -14,13 +14,37 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   gap: 6px;
 }
 
-.password-input {
+.password-input-block {
   padding: 12px;
   border: $border-default;
+
+  .input-prefix {
+    margin-right: 4px;
+    font-size: larger;
+  }
+
+  input {
+    max-width: 120px;
+    background-color: $bg-color;
+    color: $font-color;
+    border: none;
+    font-family: "Oxanium", sans-serif;
+    outline: none;
+    font-size: larger;
+  }
+
+  button {
+    background-color: $bg-color;
+    color: $font-color;
+    border: none;
+    font-family: "Oxanium", sans-serif;
+    outline: none;
+    font-size: larger;
+  }
 }
 
 .password-feedback {
