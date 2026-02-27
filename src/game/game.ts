@@ -47,7 +47,8 @@ class Game {
     this.dictionary = await loadDictionary();
 
     // Load any persisted state from a previous session
-    // todo
+    const savedBreach = this.getSavedBreach();
+    if (savedBreach) this.currentBreach = savedBreach;
 
     const loadingTime = performance.now() - startedLoad;
 
@@ -56,7 +57,13 @@ class Game {
     const swapScreenDelay = minTimeToShow - loadingTime;
     setTimeout(() => {
       // Now move to next screen
-      this.changeScreen("breach-select");
+      if (this.currentBreach) {
+        this.changeScreen(
+          this.currentBreach.breachResult ? "breach-over" : "breach-progress",
+        );
+      } else {
+        this.changeScreen("breach-select");
+      }
     }, swapScreenDelay);
   }
 
@@ -78,15 +85,15 @@ class Game {
 
     const options: BreachOption[] = [
       {
-        systemName: "Helios System",
+        systemName: "Helios",
         securityLayers,
       },
       {
-        systemName: "Argos System",
+        systemName: "Argos",
         securityLayers,
       },
       {
-        systemName: "Blit System",
+        systemName: "Blit",
         securityLayers,
       },
     ];
@@ -101,6 +108,8 @@ class Game {
       nextLayerPointer: 0,
       securityLayerStats: [],
     };
+
+    this.saveBreach();
 
     // Change to progress screen
     this.changeScreen("breach-progress");
@@ -123,6 +132,9 @@ class Game {
     // Point to next layer
     breach.nextLayerPointer++;
 
+    // Save progress
+    this.saveBreach();
+
     this.changeScreen("breach-progress");
   }
 
@@ -135,12 +147,14 @@ class Game {
     if (!breach) return;
 
     breach.breachResult = result;
+    this.saveBreach();
     this.changeScreen("breach-over");
   }
 
   finishBreach() {
     // Clear last run data
     this.currentBreach = undefined;
+    this.clearSavedBreach();
 
     this.changeScreen("breach-select");
   }
@@ -156,6 +170,28 @@ class Game {
   private changeScreen(screenName: SceenName) {
     this.currentScreen = screenName;
     eventDispatcher.fire("screen-changed", null);
+  }
+
+  private saveBreach() {
+    const breach = this.currentBreach;
+    if (!breach) return;
+
+    const data = JSON.stringify(breach);
+    localStorage.setItem("savedBreach", data);
+  }
+
+  private getSavedBreach() {
+    const data = localStorage.getItem("savedBreach");
+    if (data) {
+      const breach: Breach = JSON.parse(data);
+      return breach;
+    }
+
+    return undefined;
+  }
+
+  private clearSavedBreach() {
+    localStorage.removeItem("savedBreach");
   }
 }
 

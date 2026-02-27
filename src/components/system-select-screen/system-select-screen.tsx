@@ -42,7 +42,7 @@ export function SystemSelectScreen() {
             )}
             onClick={() => setSelectedSystem(option)}
           >
-            <span> {option.systemName}</span>
+            <span> {option.systemName} System</span>
             <span>Security Layers: {option.securityLayers.length}</span>
             <span>
               XP:{" "}
