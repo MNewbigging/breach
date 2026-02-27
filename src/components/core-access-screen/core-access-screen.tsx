@@ -127,8 +127,8 @@ function FeedbackRow({ feedback }: { feedback: CandidateFeedback }) {
     <div className={styles["feedback-block"]}>
       <span>{`> ${feedback.candidate}`}</span>
       <span>{feedback.feedbackString}</span>
-      <span>{`${feedback.charsCorrect} fragments matched`}</span>
       <span>{`${feedback.positionsCorrect} fragments aligned`}</span>
+      <span>{`${feedback.charsCorrect} fragments matched`}</span>
     </div>
   );
 }
@@ -136,19 +136,35 @@ function FeedbackRow({ feedback }: { feedback: CandidateFeedback }) {
 function getCandidateFeedback(candidate: string, pw: string) {
   let charsCorrect = 0;
   let positionsCorrect = 0;
-  let feedbackString = "";
 
-  for (let i = 0; i < candidate.length; i++) {
-    if (candidate[i] === pw[i]) {
+  const pwArr = [...pw];
+  const candidateArr = [...candidate];
+  const feedback: string[] = Array(candidate.length).fill("░");
+
+  // First pass — exact matches
+  for (let i = 0; i < candidateArr.length; i++) {
+    if (candidateArr[i] === pwArr[i]) {
       positionsCorrect++;
-      feedbackString += "▓ ";
-    } else if (pw.includes(candidate[i])) {
-      charsCorrect++;
-      feedbackString += "▒ ";
-    } else {
-      feedbackString += "░ ";
+      feedback[i] = "▓";
+      pwArr[i] = null as any; // consume
+      candidateArr[i] = null as any; // consume
     }
   }
 
-  return { charsCorrect, positionsCorrect, feedbackString };
+  // Second pass — character matches (wrong position)
+  for (let i = 0; i < candidateArr.length; i++) {
+    if (candidateArr[i] && pwArr.includes(candidateArr[i])) {
+      charsCorrect++;
+      feedback[i] = "▒";
+
+      const index = pwArr.indexOf(candidateArr[i]);
+      pwArr[index] = null as any; // consume matched char so dupes don't re-match
+    }
+  }
+
+  return {
+    charsCorrect,
+    positionsCorrect,
+    feedbackString: feedback.join(" "),
+  };
 }
