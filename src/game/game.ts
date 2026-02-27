@@ -5,8 +5,8 @@ import {
 } from "./core-password-generator";
 import { loadDictionary } from "./load-dictionary";
 import {
-  getSlimVulnerabilities,
-  SlimVulnerability,
+  getVulnerabilitySpecs,
+  VulnerabilitySpec,
 } from "./vulnerability-generator";
 
 type SceenName =
@@ -38,9 +38,9 @@ export interface BreachOption {
 export interface Breach extends BreachOption {
   nextLayerPointer: number;
   securityLayerResults: SecurityLayerResult[];
-  corePasswordMeta: CorePasswordMetadata;
-  vulnPool: SlimVulnerability[];
-  awardedVulns: SlimVulnerability[];
+  corePassword: string;
+  vulnPool: VulnerabilitySpec[];
+  awardedVulns: VulnerabilitySpec[];
   breachResult?: BreachResult;
 }
 
@@ -114,7 +114,7 @@ class Game {
 
   initiateBreach(breachOption: BreachOption) {
     const corePasswordMeta = generateCorePassword();
-    const vulnPool = getSlimVulnerabilities(corePasswordMeta);
+    const vulnPool = getVulnerabilitySpecs(corePasswordMeta);
 
     console.log(corePasswordMeta);
     console.log(vulnPool);
@@ -124,7 +124,7 @@ class Game {
       ...breachOption,
       nextLayerPointer: 0,
       securityLayerResults: [],
-      corePasswordMeta,
+      corePassword: corePasswordMeta.password,
       vulnPool,
       awardedVulns: [],
     };

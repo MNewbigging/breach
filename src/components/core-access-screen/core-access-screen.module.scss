@@ -1,7 +1,34 @@
+@use "../common-styles.scss" as *;
+
 .core-access-screen {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
+}
+
+.vuln-checker {
+  padding: 12px;
+  border: $border-default;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.password-input {
+  padding: 12px;
+  border: $border-default;
+}
+
+.password-feedback {
+  padding: 12px;
+  border: $border-default;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
 }
