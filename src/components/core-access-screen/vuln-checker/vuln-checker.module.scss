@@ -1,0 +1,11 @@
+@use "../../common-styles.scss" as *;
+
+.vuln-checker {
+  padding: 12px;
+  border: $border-default;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 6px;
+}

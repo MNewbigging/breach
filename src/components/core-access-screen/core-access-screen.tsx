@@ -1,16 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { game } from "../../game/game";
-import {
-  compileVulnerability,
-  getVulnHintFor,
-} from "../../game/vulnerability-generator";
+import { compileVulnerability } from "../../game/vulnerability-generator";
 import { AnimatedBlock } from "../animated-block/animated-block";
-import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
 import styles from "./core-access-screen.module.scss";
-import { motion, useAnimationControls } from "framer-motion";
+import { PasswordInput } from "./password-input/password-input";
+import { VulnerabilityChecker } from "./vuln-checker/vuln-checker";
+import { PasswordFeedback } from "./password-feedback/password-feedback";
 
-interface CandidateFeedback {
+export interface CandidateFeedback {
   candidate: string;
   charsCorrect: number;
   positionsCorrect: number;
@@ -33,7 +31,7 @@ export function CoreAccessScreen() {
 
   const allChecksPassed = vCheckers.every((v) => v.test(candidate));
 
-  // On submit input, run separate mastermind feedback checks and display
+  // On submit input, run mastermind feedback checks and display
   function onSubmit() {
     const breach = game.currentBreach;
     if (!breach) return null;
@@ -49,87 +47,32 @@ export function CoreAccessScreen() {
 
   return (
     <Screen className={styles["core-access-screen"]}>
-      <AnimatedBlock className={styles["vuln-checker"]}>
-        <span>{`>VULNERABILITIES<`}</span>
-        {vCheckers.map((v, index) => (
-          <VCheckerRow
-            key={`v-${index}`}
-            text={getVulnHintFor(v.spec)}
-            failed={!v.test(candidate)}
+      <AnimatedBlock className={styles["top"]}>
+        <div>{`>ACCESS ${breach.systemName.toUpperCase()} SYSTEM CORE<`}</div>
+      </AnimatedBlock>
+
+      <AnimatedBlock className={styles["two-column"]}>
+        <AnimatedBlock className={styles["left-column"]}>
+          <VulnerabilityChecker
+            vCheckers={vCheckers}
+            candidate={candidate}
             shakeSignal={shakeSignal}
           />
-        ))}
-      </AnimatedBlock>
 
-      <AnimatedBlock className={styles["password-input-block"]}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault(); // stops refresh
-            // Don't submit if vCheckers weren't all passed
-            if (allChecksPassed) onSubmit();
-            else setShakeSignal((s) => s + 1);
-          }}
-        >
-          <span className={styles["input-prefix"]} aria-hidden="true">
-            &gt;
-          </span>
-
-          <input
-            name="password-input"
-            type="text"
-            maxLength={8}
-            value={candidate}
-            onChange={(e) => setCandidate(e.target.value.toUpperCase())}
-            autoComplete="off"
-            spellCheck={false}
+          <PasswordInput
+            allChecksPassed={allChecksPassed}
+            onSubmit={onSubmit}
+            onChecksFailed={() => setShakeSignal((s) => s + 1)}
+            password={candidate}
+            setPassword={(pw) => setCandidate(pw)}
           />
+        </AnimatedBlock>
 
-          <button type="submit">⏎</button>
-        </form>
-      </AnimatedBlock>
-
-      <AnimatedBlock className={styles["password-feedback"]}>
-        {feedback.map((fb, index) => (
-          <FeedbackRow key={`fb-${fb.candidate}-${index}`} feedback={fb} />
-        ))}
+        <AnimatedBlock className={styles["right-column"]}>
+          <PasswordFeedback feedback={feedback} />
+        </AnimatedBlock>
       </AnimatedBlock>
     </Screen>
-  );
-}
-
-interface VCheckerRowProps {
-  text: string;
-  failed: boolean;
-  shakeSignal: number;
-}
-
-function VCheckerRow({ text, failed, shakeSignal }: VCheckerRowProps) {
-  const controls = useAnimationControls();
-
-  useEffect(() => {
-    if (failed) {
-      controls.start({
-        x: [0, -6, 6, -4, 4, 0],
-        transition: { duration: 0.25 },
-      });
-    }
-  }, [shakeSignal]);
-
-  return (
-    <motion.div animate={controls}>
-      {failed ? "✖" : "✔"} {text}
-    </motion.div>
-  );
-}
-
-function FeedbackRow({ feedback }: { feedback: CandidateFeedback }) {
-  return (
-    <div className={styles["feedback-block"]}>
-      <span>{`> ${feedback.candidate}`}</span>
-      <span>{feedback.feedbackString}</span>
-      <span>{`${feedback.positionsCorrect} fragments aligned`}</span>
-      <span>{`${feedback.charsCorrect} fragments matched`}</span>
-    </div>
   );
 }
 

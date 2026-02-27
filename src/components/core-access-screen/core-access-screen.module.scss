@@ -3,83 +3,28 @@
 .core-access-screen {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 20px;
   padding: 20px;
-}
 
-.vuln-checker {
-  padding: 12px;
-  border: $border-default;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  gap: 6px;
-}
-
-.password-input-block {
-  padding: 12px;
-  border: $border-default;
-
-  .input-prefix {
-    margin-right: 4px;
-    font-size: larger;
+  .top {
+    border: $border-default;
+    padding: 20px;
   }
 
-  input {
-    max-width: 120px;
-    background-color: $bg-color;
-    color: $font-color;
-    border: none;
-    font-family: "Oxanium", sans-serif;
-    outline: none;
-    font-size: larger;
+  .two-column {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .right-column {
+      overflow-y: auto;
+    }
   }
-
-  button {
-    background-color: $bg-color;
-    color: $font-color;
-    border: none;
-    font-family: "Oxanium", sans-serif;
-    outline: none;
-    font-size: larger;
-    cursor: pointer;
-    user-select: none;
-  }
-}
-
-.password-feedback {
-  flex: 1;
-  padding: 12px;
-  border: $border-default;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  overflow-y: auto;
-  scrollbar-width: thin; // Firefox
-  scrollbar-color: #ccc #000; // thumb / track
-}
-
-/* Chrome, Edge, Safari */
-.password-feedback::-webkit-scrollbar {
-  width: 8px;
-}
-
-.password-feedback::-webkit-scrollbar-track {
-  background: #000;
-}
-
-.password-feedback::-webkit-scrollbar-thumb {
-  background: #ccc;
-}
-
-.feedback-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
 }
