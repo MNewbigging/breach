@@ -4,9 +4,10 @@ import styles from "./progress-tracker.module.scss";
 import clsx from "clsx";
 
 export function ProgressTracker() {
-  if (!game.currentBreach) return null;
-  const layers = game.currentBreach.securityLayers;
-  const nextLayerPointer = game.currentBreach.nextLayerPointer;
+  const breach = game.currentBreach;
+  if (!breach) return null;
+  const layers = breach.securityLayers;
+  const nextLayerPointer = breach.nextLayerPointer;
 
   // Work out which circle style to use for each layer
   const circles: ReactElement[] = [];
@@ -25,6 +26,8 @@ export function ProgressTracker() {
   }
 
   return (
-    <div className={styles["progress-tracker"]}>BREACH PROGRESS {circles}</div>
+    <div className={styles["progress-tracker"]}>
+      {`${breach.systemName.toUpperCase()} PROGRESS`} {circles}
+    </div>
   );
 }

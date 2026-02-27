@@ -1,14 +1,27 @@
+@use "../common-styles.scss" as *;
+
 .breach-progress-screen {
   display: flex;
   flex-direction: column;
   padding: 20px;
-}
-
-.top {
+  gap: 20px;
 }
 
 .middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.test-block {
+  width: 240px;
+  height: 240px;
+  border: $border-default;
 }
 
 .bot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

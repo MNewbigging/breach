@@ -1,9 +1,15 @@
-import { motion, Transition, Variants } from "framer-motion";
+import { motion, stagger, Transition, Variants } from "framer-motion";
 import { PropsWithChildren } from "react";
 
 const animatedBlock: Variants = {
   initial: { opacity: 0, y: -5 },
-  animate: { opacity: 1, y: 0 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      delayChildren: stagger(0.2, { from: "first" }),
+    },
+  },
   exit: { opacity: 0, y: -5 },
 };
 
