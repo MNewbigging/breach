@@ -20,6 +20,7 @@ export function BreachProgressScreen() {
   function onNextLevel() {
     const breach = game.currentBreach;
     if (!breach) return;
+
     if (breach.nextLayerPointer < breach.securityLayers.length) {
       game.nextLayer();
     } else {
@@ -34,10 +35,10 @@ export function BreachProgressScreen() {
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["middle"]}>
-        <AnimatedBlock className={styles["test-block"]}>
+        <AnimatedBlock className={styles["block"]}>
           <LevelResults />
         </AnimatedBlock>
-        <AnimatedBlock className={styles["test-block"]}>
+        <AnimatedBlock className={styles["block"]}>
           <KeyConstraints />
         </AnimatedBlock>
       </AnimatedBlock>

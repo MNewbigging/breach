@@ -10,13 +10,19 @@
   gap: 6px;
 }
 
-.circle {
-  width: 16px;
-  height: 16px;
+.layer-icon {
+  width: 18px;
+  height: 18px;
   border: $border-strong;
   border-radius: 50%;
+  color: $font-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
 
-  &.filled {
-    background-color: $font-color;
-  }
+.filled {
+  background-color: $font-color;
+  color: $font-inverse-color;
 }

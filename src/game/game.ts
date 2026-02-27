@@ -9,6 +9,12 @@ type SceenName =
   | "core-access"
   | "breach-over";
 
+export type VictoryResult = "win" | "lose";
+
+export interface SecurityLayerStats {
+  result: VictoryResult;
+}
+
 export interface SecurityLayer {
   name: string;
 }
@@ -20,6 +26,7 @@ export interface BreachOption {
 
 export interface Breach extends BreachOption {
   nextLayerPointer: number;
+  securityLayerStats: SecurityLayerStats[];
 }
 
 class Game {
@@ -82,7 +89,11 @@ class Game {
 
   initiateBreach(breachOption: BreachOption) {
     // Setup the full breach object using selected option
-    this.currentBreach = { ...breachOption, nextLayerPointer: 0 };
+    this.currentBreach = {
+      ...breachOption,
+      nextLayerPointer: 0,
+      securityLayerStats: [],
+    };
 
     // Change to progress screen
     this.changeScreen("breach-progress");
@@ -95,13 +106,14 @@ class Game {
     this.changeScreen("level");
   }
 
-  // temp
-  winLayer() {
-    console.log("win layer");
+  concludeLayer(stats: SecurityLayerStats) {
     const breach = this.currentBreach;
     if (!breach) return;
 
-    // Update layer pointer
+    // Save stats of the finished layer
+    breach.securityLayerStats.push(stats);
+
+    // Point to next layer
     breach.nextLayerPointer++;
 
     this.changeScreen("breach-progress");
