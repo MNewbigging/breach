@@ -8,6 +8,11 @@ export function BreachOverScreen() {
   const breach = game.currentBreach;
   if (!breach) return null;
 
+  const resultString =
+    breach.breachResult === "win"
+      ? "You breached the system core"
+      : "You failed to gain core access";
+
   const totalXp = breach.securityLayerStats.reduce(
     (sum, layer) => (sum += layer.gainedXp),
     0,
@@ -17,7 +22,7 @@ export function BreachOverScreen() {
     <Screen className={styles["breach-over-screen"]}>
       <AnimatedBlock className={styles["breach-info"]}>
         <span>{`>BREACH OVER<`}</span>
-        <span>YOU WON</span>
+        <span>{resultString}</span>
         <span>{`XP gained: ${totalXp}`}</span>
       </AnimatedBlock>
 

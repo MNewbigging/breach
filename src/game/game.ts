@@ -29,6 +29,7 @@ export interface BreachOption {
 export interface Breach extends BreachOption {
   nextLayerPointer: number;
   securityLayerStats: SecurityLayerStats[];
+  breachResult?: VictoryResult;
 }
 
 class Game {
@@ -128,7 +129,11 @@ class Game {
     this.changeScreen("core-access");
   }
 
-  winCore() {
+  concludeCore(result: VictoryResult) {
+    const breach = this.currentBreach;
+    if (!breach) return;
+
+    breach.breachResult = result;
     this.changeScreen("breach-over");
   }
 

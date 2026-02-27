@@ -8,7 +8,11 @@ export function CoreAccessScreen() {
   return (
     <Screen className={styles["core-access-screen"]}>
       <AnimatedBlock>
-        <Button text={"Win Core"} onClick={() => game.winCore()} />
+        <Button text={"Win Core"} onClick={() => game.concludeCore("win")} />
+      </AnimatedBlock>
+
+      <AnimatedBlock>
+        <Button text={"Lose Core"} onClick={() => game.concludeCore("lose")} />
       </AnimatedBlock>
     </Screen>
   );
