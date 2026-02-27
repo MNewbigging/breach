@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { game, SystemOption } from "../../game/game";
+import { game, BreachOption } from "../../game/game";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
@@ -7,7 +7,7 @@ import styles from "./system-select-screen.module.scss";
 import clsx from "clsx";
 
 export function SystemSelectScreen() {
-  const [selectedSystem, setSelectedSystem] = useState<SystemOption | null>(
+  const [selectedSystem, setSelectedSystem] = useState<BreachOption | null>(
     null,
   );
 
@@ -15,37 +15,44 @@ export function SystemSelectScreen() {
   const targetSystemOptions = game.getSystemOptions();
 
   // Style system option when selected
-  const isSelected = (systemOption: SystemOption) => {
+  const isSelected = (option: BreachOption) => {
     if (!selectedSystem) return false;
-    return selectedSystem.name === systemOption.name;
+    return selectedSystem.systemName === option.systemName;
   };
+
+  function onInitiateBreach() {
+    if (selectedSystem) {
+      game.initiateBreach(selectedSystem);
+    }
+  }
 
   return (
     <Screen className={styles["system-select-screen"]}>
       <AnimatedBlock className={styles["heading-block"]}>
-        <>{`>SELECT TARGET SYSTEM<`}</>
+        <>{`>SELECT SYSTEM TO BREACH<`}</>
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["system-options"]}>
-        {targetSystemOptions.map((systemOption) => (
+        {targetSystemOptions.map((option) => (
           <div
-            key={systemOption.name}
+            key={option.systemName}
             className={clsx(
               styles["system-option"],
-              isSelected(systemOption) && styles["selected"],
+              isSelected(option) && styles["selected"],
             )}
-            onClick={() => setSelectedSystem(systemOption)}
+            onClick={() => setSelectedSystem(option)}
           >
-            {systemOption.name}
+            <span> {option.systemName}</span>
+            <span>Security Layers: {option.securityLayers.length}</span>
           </div>
         ))}
       </AnimatedBlock>
 
       <AnimatedBlock>
         <Button
-          text="Next"
+          text="Initiate Breach"
           disabled={!selectedSystem}
-          onClick={() => console.log("click")}
+          onClick={onInitiateBreach}
         />
       </AnimatedBlock>
     </Screen>

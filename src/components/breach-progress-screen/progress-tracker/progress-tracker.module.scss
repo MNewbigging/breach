@@ -1,0 +1,22 @@
+@use "../../common-styles.scss" as *;
+
+.progress-tracker {
+  padding: 20px;
+  border: $border-default;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.circle {
+  width: 16px;
+  height: 16px;
+  border: $border-strong;
+  border-radius: 50%;
+
+  &.filled {
+    background-color: $font-color;
+  }
+}

@@ -6,6 +6,7 @@ import { LoadingScreen } from "./loading-screen/loading-screen";
 import { useEventUpdater } from "./hooks/use-event-updater";
 import { game } from "../game/game";
 import { SystemSelectScreen } from "./system-select-screen/system-select-screen";
+import { BreachProgressScreen } from "./breach-progress-screen/breach-progress-screen";
 
 export function App() {
   useEventUpdater("screen-changed");
@@ -21,8 +22,11 @@ export function App() {
     <div className={styles["app"]}>
       <AnimatePresence mode="wait">
         {screen === "loading" && <LoadingScreen key="loading-screen" />}
-        {screen === "system-select" && (
+        {screen === "breach-select" && (
           <SystemSelectScreen key="system-select-screen" />
+        )}
+        {screen === "breach-progress" && (
+          <BreachProgressScreen key="breach-progress-screen" />
         )}
       </AnimatePresence>
     </div>

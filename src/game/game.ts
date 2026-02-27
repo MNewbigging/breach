@@ -1,14 +1,24 @@
 import { eventDispatcher } from "../events/event-dispatcher";
 import { loadDictionary } from "./load-dictionary";
 
-type SceenName = "loading" | "system-select";
+type SceenName = "loading" | "breach-select" | "breach-progress";
 
-export interface SystemOption {
+export interface SecurityLayer {
   name: string;
+}
+
+export interface BreachOption {
+  systemName: string;
+  securityLayers: SecurityLayer[];
+}
+
+export interface Breach extends BreachOption {
+  nextLayerPointer: number;
 }
 
 class Game {
   currentScreen: SceenName = "loading";
+  currentBreach?: Breach;
 
   private dictionary?: Set<string>;
 
@@ -29,28 +39,53 @@ class Game {
     const swapScreenDelay = minTimeToShow - loadingTime;
     setTimeout(() => {
       // Now move to next screen
-      this.currentScreen = "system-select";
-      eventDispatcher.fire("screen-changed", null);
+      this.changeScreen("breach-select");
     }, swapScreenDelay);
   }
 
-  getSystemOptions(): SystemOption[] {
-    const options: SystemOption[] = [
+  getSystemOptions(): BreachOption[] {
+    const securityLayers: SecurityLayer[] = [
       {
-        name: "Helios System",
+        name: "Layer 1",
       },
       {
-        name: "Argos System",
+        name: "Layer 2",
       },
       {
-        name: "Blit System",
+        name: "Layer 3",
+      },
+    ];
+
+    const options: BreachOption[] = [
+      {
+        systemName: "Helios System",
+        securityLayers,
+      },
+      {
+        systemName: "Argos System",
+        securityLayers,
+      },
+      {
+        systemName: "Blit System",
+        securityLayers,
       },
     ];
 
     return options;
   }
 
-  private getSystemTarget() {}
+  initiateBreach(breachOption: BreachOption) {
+    // Setup the full breach object using selected option
+    this.currentBreach = { ...breachOption, nextLayerPointer: 0 };
+
+    // Change to progress screen
+    this.changeScreen("breach-progress");
+  }
+
+  private changeScreen(screenName: SceenName) {
+    this.currentScreen = screenName;
+    eventDispatcher.fire("screen-changed", null);
+  }
 }
 
 export const game = new Game();
