@@ -43,6 +43,14 @@ export function CoreAccessScreen() {
       ...feedback,
       { candidate, charsCorrect, positionsCorrect, feedbackString },
     ]);
+
+    // Check for a win
+    if (positionsCorrect === breach.corePassword.length) {
+      // Play some cool animation
+      setTimeout(() => {
+        game.concludeCore("win");
+      }, 1000);
+    }
   }
 
   return (
