@@ -1,4 +1,4 @@
-import { game } from "../../game/game";
+import { BreachResult, game } from "../../game/game";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
@@ -8,10 +8,7 @@ export function BreachOverScreen() {
   const breach = game.currentBreach;
   if (!breach) return null;
 
-  const resultString =
-    breach.breachResult === "win"
-      ? "You breached the system core"
-      : "You failed to gain core access";
+  const resultString = getBreachResultString(breach.breachResult);
 
   const totalXp = breach.securityLayerStats.reduce(
     (sum, layer) => (sum += layer.gainedXp),
@@ -31,4 +28,12 @@ export function BreachOverScreen() {
       </AnimatedBlock>
     </Screen>
   );
+}
+
+function getBreachResultString(breachResult?: BreachResult) {
+  if (breachResult === "win") return "You breached the system core";
+  if (breachResult === "lose") return "You failed to gain core access";
+  if (breachResult === "abandoned") return "You abandoned the breach attempt";
+
+  return ">PARSING ERROR<";
 }

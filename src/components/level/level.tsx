@@ -25,6 +25,10 @@ export function Level() {
   return (
     <Screen className={styles["level"]}>
       <AnimatedBlock>
+        <Button text="Abandon Run" onClick={() => game.abandonBreach()} />
+      </AnimatedBlock>
+
+      <AnimatedBlock>
         <Button text="Win" onClick={onWin} />
       </AnimatedBlock>
 

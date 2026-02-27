@@ -7,6 +7,12 @@
   gap: 20px;
 }
 
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .middle {
   display: flex;
   justify-content: center;

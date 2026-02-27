@@ -10,6 +10,7 @@ type SceenName =
   | "breach-over";
 
 export type VictoryResult = "win" | "lose";
+export type BreachResult = VictoryResult | "abandoned";
 
 export interface SecurityLayerStats {
   result: VictoryResult;
@@ -29,7 +30,7 @@ export interface BreachOption {
 export interface Breach extends BreachOption {
   nextLayerPointer: number;
   securityLayerStats: SecurityLayerStats[];
-  breachResult?: VictoryResult;
+  breachResult?: BreachResult;
 }
 
 class Game {
@@ -65,14 +66,14 @@ class Game {
         name: "Layer 1",
         baseXp: 1,
       },
-      {
-        name: "Layer 2",
-        baseXp: 1,
-      },
-      {
-        name: "Layer 3",
-        baseXp: 1,
-      },
+      // {
+      //   name: "Layer 2",
+      //   baseXp: 1,
+      // },
+      // {
+      //   name: "Layer 3",
+      //   baseXp: 1,
+      // },
     ];
 
     const options: BreachOption[] = [
@@ -142,6 +143,14 @@ class Game {
     this.currentBreach = undefined;
 
     this.changeScreen("breach-select");
+  }
+
+  abandonBreach() {
+    const breach = this.currentBreach;
+    if (!breach) return;
+
+    breach.breachResult = "abandoned";
+    this.changeScreen("breach-over");
   }
 
   private changeScreen(screenName: SceenName) {
