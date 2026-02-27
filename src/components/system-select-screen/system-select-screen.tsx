@@ -47,7 +47,7 @@ export function SystemSelectScreen() {
             <span>
               XP:{" "}
               {option.securityLayers.reduce(
-                (sum, layer) => (sum += layer.xp),
+                (sum, layer) => (sum += layer.baseXp),
                 0,
               )}
             </span>

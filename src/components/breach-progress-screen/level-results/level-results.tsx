@@ -17,7 +17,7 @@ export function LevelResults() {
         {lastStats && (
           <>
             <span>{`You ${lastStats.result === "win" ? "succeeded" : "failed"}`}</span>
-            <span>{`XP Gained: ${lastStats.xp}`}</span>
+            <span>{`XP Gained: ${lastStats.gainedXp}`}</span>
           </>
         )}
       </div>

@@ -9,7 +9,7 @@ export function Level() {
   function onWin() {
     const stats: SecurityLayerStats = {
       result: "win",
-      xp: 1,
+      gainedXp: 1,
     };
     game.concludeLayer(stats);
   }
@@ -17,7 +17,7 @@ export function Level() {
   function onLose() {
     const stats: SecurityLayerStats = {
       result: "lose",
-      xp: 0,
+      gainedXp: 0,
     };
     game.concludeLayer(stats);
   }
