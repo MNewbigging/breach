@@ -10,9 +10,17 @@ import { Screen } from "../screen/screen";
 import styles from "./core-access-screen.module.scss";
 import { motion, useAnimationControls } from "framer-motion";
 
+interface CandidateFeedback {
+  candidate: string;
+  charsCorrect: number;
+  positionsCorrect: number;
+  feedbackString: string;
+}
+
 export function CoreAccessScreen() {
   const [candidate, setCandidate] = useState("");
   const [shakeSignal, setShakeSignal] = useState(0);
+  const [feedback, setFeedback] = useState<CandidateFeedback[]>([]);
 
   const breach = game.currentBreach;
   if (!breach) return null;
@@ -27,7 +35,16 @@ export function CoreAccessScreen() {
 
   // On submit input, run separate mastermind feedback checks and display
   function onSubmit() {
-    console.log("testing", candidate);
+    const breach = game.currentBreach;
+    if (!breach) return null;
+
+    const { charsCorrect, positionsCorrect, feedbackString } =
+      getCandidateFeedback(candidate, breach.corePassword);
+
+    setFeedback([
+      ...feedback,
+      { candidate, charsCorrect, positionsCorrect, feedbackString },
+    ]);
   }
 
   return (
@@ -71,14 +88,10 @@ export function CoreAccessScreen() {
         </form>
       </AnimatedBlock>
 
-      <AnimatedBlock className={styles["password-feedback"]}></AnimatedBlock>
-
-      <AnimatedBlock>
-        <Button text={"Win Core"} onClick={() => game.concludeCore("win")} />
-      </AnimatedBlock>
-
-      <AnimatedBlock>
-        <Button text={"Lose Core"} onClick={() => game.concludeCore("lose")} />
+      <AnimatedBlock className={styles["password-feedback"]}>
+        {feedback.map((fb, index) => (
+          <FeedbackRow key={`fb-${fb.candidate}-${index}`} feedback={fb} />
+        ))}
       </AnimatedBlock>
     </Screen>
   );
@@ -107,4 +120,35 @@ function VCheckerRow({ text, failed, shakeSignal }: VCheckerRowProps) {
       {failed ? "✖" : "✔"} {text}
     </motion.div>
   );
+}
+
+function FeedbackRow({ feedback }: { feedback: CandidateFeedback }) {
+  return (
+    <div className={styles["feedback-block"]}>
+      <span>{`> ${feedback.candidate}`}</span>
+      <span>{feedback.feedbackString}</span>
+      <span>{`${feedback.charsCorrect} fragments matched`}</span>
+      <span>{`${feedback.positionsCorrect} fragments aligned`}</span>
+    </div>
+  );
+}
+
+function getCandidateFeedback(candidate: string, pw: string) {
+  let charsCorrect = 0;
+  let positionsCorrect = 0;
+  let feedbackString = "";
+
+  for (let i = 0; i < candidate.length; i++) {
+    if (candidate[i] === pw[i]) {
+      positionsCorrect++;
+      feedbackString += "▓ ";
+    } else if (pw.includes(candidate[i])) {
+      charsCorrect++;
+      feedbackString += "▒ ";
+    } else {
+      feedbackString += "░ ";
+    }
+  }
+
+  return { charsCorrect, positionsCorrect, feedbackString };
 }
