@@ -11,7 +11,21 @@ export function BreachProgressScreen() {
   const breach = game.currentBreach;
   if (!breach) return null;
 
-  const nextLayerName = breach.securityLayers[breach.nextLayerPointer].name;
+  // Get the next level name
+  const nextLevelName =
+    breach.nextLayerPointer < breach.securityLayers.length
+      ? breach.securityLayers[breach.nextLayerPointer].name
+      : "Breach Core";
+
+  function onNextLevel() {
+    const breach = game.currentBreach;
+    if (!breach) return;
+    if (breach.nextLayerPointer < breach.securityLayers.length) {
+      game.nextLayer();
+    } else {
+      game.accessCore();
+    }
+  }
 
   return (
     <Screen className={styles["breach-progress-screen"]}>
@@ -29,7 +43,7 @@ export function BreachProgressScreen() {
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["bot"]}>
-        <Button text={`Next: ${nextLayerName}`} onClick={() => {}} />
+        <Button text={`Next: ${nextLevelName}`} onClick={onNextLevel} />
       </AnimatedBlock>
     </Screen>
   );

@@ -7,6 +7,9 @@ import { useEventUpdater } from "./hooks/use-event-updater";
 import { game } from "../game/game";
 import { SystemSelectScreen } from "./system-select-screen/system-select-screen";
 import { BreachProgressScreen } from "./breach-progress-screen/breach-progress-screen";
+import { Level } from "./level/level";
+import { CoreAccessScreen } from "./core-access-screen/core-access-screen";
+import { BreachOverScreen } from "./breach-over-screen/breach-over-screen";
 
 export function App() {
   useEventUpdater("screen-changed");
@@ -27,6 +30,13 @@ export function App() {
         )}
         {screen === "breach-progress" && (
           <BreachProgressScreen key="breach-progress-screen" />
+        )}
+        {screen === "level" && <Level key="level" />}
+        {screen === "core-access" && (
+          <CoreAccessScreen key="core-access-screen" />
+        )}
+        {screen === "breach-over" && (
+          <BreachOverScreen key="breach-over-screen" />
         )}
       </AnimatePresence>
     </div>

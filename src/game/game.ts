@@ -1,7 +1,13 @@
 import { eventDispatcher } from "../events/event-dispatcher";
 import { loadDictionary } from "./load-dictionary";
 
-type SceenName = "loading" | "breach-select" | "breach-progress";
+type SceenName =
+  | "loading"
+  | "breach-select"
+  | "breach-progress"
+  | "level"
+  | "core-access"
+  | "breach-over";
 
 export interface SecurityLayer {
   name: string;
@@ -80,6 +86,40 @@ class Game {
 
     // Change to progress screen
     this.changeScreen("breach-progress");
+  }
+
+  nextLayer() {
+    if (!this.currentBreach) return;
+
+    // For now
+    this.changeScreen("level");
+  }
+
+  // temp
+  winLayer() {
+    console.log("win layer");
+    const breach = this.currentBreach;
+    if (!breach) return;
+
+    // Update layer pointer
+    breach.nextLayerPointer++;
+
+    this.changeScreen("breach-progress");
+  }
+
+  accessCore() {
+    this.changeScreen("core-access");
+  }
+
+  winCore() {
+    this.changeScreen("breach-over");
+  }
+
+  finishBreach() {
+    // Clear last run data
+    this.currentBreach = undefined;
+
+    this.changeScreen("breach-select");
   }
 
   private changeScreen(screenName: SceenName) {
