@@ -1,0 +1,9 @@
+@use "../../common-styles.scss" as *;
+
+.sum-helper {
+  border: $border-default;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+}

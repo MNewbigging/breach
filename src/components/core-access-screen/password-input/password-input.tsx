@@ -35,7 +35,10 @@ export function PasswordInput({
           type="text"
           maxLength={8}
           value={password}
-          onChange={(e) => setPassword(e.target.value.toUpperCase())}
+          onChange={(e) => {
+            const cleaned = e.target.value.toUpperCase().replace(/[^A-Z]/g, "");
+            setPassword(cleaned);
+          }}
           autoComplete="off"
           spellCheck={false}
         />

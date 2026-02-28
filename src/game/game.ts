@@ -1,8 +1,5 @@
 import { eventDispatcher } from "../events/event-dispatcher";
-import {
-  CorePasswordMetadata,
-  generateCorePassword,
-} from "./core-password-generator";
+import { generateCorePassword } from "./core-password-generator";
 import { loadDictionary } from "./load-dictionary";
 import {
   getVulnerabilitySpecs,
@@ -113,18 +110,15 @@ class Game {
   }
 
   initiateBreach(breachOption: BreachOption) {
-    const corePasswordMeta = generateCorePassword();
-    const vulnPool = getVulnerabilitySpecs(corePasswordMeta);
-
-    console.log(corePasswordMeta);
-    console.log(vulnPool);
+    const corePassword = generateCorePassword();
+    const vulnPool = getVulnerabilitySpecs(corePassword);
 
     // Setup the full breach object using selected option
     this.currentBreach = {
       ...breachOption,
       nextLayerPointer: 0,
       securityLayerResults: [],
-      corePassword: corePasswordMeta.password,
+      corePassword,
       vulnPool,
       awardedVulns: [],
     };

@@ -7,13 +7,7 @@ import styles from "./core-access-screen.module.scss";
 import { PasswordInput } from "./password-input/password-input";
 import { VulnerabilityChecker } from "./vuln-checker/vuln-checker";
 import { PasswordFeedback } from "./password-feedback/password-feedback";
-
-export interface CandidateFeedback {
-  candidate: string;
-  charsCorrect: number;
-  positionsCorrect: number;
-  feedbackString: string;
-}
+import { SumHelper } from "./sum-helper/sum-helper";
 
 export function CoreAccessScreen() {
   const [candidate, setCandidate] = useState("");
@@ -30,18 +24,19 @@ export function CoreAccessScreen() {
   );
 
   const allChecksPassed = vCheckers.every((v) => v.test(candidate));
+  const showSumHelper = breach.awardedVulns.some((v) => v.type === "sum");
 
   // On submit input, run mastermind feedback checks and display
   function onSubmit() {
     const breach = game.currentBreach;
     if (!breach) return null;
 
-    const { charsCorrect, positionsCorrect, feedbackString } =
+    const { charsCorrect, positionsCorrect, charFeedback } =
       getCandidateFeedback(candidate, breach.corePassword);
 
     setFeedback([
       ...feedback,
-      { candidate, charsCorrect, positionsCorrect, feedbackString },
+      { candidate, charsCorrect, positionsCorrect, charFeedback },
     ]);
 
     // Check for a win
@@ -74,6 +69,8 @@ export function CoreAccessScreen() {
             password={candidate}
             setPassword={(pw) => setCandidate(pw)}
           />
+
+          {showSumHelper && <SumHelper candidate={candidate} />}
         </AnimatedBlock>
 
         <AnimatedBlock className={styles["right-column"]}>
@@ -84,19 +81,28 @@ export function CoreAccessScreen() {
   );
 }
 
+export type CharFeedbackType = "pos-match" | "char-match" | "miss";
+
+export interface CandidateFeedback {
+  candidate: string;
+  charsCorrect: number;
+  positionsCorrect: number;
+  charFeedback: CharFeedbackType[];
+}
+
 function getCandidateFeedback(candidate: string, pw: string) {
   let charsCorrect = 0;
   let positionsCorrect = 0;
 
   const pwArr = [...pw];
   const candidateArr = [...candidate];
-  const feedback: string[] = Array(candidate.length).fill("░");
+  const charFeedback: CharFeedbackType[] = Array(candidate.length).fill("miss");
 
   // First pass — exact matches
   for (let i = 0; i < candidateArr.length; i++) {
     if (candidateArr[i] === pwArr[i]) {
       positionsCorrect++;
-      feedback[i] = "▓";
+      charFeedback[i] = "pos-match";
       pwArr[i] = null as any; // consume
       candidateArr[i] = null as any; // consume
     }
@@ -106,7 +112,7 @@ function getCandidateFeedback(candidate: string, pw: string) {
   for (let i = 0; i < candidateArr.length; i++) {
     if (candidateArr[i] && pwArr.includes(candidateArr[i])) {
       charsCorrect++;
-      feedback[i] = "▒";
+      charFeedback[i] = "char-match";
 
       const index = pwArr.indexOf(candidateArr[i]);
       pwArr[index] = null as any; // consume matched char so dupes don't re-match
@@ -116,6 +122,6 @@ function getCandidateFeedback(candidate: string, pw: string) {
   return {
     charsCorrect,
     positionsCorrect,
-    feedbackString: feedback.join(" "),
+    charFeedback,
   };
 }
