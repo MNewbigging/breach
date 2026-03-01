@@ -1,5 +1,7 @@
 import { useAnimationControls, motion } from "framer-motion";
 import { useEffect } from "react";
+import styles from "./vuln-checker-row.module.scss";
+import clsx from "clsx";
 
 interface VulnCheckerRowProps {
   text: string;
@@ -24,7 +26,10 @@ export function VulnCheckerRow({
   }, [shakeSignal]);
 
   return (
-    <motion.div animate={controls}>
+    <motion.div
+      animate={controls}
+      className={clsx(styles[failed ? "failed" : "passed"])}
+    >
       {failed ? "✖" : "✔"} {text}
     </motion.div>
   );

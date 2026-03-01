@@ -1,4 +1,4 @@
-@use '../../common-styles.scss' as *;
+@use "../../common-styles.scss" as *;
 
 .cheat-sheet {
   width: 100%;
@@ -25,8 +25,10 @@
 
 .highlight {
   opacity: 1;
+  color: $green;
 }
 
 .hide {
   opacity: 0.2;
+  color: $red;
 }

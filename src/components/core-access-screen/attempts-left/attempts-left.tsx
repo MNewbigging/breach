@@ -8,6 +8,6 @@ export function AttemptsLeft({ attempts }: AttemptsLeftProps) {
   return (
     <div
       className={styles["attempts-left"]}
-    >{`${attempts} attempts til detection`}</div>
+    >{`${attempts} attempts until detection`}</div>
   );
 }
