@@ -8,6 +8,7 @@ import { PasswordInput } from "./password-input/password-input";
 import { VulnerabilityChecker } from "./vuln-checker/vuln-checker";
 import { PasswordFeedback } from "./password-feedback/password-feedback";
 import { SumHelper } from "./sum-helper/sum-helper";
+import { CheatSheet } from "./cheat-sheet/cheat-sheet";
 
 export function CoreAccessScreen() {
   const [candidate, setCandidate] = useState("");
@@ -71,6 +72,8 @@ export function CoreAccessScreen() {
           />
 
           {showSumHelper && <SumHelper candidate={candidate} />}
+
+          <CheatSheet />
         </AnimatedBlock>
 
         <AnimatedBlock className={styles["right-column"]}>

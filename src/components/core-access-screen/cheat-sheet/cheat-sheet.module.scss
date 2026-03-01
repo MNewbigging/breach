@@ -1,0 +1,14 @@
+@use '../../common-styles.scss' as *;
+
+.cheat-sheet {
+  display: flex;
+  gap: 4px;
+}
+
+.letter {
+  border: $border-default;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
