@@ -20,6 +20,7 @@ export function App() {
   }, []);
 
   const screen = game.currentScreen;
+  const breach = game.currentBreach;
 
   return (
     <div className={styles["app"]}>
@@ -32,8 +33,8 @@ export function App() {
           <BreachProgressScreen key="breach-progress-screen" />
         )}
         {screen === "level" && <Level key="level" />}
-        {screen === "core-access" && (
-          <CoreAccessScreen key="core-access-screen" />
+        {screen === "core-access" && breach && (
+          <CoreAccessScreen key="core-access-screen" breach={breach} />
         )}
         {screen === "breach-over" && (
           <BreachOverScreen key="breach-over-screen" />

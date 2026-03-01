@@ -45,6 +45,7 @@ export function getBreachAttempts(breach: Breach) {
   const bitsPerGuess = 3;
 
   // Get an initial idea of attempts from (un)certainty bits info
+  // todo maybe do 1 + ... here
   const attempts = Math.ceil(bitsUntilSolve / bitsPerGuess);
 
   // Clamp it within sensible bounds and return

@@ -1,0 +1,8 @@
+@use "../../common-styles.scss" as *;
+
+.attempts-left {
+  border: $border-default;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+}

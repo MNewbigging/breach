@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { game } from "../../game/game";
+import { Breach, game } from "../../game/game";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./core-access-screen.module.scss";
@@ -10,18 +10,17 @@ import { SumHelper } from "./sum-helper/sum-helper";
 import { CheatSheet } from "./cheat-sheet/cheat-sheet";
 import { getBreachAttempts } from "../../game/vulns/search-space";
 import { compileVulnerability } from "../../game/vulns/compile";
+import { AttemptsLeft } from "./attempts-left/attempts-left";
 
-export function CoreAccessScreen() {
+interface CoreAccessScreenProps {
+  breach: Breach;
+}
+
+export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
   const [candidate, setCandidate] = useState("");
   const [shakeSignal, setShakeSignal] = useState(0);
   const [feedback, setFeedback] = useState<CandidateFeedback[]>([]);
-
-  const breach = game.currentBreach;
-  if (!breach) return null;
-
-  // Get attempts count
-  const attempts = getBreachAttempts(breach);
-  console.log("attempts", attempts);
+  const [attempts, setAttempts] = useState(getBreachAttempts(breach));
 
   // Get hydrated V classes for each awarded vSpec in the breach
   const vCheckers = useMemo(
@@ -34,8 +33,7 @@ export function CoreAccessScreen() {
 
   // On submit input, run mastermind feedback checks and display
   function onSubmit() {
-    const breach = game.currentBreach;
-    if (!breach) return null;
+    if (attempts === 0) return;
 
     const { charsCorrect, positionsCorrect, charFeedback } =
       getCandidateFeedback(candidate, breach.corePassword);
@@ -44,6 +42,18 @@ export function CoreAccessScreen() {
       ...feedback,
       { candidate, charsCorrect, positionsCorrect, charFeedback },
     ]);
+
+    const reducedAttempts = attempts - 1;
+    if (reducedAttempts > 0) {
+      setAttempts(reducedAttempts);
+    } else {
+      // Lose
+      setAttempts(0);
+      // Play some cool animation
+      setTimeout(() => {
+        game.concludeCore("lose");
+      }, 1000);
+    }
 
     // Check for a win
     if (positionsCorrect === breach.corePassword.length) {
@@ -83,6 +93,10 @@ export function CoreAccessScreen() {
           <SumHelper candidate={candidate} />
         </AnimatedBlock>
       )}
+
+      <AnimatedBlock>
+        <AttemptsLeft attempts={attempts} />
+      </AnimatedBlock>
 
       <AnimatedBlock>
         <CheatSheet />
