@@ -2,6 +2,7 @@ import { eventDispatcher } from "../events/event-dispatcher";
 import { generateCorePassword } from "./core-password-generator";
 import { loadDictionary } from "./load-dictionary";
 import {
+  getExactLengthVulnSpec,
   getVulnerabilitySpecs,
   VulnerabilitySpec,
 } from "./vulnerability-generator";
@@ -112,6 +113,8 @@ class Game {
   initiateBreach(breachOption: BreachOption) {
     const corePassword = generateCorePassword();
     const vulnPool = getVulnerabilitySpecs(corePassword);
+    // Always start with length vuln
+    const awardedVulns = [getExactLengthVulnSpec(corePassword)];
 
     // Setup the full breach object using selected option
     this.currentBreach = {
@@ -120,7 +123,7 @@ class Game {
       securityLayerResults: [],
       corePassword,
       vulnPool,
-      awardedVulns: [],
+      awardedVulns
     };
 
     this.saveBreach();
@@ -218,6 +221,8 @@ class Game {
   }
 
   private awardVulnerability(breach: Breach) {
+    // I award a v based on how much I want to reduce search space at this time
+
     // Remove a v from the pool and add to awarded list
     const rnd = Math.floor(Math.random() * breach.vulnPool.length);
     const removed = breach.vulnPool.splice(rnd, 1);
