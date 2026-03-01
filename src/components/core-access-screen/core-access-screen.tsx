@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { game } from "../../game/game";
-import { compileVulnerability } from "../../game/vulnerability-generator";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./core-access-screen.module.scss";
@@ -9,6 +8,8 @@ import { VulnerabilityChecker } from "./vuln-checker/vuln-checker";
 import { PasswordFeedback } from "./password-feedback/password-feedback";
 import { SumHelper } from "./sum-helper/sum-helper";
 import { CheatSheet } from "./cheat-sheet/cheat-sheet";
+import { getAttemptsCount } from "../../game/vulns/search-space";
+import { compileVulnerability } from "../../game/vulns/compile";
 
 export function CoreAccessScreen() {
   const [candidate, setCandidate] = useState("");
@@ -17,6 +18,13 @@ export function CoreAccessScreen() {
 
   const breach = game.currentBreach;
   if (!breach) return null;
+
+  // Get attempts count
+  getAttemptsCount(
+    breach.corePassword.length,
+    breach.awardedVulns,
+    breach.seed,
+  );
 
   // Get hydrated V classes for each awarded vSpec in the breach
   const vCheckers = useMemo(
@@ -55,37 +63,37 @@ export function CoreAccessScreen() {
         <div>{`>ACCESS ${breach.systemName.toUpperCase()} SYSTEM CORE<`}</div>
       </AnimatedBlock>
 
+      <AnimatedBlock>
+        <VulnerabilityChecker
+          vCheckers={vCheckers}
+          candidate={candidate}
+          shakeSignal={shakeSignal}
+        />
+      </AnimatedBlock>
+
+      <AnimatedBlock>
+        <PasswordInput
+          allChecksPassed={allChecksPassed}
+          onSubmit={onSubmit}
+          onChecksFailed={() => setShakeSignal((s) => s + 1)}
+          password={candidate}
+          setPassword={(pw) => setCandidate(pw)}
+        />
+      </AnimatedBlock>
+
+      {showSumHelper && (
         <AnimatedBlock>
-          <VulnerabilityChecker
-            vCheckers={vCheckers}
-            candidate={candidate}
-            shakeSignal={shakeSignal}
-          />
+          <SumHelper candidate={candidate} />
         </AnimatedBlock>
+      )}
 
-        <AnimatedBlock>
-          <PasswordInput
-            allChecksPassed={allChecksPassed}
-            onSubmit={onSubmit}
-            onChecksFailed={() => setShakeSignal((s) => s + 1)}
-            password={candidate}
-            setPassword={(pw) => setCandidate(pw)}
-          />
-        </AnimatedBlock>
+      <AnimatedBlock>
+        <CheatSheet />
+      </AnimatedBlock>
 
-        {showSumHelper && (
-          <AnimatedBlock>
-            <SumHelper candidate={candidate} />
-          </AnimatedBlock>
-        )}
-
-          <AnimatedBlock>
-            <CheatSheet />
-          </AnimatedBlock>
-
-          <AnimatedBlock className={styles['scroll-container']}>
-            <PasswordFeedback feedback={feedback} />
-          </AnimatedBlock>
+      <AnimatedBlock className={styles["scroll-container"]}>
+        <PasswordFeedback feedback={feedback} />
+      </AnimatedBlock>
     </Screen>
   );
 }

@@ -1,7 +1,5 @@
-import {
-  getVulnHintFor,
-  Vulnerability,
-} from "../../../game/vulnerability-generator";
+import { Vulnerability } from "../../../game/vulns/compile";
+import { getVulnHintFor } from "../../../game/vulns/hints";
 import { VulnCheckerRow } from "./vuln-checker-row/vuln-checker-row";
 import styles from "./vuln-checker.module.scss";
 

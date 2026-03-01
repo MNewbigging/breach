@@ -2,10 +2,10 @@ import { eventDispatcher } from "../events/event-dispatcher";
 import { generateCorePassword } from "./core-password-generator";
 import { loadDictionary } from "./load-dictionary";
 import {
-  getExactLengthVulnSpec,
   getVulnerabilitySpecs,
-  VulnerabilitySpec,
-} from "./vulnerability-generator";
+  getExactLengthVulnSpec,
+} from "./vulns/generate";
+import { VulnerabilitySpec } from "./vulns/spec";
 
 type SceenName =
   | "loading"
@@ -34,6 +34,7 @@ export interface BreachOption {
 }
 
 export interface Breach extends BreachOption {
+  seed: number;
   nextLayerPointer: number;
   securityLayerResults: SecurityLayerResult[];
   corePassword: string;
@@ -119,11 +120,12 @@ class Game {
     // Setup the full breach object using selected option
     this.currentBreach = {
       ...breachOption,
+      seed: 12345, // todo how should this be randomised?
       nextLayerPointer: 0,
       securityLayerResults: [],
       corePassword,
       vulnPool,
-      awardedVulns
+      awardedVulns,
     };
 
     this.saveBreach();
