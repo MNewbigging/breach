@@ -114,13 +114,17 @@ class Game {
   initiateBreach(breachOption: BreachOption) {
     const corePassword = generateCorePassword();
     const vulnPool = getVulnerabilitySpecs(corePassword);
-    // Always start with length vuln
-    const awardedVulns = [getExactLengthVulnSpec(corePassword)];
+    const awardedVulns = [getExactLengthVulnSpec(corePassword)]; // Always start with length vuln
+
+    // Generate breach seed
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const seed = arr[0];
 
     // Setup the full breach object using selected option
     this.currentBreach = {
       ...breachOption,
-      seed: 12345, // todo how should this be randomised?
+      seed,
       nextLayerPointer: 0,
       securityLayerResults: [],
       corePassword,

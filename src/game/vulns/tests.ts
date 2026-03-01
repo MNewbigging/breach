@@ -20,7 +20,7 @@ export function vowelCount(s: string): number {
 export function hasDuplicateChars(s: string): boolean {
   let seen = 0; // bitset for A-Z
   for (let i = 0; i < s.length; i++) {
-    const bit = 1 << (s.charCodeAt(i) - 65); // A -> O
+    const bit = 1 << (s.charCodeAt(i) - 65); // A -> 0
     if (seen & bit) return true; // already seen
     seen |= bit;
   }

@@ -14,5 +14,11 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `${spec.hasDuplicates ? "Has" : "no"} duplicate characters`;
     case "at-least-AM":
       return `At least ${spec.minAM} from A-M`;
+    default:
+      return assertNever(spec);
   }
+}
+
+export function assertNever(x: never): never {
+  throw new Error(`Unexpected object: ${JSON.stringify(x)}`);
 }

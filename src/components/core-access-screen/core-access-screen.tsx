@@ -8,7 +8,7 @@ import { VulnerabilityChecker } from "./vuln-checker/vuln-checker";
 import { PasswordFeedback } from "./password-feedback/password-feedback";
 import { SumHelper } from "./sum-helper/sum-helper";
 import { CheatSheet } from "./cheat-sheet/cheat-sheet";
-import { getAttemptsCount } from "../../game/vulns/search-space";
+import { getBreachAttempts } from "../../game/vulns/search-space";
 import { compileVulnerability } from "../../game/vulns/compile";
 
 export function CoreAccessScreen() {
@@ -20,11 +20,8 @@ export function CoreAccessScreen() {
   if (!breach) return null;
 
   // Get attempts count
-  getAttemptsCount(
-    breach.corePassword.length,
-    breach.awardedVulns,
-    breach.seed,
-  );
+  const attempts = getBreachAttempts(breach);
+  console.log("attempts", attempts);
 
   // Get hydrated V classes for each awarded vSpec in the breach
   const vCheckers = useMemo(
