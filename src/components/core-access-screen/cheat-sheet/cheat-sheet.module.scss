@@ -1,14 +1,32 @@
 @use '../../common-styles.scss' as *;
 
 .cheat-sheet {
+  width: 100%;
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
 }
 
 .letter {
+  padding: 2px 4px;
   border: $border-default;
+  user-select: none;
+  cursor: pointer;
+
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  user-select: none;
+}
+
+.default {
+  opacity: 0.75;
+}
+
+.highlight {
+  opacity: 1;
+}
+
+.hide {
+  opacity: 0.2;
 }

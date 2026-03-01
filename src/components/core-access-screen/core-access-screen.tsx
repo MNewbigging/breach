@@ -51,18 +51,19 @@ export function CoreAccessScreen() {
 
   return (
     <Screen className={styles["core-access-screen"]}>
-      <AnimatedBlock className={styles["top"]}>
+      <AnimatedBlock>
         <div>{`>ACCESS ${breach.systemName.toUpperCase()} SYSTEM CORE<`}</div>
       </AnimatedBlock>
 
-      <AnimatedBlock className={styles["two-column"]}>
-        <AnimatedBlock className={styles["left-column"]}>
+        <AnimatedBlock>
           <VulnerabilityChecker
             vCheckers={vCheckers}
             candidate={candidate}
             shakeSignal={shakeSignal}
           />
+        </AnimatedBlock>
 
+        <AnimatedBlock>
           <PasswordInput
             allChecksPassed={allChecksPassed}
             onSubmit={onSubmit}
@@ -70,16 +71,21 @@ export function CoreAccessScreen() {
             password={candidate}
             setPassword={(pw) => setCandidate(pw)}
           />
-
-          {showSumHelper && <SumHelper candidate={candidate} />}
-
-          <CheatSheet />
         </AnimatedBlock>
 
-        <AnimatedBlock className={styles["right-column"]}>
-          <PasswordFeedback feedback={feedback} />
-        </AnimatedBlock>
-      </AnimatedBlock>
+        {showSumHelper && (
+          <AnimatedBlock>
+            <SumHelper candidate={candidate} />
+          </AnimatedBlock>
+        )}
+
+          <AnimatedBlock>
+            <CheatSheet />
+          </AnimatedBlock>
+
+          <AnimatedBlock className={styles['scroll-container']}>
+            <PasswordFeedback feedback={feedback} />
+          </AnimatedBlock>
     </Screen>
   );
 }
