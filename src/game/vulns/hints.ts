@@ -26,6 +26,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `Position ${spec.position + 1} is ${spec.letterType}`;
     case "position-in-set":
       return `Position ${spec.position + 1} is one of  [${lettersFromMask(spec.mask).join(", ")}]`;
+    case "highest-value":
+      return `Highest letter value is ${spec.value}`;
     default:
       return assertNever(spec);
   }

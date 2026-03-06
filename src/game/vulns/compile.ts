@@ -8,6 +8,7 @@ import {
   isPalindrome,
   vowelRelation,
   positionTypeMatches,
+  highestValueEquals,
 } from "./tests";
 
 export interface Vulnerability {
@@ -57,5 +58,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
         spec,
         test: (s: string) => containsOneOf(s, spec.mask),
       };
+    case "highest-value":
+      return { spec, test: (s: string) => highestValueEquals(s, spec.value) };
   }
 }

@@ -61,6 +61,8 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   // Mathematical Hints
   specs.push({ type: "sum", sum: sumLetters(password) });
 
+  specs.push({ type: "highest-value", value: getHighestLetterValue(password) });
+
   return specs;
 }
 
@@ -150,4 +152,13 @@ function positionInSetValues(password: string, rng: () => number) {
   const position = randomIndex(rng, password.length);
   const set = getRandomSetFor(password[position], rng);
   return { position, mask: maskFromLetters(set) };
+}
+
+function getHighestLetterValue(password: string) {
+  let highest = 0;
+  for (let i = 0; i < password.length; i++) {
+    const value = password[i].charCodeAt(0) - 64; // 1..26
+    if (value > highest) highest = value;
+  }
+  return highest;
 }

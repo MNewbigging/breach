@@ -84,10 +84,20 @@ export function positionTypeMatches(
   s: string,
   position: number,
   type: "vowel" | "consonant",
-) {
+): boolean {
   if (s.length - 1 < position) return false;
 
   const c = s[position];
   if (type === "vowel") return isVowel(c);
   return isVowel(c) === false;
+}
+
+export function highestValueEquals(s: string, testValue: number): boolean {
+  let highest = 0;
+  for (let i = 0; i < s.length; i++) {
+    const value = s[i].charCodeAt(0) - 64;
+    if (value > testValue) return false;
+    if (value > highest) highest = value;
+  }
+  return highest === testValue;
 }
