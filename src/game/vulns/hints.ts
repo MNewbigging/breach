@@ -18,6 +18,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `At least 1 in [${lettersFromMask(spec.mask).join(", ")}]`;
     case "is-palindrome":
       return `Is a palindrome`;
+    case "position-exact":
+      return `Position ${spec.position + 1} is ${spec.letter}`;
     default:
       return assertNever(spec);
   }

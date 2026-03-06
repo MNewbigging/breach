@@ -34,5 +34,10 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return { spec, test: (s: string) => containsOneOf(s, spec.mask) };
     case "is-palindrome":
       return { spec, test: (s: string) => isPalindrome(s) };
+    case "position-exact":
+      return {
+        spec,
+        test: (s: string) => s[spec.position] === spec.letter,
+      };
   }
 }

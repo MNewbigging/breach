@@ -18,6 +18,8 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   const rng = rngFunctionFromSeed(seed);
 
   // Positional Hints
+  const { position, letter } = positionExactValues(password, rng);
+  specs.push({ type: "position-exact", position, letter });
 
   // Compositional Hints
   specs.push({ type: "vowel-exact", vowelCount: vowelCount(password) });
@@ -97,4 +99,9 @@ function maskFromLetters(letters: string[]) {
   let mask = 0;
   for (const c of letters) mask |= 1 << (c.charCodeAt(0) - 65);
   return mask;
+}
+
+function positionExactValues(password: string, rng: () => number) {
+  const position = randomIndex(rng, password.length);
+  return { position, letter: password[position] };
 }

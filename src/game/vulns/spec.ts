@@ -7,4 +7,5 @@ export type VulnerabilitySpec =
   | { type: "at-least-AM"; minAM: number }
   | { type: "duplicate-characters"; hasDuplicates: boolean }
   | { type: "contains-one-of"; mask: number }
-  | { type: "is-palindrome" };
+  | { type: "is-palindrome" }
+  | { type: "position-exact"; position: number; letter: string };
