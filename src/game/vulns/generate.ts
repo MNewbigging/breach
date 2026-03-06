@@ -47,8 +47,11 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   const minAM = atLeastFromAM(password, rng);
   if (minAM > 0) specs.push({ type: "at-least-AM", minAM });
 
-  const mask = getSetMask(password, rng);
-  specs.push({ type: "contains-one-of", mask });
+  specs.push({ type: "contains-one-of", mask: getOneOfSetMask(password, rng) });
+  specs.push({
+    type: "contains-none-of",
+    mask: getNoneOfSetMask(password, rng),
+  });
 
   specs.push({
     type: "vowel-relation",
@@ -86,13 +89,23 @@ function atLeastFromAM(s: string, rng: () => number) {
   return biasedMin(exact, rng);
 }
 
-function getSetMask(password: string, rng: () => number) {
-  // Pick one random letter from the password
+function getOneOfSetMask(password: string, rng: () => number) {
   const chosen = password[randomIndex(rng, password.length)];
-
   const set = getRandomSetFor(chosen, rng);
+  return maskFromLetters(set);
+}
 
-  // Return the mask
+function getNoneOfSetMask(password: string, rng: () => number, setLength = 3) {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    .split("")
+    .filter((c) => !password.includes(c));
+
+  const set = [];
+  for (let i = 0; i < setLength; i++) {
+    const pick = alphabet.splice(randomIndex(rng, alphabet.length), 1)[0];
+    set.push(pick);
+  }
+
   return maskFromLetters(set);
 }
 

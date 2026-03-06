@@ -17,4 +17,5 @@ export type VulnerabilitySpec =
     }
   | { type: "position-in-set"; position: number; mask: number }
   | { type: "highest-value"; value: number }
-  | { type: "lowest-value"; value: number };
+  | { type: "lowest-value"; value: number }
+  | { type: "contains-none-of"; mask: number };

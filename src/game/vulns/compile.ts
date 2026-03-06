@@ -63,5 +63,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return { spec, test: (s: string) => highestValueEquals(s, spec.value) };
     case "lowest-value":
       return { spec, test: (s: string) => lowestValueEquals(s, spec.value) };
+    case "contains-none-of":
+      return { spec, test: (s: string) => !containsOneOf(s, spec.mask) };
   }
 }
