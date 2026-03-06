@@ -46,7 +46,7 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `Position ${spec.position + 1} is highest`;
     case "lowest-position":
       return `Position ${spec.position + 1} is lowest`;
-    case "even-count":
+    case "even-letter-count":
       return `${spec.count} even letter values`;
     case "even-relation":
       return `Even ${spec.relation} odd`;
