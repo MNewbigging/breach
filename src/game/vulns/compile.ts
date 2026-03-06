@@ -52,5 +52,10 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
         test: (s: string) =>
           positionTypeMatches(s, spec.position, spec.letterType),
       };
+    case "position-in-set":
+      return {
+        spec,
+        test: (s: string) => containsOneOf(s, spec.mask),
+      };
   }
 }

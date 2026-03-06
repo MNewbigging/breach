@@ -14,4 +14,5 @@ export type VulnerabilitySpec =
       type: "position-type";
       position: number;
       letterType: "vowel" | "consonant";
-    };
+    }
+  | { type: "position-in-set"; position: number; mask: number };

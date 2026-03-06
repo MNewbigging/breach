@@ -29,6 +29,11 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
     specs.push({ type: "position-type", position, letterType });
   }
 
+  {
+    const { position, mask } = positionInSetValues(password, rng);
+    specs.push({ type: "position-in-set", position, mask });
+  }
+
   // Compositional Hints
   specs.push({ type: "vowel-exact", vowelCount: vowelCount(password) });
   const minVowels = minVowelCount(password, rng);
@@ -83,20 +88,25 @@ function getSetMask(password: string, rng: () => number) {
   // Pick one random letter from the password
   const chosen = password[randomIndex(rng, password.length)];
 
-  // Make an alphabet array to pick two other random letters from
+  const set = getRandomSetFor(chosen, rng);
+
+  // Return the mask
+  return maskFromLetters(set);
+}
+
+function getRandomSetFor(chosen: string, rng: () => number, setLength = 3) {
+  const set = [chosen];
+
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     .split("")
     .filter((c) => c !== chosen);
 
-  // Pick two distinct letters
-  const firstPick = alphabet.splice(randomIndex(rng, alphabet.length), 1)[0];
-  const secondPick = alphabet.splice(randomIndex(rng, alphabet.length), 1)[0];
+  for (let i = 1; i < setLength; i++) {
+    const pick = alphabet.splice(randomIndex(rng, alphabet.length), 1)[0];
+    set.push(pick);
+  }
 
-  // Shuffle the set
-  const setLetters = shuffle([chosen, firstPick, secondPick], rng);
-
-  // Return the mask
-  return maskFromLetters(setLetters);
+  return shuffle(set, rng);
 }
 
 function shuffle<T>(arr: T[], rng: () => number): T[] {
@@ -134,4 +144,10 @@ function positionTypeValues(password: string, rng: () => number) {
   const isV = isVowel(password[position]);
   const letterType = isV ? "vowel" : "consonant";
   return { position, letterType: letterType as "vowel" | "consonant" };
+}
+
+function positionInSetValues(password: string, rng: () => number) {
+  const position = randomIndex(rng, password.length);
+  const set = getRandomSetFor(password[position], rng);
+  return { position, mask: maskFromLetters(set) };
 }
