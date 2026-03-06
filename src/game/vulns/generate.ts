@@ -60,8 +60,8 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
 
   // Mathematical Hints
   specs.push({ type: "sum", sum: sumLetters(password) });
-
   specs.push({ type: "highest-value", value: getHighestLetterValue(password) });
+  specs.push({ type: "lowest-value", value: getLowestLetterValue(password) });
 
   return specs;
 }
@@ -161,4 +161,13 @@ function getHighestLetterValue(password: string) {
     if (value > highest) highest = value;
   }
   return highest;
+}
+
+function getLowestLetterValue(password: string) {
+  let lowest = 27;
+  for (let i = 0; i < password.length; i++) {
+    const value = password[i].charCodeAt(0) - 64;
+    if (value < lowest) lowest = value;
+  }
+  return lowest;
 }

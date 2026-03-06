@@ -9,6 +9,7 @@ import {
   vowelRelation,
   positionTypeMatches,
   highestValueEquals,
+  lowestValueEquals,
 } from "./tests";
 
 export interface Vulnerability {
@@ -60,5 +61,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       };
     case "highest-value":
       return { spec, test: (s: string) => highestValueEquals(s, spec.value) };
+    case "lowest-value":
+      return { spec, test: (s: string) => lowestValueEquals(s, spec.value) };
   }
 }

@@ -16,4 +16,5 @@ export type VulnerabilitySpec =
       letterType: "vowel" | "consonant";
     }
   | { type: "position-in-set"; position: number; mask: number }
-  | { type: "highest-value"; value: number };
+  | { type: "highest-value"; value: number }
+  | { type: "lowest-value"; value: number };

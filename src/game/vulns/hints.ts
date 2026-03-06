@@ -28,6 +28,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `Position ${spec.position + 1} is one of  [${lettersFromMask(spec.mask).join(", ")}]`;
     case "highest-value":
       return `Highest letter value is ${spec.value}`;
+    case "lowest-value":
+      return `Lowest letter value is ${spec.value}`;
     default:
       return assertNever(spec);
   }

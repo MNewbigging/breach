@@ -101,3 +101,13 @@ export function highestValueEquals(s: string, testValue: number): boolean {
   }
   return highest === testValue;
 }
+
+export function lowestValueEquals(s: string, testValue: number): boolean {
+  let lowest = 27;
+  for (let i = 0; i < s.length; i++) {
+    const value = s[i].charCodeAt(0) - 64;
+    if (value < testValue) return false;
+    if (value < lowest) lowest = value;
+  }
+  return lowest === testValue;
+}
