@@ -35,6 +35,10 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
   function onSubmit() {
     if (attempts === 0) return;
 
+    // Prevent re-submitting passwords
+    const alreadySubmitted = feedback.some((fb) => fb.candidate === candidate);
+    if (alreadySubmitted) return;
+
     const { charsCorrect, positionsCorrect, charFeedback } =
       getCandidateFeedback(candidate, breach.corePassword);
 
