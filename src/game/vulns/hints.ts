@@ -22,6 +22,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `Position ${spec.position + 1} is ${spec.letter}`;
     case "vowel-relation":
       return `Vowels ${spec.vowelRelation} consonants`;
+    case "position-type":
+      return `Position ${spec.position + 1} is ${spec.letterType}`;
     default:
       return assertNever(spec);
   }

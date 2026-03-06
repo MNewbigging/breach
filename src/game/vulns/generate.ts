@@ -6,6 +6,7 @@ import {
   hasDuplicateChars,
   amCount,
   isPalindrome,
+  isVowel,
 } from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
@@ -18,8 +19,15 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   const rng = rngFunctionFromSeed(seed);
 
   // Positional Hints
-  const { position, letter } = positionExactValues(password, rng);
-  specs.push({ type: "position-exact", position, letter });
+  {
+    const { position, letter } = positionExactValues(password, rng);
+    specs.push({ type: "position-exact", position, letter });
+  }
+
+  {
+    const { position, letterType } = positionTypeValues(password, rng);
+    specs.push({ type: "position-type", position, letterType });
+  }
 
   // Compositional Hints
   specs.push({ type: "vowel-exact", vowelCount: vowelCount(password) });
@@ -119,4 +127,11 @@ function vowelRelation(password: string) {
   if (vowels === consonants) return "=";
   if (vowels < consonants) return "<";
   return ">"; // just to satisfy ts
+}
+
+function positionTypeValues(password: string, rng: () => number) {
+  const position = randomIndex(rng, password.length);
+  const isV = isVowel(password[position]);
+  const letterType = isV ? "vowel" : "consonant";
+  return { position, letterType: letterType as "vowel" | "consonant" };
 }

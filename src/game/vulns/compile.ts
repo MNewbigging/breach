@@ -7,6 +7,7 @@ import {
   containsOneOf,
   isPalindrome,
   vowelRelation,
+  positionTypeMatches,
 } from "./tests";
 
 export interface Vulnerability {
@@ -44,6 +45,12 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return {
         spec,
         test: (s: string) => vowelRelation(s, spec.vowelRelation),
+      };
+    case "position-type":
+      return {
+        spec,
+        test: (s: string) =>
+          positionTypeMatches(s, spec.position, spec.letterType),
       };
   }
 }

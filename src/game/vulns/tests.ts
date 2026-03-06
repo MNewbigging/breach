@@ -79,3 +79,15 @@ export function isPalindrome(s: string): boolean {
 
   return true;
 }
+
+export function positionTypeMatches(
+  s: string,
+  position: number,
+  type: "vowel" | "consonant",
+) {
+  if (s.length - 1 < position) return false;
+
+  const c = s[position];
+  if (type === "vowel") return isVowel(c);
+  return isVowel(c) === false;
+}

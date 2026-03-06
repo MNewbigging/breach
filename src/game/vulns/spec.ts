@@ -9,4 +9,9 @@ export type VulnerabilitySpec =
   | { type: "contains-one-of"; mask: number }
   | { type: "is-palindrome" }
   | { type: "position-exact"; position: number; letter: string }
-  | { type: "vowel-relation"; vowelRelation: ">" | "=" | "<" };
+  | { type: "vowel-relation"; vowelRelation: ">" | "=" | "<" }
+  | {
+      type: "position-type";
+      position: number;
+      letterType: "vowel" | "consonant";
+    };
