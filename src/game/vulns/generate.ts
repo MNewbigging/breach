@@ -12,6 +12,7 @@ import {
   highestLetterValue,
   lowestLetterValue,
   spanValue,
+  exactCount,
 } from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
@@ -60,6 +61,11 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
 
   const minAM = atLeastFromAM(password, rng);
   if (minAM > 0) specs.push({ type: "at-least-AM", minAM });
+
+  {
+    const { letter, count } = letterCountValues(password, rng);
+    specs.push({ type: "letter-count", letter, count });
+  }
 
   specs.push({ type: "contains-one-of", mask: getOneOfSetMask(password, rng) });
   specs.push({
@@ -188,4 +194,9 @@ function positionInSetValues(password: string, rng: () => number) {
   const position = randomIndex(rng, password.length);
   const set = getRandomSetFor(password[position], rng);
   return { position, mask: maskFromLetters(set) };
+}
+
+function letterCountValues(password: string, rng: () => number) {
+  const letter = password[randomIndex(rng, password.length)];
+  return { letter, count: exactCount(password, letter) };
 }

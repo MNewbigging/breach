@@ -13,6 +13,7 @@ import {
   distinctCount,
   firstLastRelationMatches,
   spanValue,
+  exactCount,
 } from "./tests";
 
 export interface Vulnerability {
@@ -81,6 +82,11 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return {
         spec,
         test: (s: string) => spanValue(s) === spec.span,
+      };
+    case "letter-count":
+      return {
+        spec,
+        test: (s: string) => exactCount(s, spec.letter) === spec.count,
       };
   }
 }

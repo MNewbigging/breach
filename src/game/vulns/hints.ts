@@ -40,6 +40,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `First letter ${spec.relation} last letter`;
     case "span":
       return `Spans total value of ${spec.span}`;
+    case "letter-count":
+      return `Contains ${spec.count} of ${spec.letter}`;
     default:
       return assertNever(spec);
   }

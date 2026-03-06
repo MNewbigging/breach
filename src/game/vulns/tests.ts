@@ -56,6 +56,14 @@ export function distinctCount(s: string): number {
   return count;
 }
 
+export function exactCount(s: string, toMatch: string): number {
+  let count = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === toMatch) count++;
+  }
+  return count;
+}
+
 export function sumLetters(s: string): number {
   let sum = 0;
   for (let i = 0; i < s.length; i++) {
