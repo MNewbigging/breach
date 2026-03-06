@@ -82,10 +82,10 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
         spec,
         test: (s: string) => firstLastRelationMatches(s, spec.relation),
       };
-    case "span":
+    case "max-span":
       return {
         spec,
-        test: (s: string) => spanValue(s) === spec.span,
+        test: (s: string) => spanValue(s) <= spec.maxSpan,
       };
     case "letter-count":
       return {

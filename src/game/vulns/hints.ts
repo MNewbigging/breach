@@ -38,8 +38,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `At least ${spec.min} distinct letters`;
     case "first-last-relation":
       return `First letter ${spec.relation} last letter`;
-    case "span":
-      return `Spans total value of ${spec.span}`;
+    case "max-span":
+      return `Spans max value of ${spec.maxSpan}`;
     case "letter-count":
       return `Contains ${spec.count} of ${spec.letter}`;
     case "highest-position":
