@@ -6,6 +6,7 @@ import {
   amCount,
   containsOneOf,
   isPalindrome,
+  vowelRelation,
 } from "./tests";
 
 export interface Vulnerability {
@@ -38,6 +39,11 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return {
         spec,
         test: (s: string) => s[spec.position] === spec.letter,
+      };
+    case "vowel-relation":
+      return {
+        spec,
+        test: (s: string) => vowelRelation(s, spec.vowelRelation),
       };
   }
 }

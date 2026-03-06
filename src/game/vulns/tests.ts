@@ -17,6 +17,19 @@ export function vowelCount(s: string): number {
   return count;
 }
 
+export function vowelRelation(s: string, relation: ">" | "=" | "<") {
+  const vowels = vowelCount(s);
+  const consonants = s.length - vowels;
+  switch (relation) {
+    case ">":
+      return vowels > consonants;
+    case "=":
+      return vowels === consonants;
+    case "<":
+      return vowels < consonants;
+  }
+}
+
 export function hasDuplicateChars(s: string): boolean {
   let seen = 0; // bitset for A-Z
   for (let i = 0; i < s.length; i++) {

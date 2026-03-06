@@ -20,6 +20,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `Is a palindrome`;
     case "position-exact":
       return `Position ${spec.position + 1} is ${spec.letter}`;
+    case "vowel-relation":
+      return `Vowels ${spec.vowelRelation} consonants`;
     default:
       return assertNever(spec);
   }

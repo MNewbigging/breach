@@ -37,6 +37,11 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   const mask = getSetMask(password, rng);
   specs.push({ type: "contains-one-of", mask });
 
+  specs.push({
+    type: "vowel-relation",
+    vowelRelation: vowelRelation(password),
+  });
+
   // Relational / Structural Hints
   if (isPalindrome(password)) specs.push({ type: "is-palindrome" });
 
@@ -104,4 +109,14 @@ function maskFromLetters(letters: string[]) {
 function positionExactValues(password: string, rng: () => number) {
   const position = randomIndex(rng, password.length);
   return { position, letter: password[position] };
+}
+
+function vowelRelation(password: string) {
+  const vowels = vowelCount(password);
+  const consonants = password.length - vowels;
+
+  if (vowels > consonants) return ">";
+  if (vowels === consonants) return "=";
+  if (vowels < consonants) return "<";
+  return ">"; // just to satisfy ts
 }
