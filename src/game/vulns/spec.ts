@@ -6,4 +6,5 @@ export type VulnerabilitySpec =
   | { type: "sum"; sum: number }
   | { type: "at-least-AM"; minAM: number }
   | { type: "duplicate-characters"; hasDuplicates: boolean }
-  | { type: "contains-one-of"; mask: number };
+  | { type: "contains-one-of"; mask: number }
+  | { type: "is-palindrome" };

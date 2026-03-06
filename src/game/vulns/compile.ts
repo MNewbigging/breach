@@ -5,6 +5,7 @@ import {
   hasDuplicateChars,
   amCount,
   containsOneOf,
+  isPalindrome,
 } from "./tests";
 
 export interface Vulnerability {
@@ -31,5 +32,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return { spec, test: (s: string) => amCount(s) >= spec.minAM };
     case "contains-one-of":
       return { spec, test: (s: string) => containsOneOf(s, spec.mask) };
+    case "is-palindrome":
+      return { spec, test: (s: string) => isPalindrome(s) };
   }
 }

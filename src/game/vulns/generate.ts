@@ -1,6 +1,12 @@
 import { randomIndex, rngFunctionFromSeed } from "../seeded-random";
 import { VulnerabilitySpec } from "./spec";
-import { vowelCount, sumLetters, hasDuplicateChars, amCount } from "./tests";
+import {
+  vowelCount,
+  sumLetters,
+  hasDuplicateChars,
+  amCount,
+  isPalindrome,
+} from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
   return { type: "exact-length", exactLength: password.length };
@@ -11,29 +17,29 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
 
   const rng = rngFunctionFromSeed(seed);
 
-  // Vowels - exact is strong
+  // Positional Hints
+
+  // Compositional Hints
   specs.push({ type: "vowel-exact", vowelCount: vowelCount(password) });
   const minVowels = minVowelCount(password, rng);
   if (minVowels > 0) specs.push({ type: "vowel-min", minVowels });
 
-  // Sum
-  specs.push({ type: "sum", sum: sumLetters(password) });
-
-  // Dupes - strong
   specs.push({
     type: "duplicate-characters",
     hasDuplicates: hasDuplicateChars(password),
   });
 
-  // Distribution
   const minAM = atLeastFromAM(password, rng);
-  if (minAM > 0) {
-    specs.push({ type: "at-least-AM", minAM });
-  }
+  if (minAM > 0) specs.push({ type: "at-least-AM", minAM });
 
-  // Set
   const mask = getSetMask(password, rng);
   specs.push({ type: "contains-one-of", mask });
+
+  // Relational / Structural Hints
+  if (isPalindrome(password)) specs.push({ type: "is-palindrome" });
+
+  // Mathematical Hints
+  specs.push({ type: "sum", sum: sumLetters(password) });
 
   return specs;
 }

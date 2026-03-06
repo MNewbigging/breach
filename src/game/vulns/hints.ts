@@ -16,6 +16,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `At least ${spec.minAM} from A-M`;
     case "contains-one-of":
       return `At least 1 in [${lettersFromMask(spec.mask).join(", ")}]`;
+    case "is-palindrome":
+      return `Is a palindrome`;
     default:
       return assertNever(spec);
   }

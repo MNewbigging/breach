@@ -220,7 +220,7 @@ class Game {
     const seed = 54321;
     const vulnPool = getVulnerabilitySpecs(corePassword, seed);
     const awardedVulns: VulnerabilitySpec[] = [];
-    const hint = vulnPool.find((vs) => vs.type === "vowel-min");
+    const hint = vulnPool.find((vs) => vs.type === "is-palindrome");
     if (hint) awardedVulns.push(hint);
 
     const testBreach: Breach = {
