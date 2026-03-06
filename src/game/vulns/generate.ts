@@ -15,6 +15,8 @@ import {
   exactCount,
   highestPosition,
   lowestPosition,
+  evenCount,
+  evenRelation,
 } from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
@@ -95,6 +97,8 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   specs.push({ type: "highest-value", value: highestLetterValue(password) });
   specs.push({ type: "lowest-value", value: lowestLetterValue(password) });
   specs.push({ type: "span", span: spanValue(password) });
+  specs.push({ type: "even-count", count: evenCount(password) });
+  specs.push({ type: "even-relation", relation: evenRelation(password) });
 
   return specs;
 }

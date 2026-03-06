@@ -216,11 +216,11 @@ class Game {
     // When testing, return manually created state here
     const testing = true;
 
-    const corePassword = "ABCD";
+    const corePassword = "BBA";
     const seed = 1234;
     const vulnPool = getVulnerabilitySpecs(corePassword, seed);
     const awardedVulns: VulnerabilitySpec[] = [];
-    const hint = vulnPool.find((vs) => vs.type === "lowest-position");
+    const hint = vulnPool.find((vs) => vs.type === "even-relation");
     if (hint) awardedVulns.push(hint);
 
     const testBreach: Breach = {

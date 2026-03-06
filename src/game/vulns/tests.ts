@@ -202,3 +202,20 @@ export function spanValue(s: string): number {
   const lowest = lowestLetterValue(s);
   return highest - lowest;
 }
+
+export function evenCount(s: string): number {
+  let count = 0;
+  for (let i = 0; i < s.length; i++) {
+    const value = s[i].charCodeAt(0) - 64;
+    if (value % 2 === 0) count++;
+  }
+  return count;
+}
+
+export function evenRelation(password: string): Relation {
+  const evens = evenCount(password);
+  const odds = password.length - evens;
+  if (evens > odds) return ">";
+  if (evens === odds) return "=";
+  return "<";
+}

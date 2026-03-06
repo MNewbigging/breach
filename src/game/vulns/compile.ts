@@ -16,6 +16,8 @@ import {
   exactCount,
   highestPosition,
   lowestPosition,
+  evenCount,
+  evenRelation,
 } from "./tests";
 
 export interface Vulnerability {
@@ -100,5 +102,9 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
         spec,
         test: (s: string) => lowestPosition(s) === spec.position,
       };
+    case "even-count":
+      return { spec, test: (s: string) => evenCount(s) === spec.count };
+    case "even-relation":
+      return { spec, test: (s: string) => evenRelation(s) === spec.relation };
   }
 }
