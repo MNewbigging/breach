@@ -13,7 +13,7 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
 
   // Vowels - exact is strong
   specs.push({ type: "vowel-exact", vowelCount: vowelCount(password) });
-  const minVowels = minVowelCount(password);
+  const minVowels = minVowelCount(password, rng);
   if (minVowels > 0) specs.push({ type: "vowel-min", minVowels });
 
   // Sum
@@ -26,7 +26,7 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   });
 
   // Distribution
-  const minAM = atLeastFromAM(password);
+  const minAM = atLeastFromAM(password, rng);
   if (minAM > 0) {
     specs.push({ type: "at-least-AM", minAM });
   }
@@ -40,22 +40,22 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
 
 // ##### Spec generator helpers #####
 
-function biasedMin(exact: number, floor = 1) {
+function biasedMin(exact: number, rng: () => number, floor = 1) {
   if (exact === 0) return 0;
-  const r = Math.random();
+  const r = rng();
   const biased = r * r;
   const raw = Math.floor(biased * (exact + 1)); // 0..exact
   return Math.min(exact, Math.max(floor, raw));
 }
 
-function minVowelCount(s: string) {
+function minVowelCount(s: string, rng: () => number) {
   const vowels = vowelCount(s);
-  return biasedMin(vowels);
+  return biasedMin(vowels, rng);
 }
 
-function atLeastFromAM(s: string) {
+function atLeastFromAM(s: string, rng: () => number) {
   const exact = amCount(s);
-  return biasedMin(exact);
+  return biasedMin(exact, rng);
 }
 
 function getSetMask(password: string, rng: () => number) {
