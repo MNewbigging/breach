@@ -13,6 +13,7 @@ import {
   lowestLetterValue,
   spanValue,
   exactCount,
+  highestPosition,
 } from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
@@ -39,6 +40,8 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
     const { position, mask } = positionInSetValues(password, rng);
     specs.push({ type: "position-in-set", position, mask });
   }
+
+  specs.push({ type: "highest-position", position: highestPosition(password) });
 
   // Compositional Hints
   specs.push({ type: "vowel-exact", vowelCount: vowelCount(password) });

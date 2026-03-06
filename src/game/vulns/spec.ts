@@ -25,4 +25,5 @@ export type VulnerabilitySpec =
   | { type: "min-distinct-count"; min: number }
   | { type: "first-last-relation"; relation: Relation }
   | { type: "span"; span: number }
-  | { type: "letter-count"; letter: string; count: number };
+  | { type: "letter-count"; letter: string; count: number }
+  | { type: "highest-position"; position: number };

@@ -6,7 +6,7 @@ import {
   amCount,
   containsOneOf,
   isPalindrome,
-  vowelRelation,
+  vowelRelationMatches,
   positionTypeMatches,
   highestValueEquals,
   lowestValueEquals,
@@ -14,6 +14,7 @@ import {
   firstLastRelationMatches,
   spanValue,
   exactCount,
+  highestPosition,
 } from "./tests";
 
 export interface Vulnerability {
@@ -50,7 +51,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
     case "vowel-relation":
       return {
         spec,
-        test: (s: string) => vowelRelation(s, spec.vowelRelation),
+        test: (s: string) => vowelRelationMatches(s, spec.vowelRelation),
       };
     case "position-type":
       return {
@@ -87,6 +88,11 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return {
         spec,
         test: (s: string) => exactCount(s, spec.letter) === spec.count,
+      };
+    case "highest-position":
+      return {
+        spec,
+        test: (s: string) => highestPosition(s) === spec.position,
       };
   }
 }

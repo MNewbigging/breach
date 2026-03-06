@@ -42,6 +42,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `Spans total value of ${spec.span}`;
     case "letter-count":
       return `Contains ${spec.count} of ${spec.letter}`;
+    case "highest-position":
+      return `Position ${spec.position + 1} is highest`;
     default:
       return assertNever(spec);
   }
