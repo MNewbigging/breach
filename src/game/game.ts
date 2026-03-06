@@ -213,6 +213,30 @@ class Game {
   }
 
   private getSavedBreach() {
+    // When testing, return manually created state here
+    const testing = true;
+
+    const corePassword = "TEST";
+    const seed = 12345;
+    const vulnPool = getVulnerabilitySpecs(corePassword, seed);
+    const awardedVulns: VulnerabilitySpec[] = [];
+    const setHint = vulnPool.find((vs) => vs.type === "contains-one-of");
+    if (setHint) awardedVulns.push(setHint);
+
+    const testBreach: Breach = {
+      systemName: "Test",
+      securityLayers: [{ name: "Test Layer", baseXp: 1 }], // might want a layer generator later
+      securityLayerResults: [{ result: "win", gainedXp: 1 }],
+      nextLayerPointer: 1,
+      seed,
+      corePassword,
+      vulnPool,
+      awardedVulns,
+    };
+
+    if (testing) return testBreach;
+
+    // Load saved breach from localStorage
     const data = localStorage.getItem("savedBreach");
     if (data) {
       const breach: Breach = JSON.parse(data);

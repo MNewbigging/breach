@@ -1,10 +1,10 @@
-export function randomSeed() {
+export function randomSeed(): number {
   const arr = new Uint32Array(1);
   crypto.getRandomValues(arr);
   return arr[0];
 }
 
-export function rngFunctionFromSeed(seed: number) {
+export function rngFunctionFromSeed(seed: number): () => number {
   return function () {
     let t = (seed += 0x6d2b79f5);
     t = Math.imul(t ^ (t >>> 15), t | 1);
@@ -13,10 +13,10 @@ export function rngFunctionFromSeed(seed: number) {
   };
 }
 
-export function randomLetter(rng: () => number) {
+export function randomLetter(rng: () => number): string {
   return String.fromCharCode(65 + Math.floor(rng() * 26));
 }
 
-export function randomIndex(rng: () => number, length: number) {
+export function randomIndex(rng: () => number, length: number): number {
   return Math.floor(rng() * length);
 }
