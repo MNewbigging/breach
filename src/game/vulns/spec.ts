@@ -1,5 +1,6 @@
 export type Relation = ">" | "=" | "<";
 export type LetterType = "vowel" | "consonant";
+export type VulnerabilityTier = "weak" | "medium" | "strong";
 
 export type VulnerabilitySpec =
   | { type: "exact-length"; exactLength: number }

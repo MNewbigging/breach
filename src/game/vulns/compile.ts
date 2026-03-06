@@ -85,7 +85,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
     case "max-span":
       return {
         spec,
-        test: (s: string) => spanValue(s) <= spec.maxSpan,
+        test: (s: string) => s.length > 1 && spanValue(s) <= spec.maxSpan,
       };
     case "letter-count":
       return {

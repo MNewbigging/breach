@@ -1,9 +1,9 @@
 @use "../../../common-styles.scss" as *;
 
-.passed {
+.pass {
   color: $green;
 }
 
-.failed {
+.fail {
   color: $red;
 }

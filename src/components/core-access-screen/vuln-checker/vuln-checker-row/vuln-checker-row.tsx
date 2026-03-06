@@ -5,19 +5,19 @@ import clsx from "clsx";
 
 interface VulnCheckerRowProps {
   text: string;
-  failed: boolean;
+  appearance: "pass" | "fail" | "neutral";
   shakeSignal: number;
 }
 
 export function VulnCheckerRow({
   text,
-  failed,
+  appearance,
   shakeSignal,
 }: VulnCheckerRowProps) {
   const controls = useAnimationControls();
 
   useEffect(() => {
-    if (failed) {
+    if (appearance === "fail") {
       controls.start({
         x: [0, -6, 6, -4, 4, 0],
         transition: { duration: 0.25 },
@@ -25,12 +25,13 @@ export function VulnCheckerRow({
     }
   }, [shakeSignal]);
 
+  let prefix = "";
+  if (appearance === "fail") prefix = "✖";
+  if (appearance === "pass") prefix = "✔";
+
   return (
-    <motion.div
-      animate={controls}
-      className={clsx(styles[failed ? "failed" : "passed"])}
-    >
-      {failed ? "✖" : "✔"} {text}
+    <motion.div animate={controls} className={clsx(styles[appearance])}>
+      {prefix} {text}
     </motion.div>
   );
 }

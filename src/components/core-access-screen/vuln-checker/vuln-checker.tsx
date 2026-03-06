@@ -21,7 +21,9 @@ export function VulnerabilityChecker({
         <VulnCheckerRow
           key={`v-${index}`}
           text={getVulnHintFor(v.spec)}
-          failed={!v.test(candidate)}
+          appearance={
+            candidate.length ? (v.test(candidate) ? "pass" : "fail") : "neutral"
+          }
           shakeSignal={shakeSignal}
         />
       ))}
