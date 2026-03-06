@@ -1,5 +1,5 @@
 import { randomIndex, rngFunctionFromSeed } from "../seeded-random";
-import { VulnerabilitySpec } from "./spec";
+import { LetterType, Relation, VulnerabilitySpec } from "./spec";
 import {
   vowelCount,
   sumLetters,
@@ -8,6 +8,7 @@ import {
   isPalindrome,
   isVowel,
   distinctCount,
+  firstLastRelation,
 } from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
@@ -70,11 +71,15 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
 
   // Relational / Structural Hints
   if (isPalindrome(password)) specs.push({ type: "is-palindrome" });
+  specs.push({
+    type: "first-last-relation",
+    relation: firstLastRelation(password),
+  });
 
   // Mathematical Hints
   specs.push({ type: "sum", sum: sumLetters(password) });
-  specs.push({ type: "highest-value", value: getHighestLetterValue(password) });
-  specs.push({ type: "lowest-value", value: getLowestLetterValue(password) });
+  specs.push({ type: "highest-value", value: highestLetterValue(password) });
+  specs.push({ type: "lowest-value", value: lowestLetterValue(password) });
 
   return specs;
 }
@@ -159,21 +164,20 @@ function positionExactValues(password: string, rng: () => number) {
   return { position, letter: password[position] };
 }
 
-function vowelRelation(password: string) {
+function vowelRelation(password: string): Relation {
   const vowels = vowelCount(password);
   const consonants = password.length - vowels;
 
   if (vowels > consonants) return ">";
   if (vowels === consonants) return "=";
-  if (vowels < consonants) return "<";
-  return ">"; // just to satisfy ts
+  return "<";
 }
 
 function positionTypeValues(password: string, rng: () => number) {
   const position = randomIndex(rng, password.length);
   const isV = isVowel(password[position]);
-  const letterType = isV ? "vowel" : "consonant";
-  return { position, letterType: letterType as "vowel" | "consonant" };
+  const letterType: LetterType = isV ? "vowel" : "consonant";
+  return { position, letterType };
 }
 
 function positionInSetValues(password: string, rng: () => number) {
@@ -182,7 +186,7 @@ function positionInSetValues(password: string, rng: () => number) {
   return { position, mask: maskFromLetters(set) };
 }
 
-function getHighestLetterValue(password: string) {
+function highestLetterValue(password: string) {
   let highest = 0;
   for (let i = 0; i < password.length; i++) {
     const value = password[i].charCodeAt(0) - 64; // 1..26
@@ -191,7 +195,7 @@ function getHighestLetterValue(password: string) {
   return highest;
 }
 
-function getLowestLetterValue(password: string) {
+function lowestLetterValue(password: string) {
   let lowest = 27;
   for (let i = 0; i < password.length; i++) {
     const value = password[i].charCodeAt(0) - 64;

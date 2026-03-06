@@ -1,3 +1,5 @@
+import { LetterType, Relation } from "./spec";
+
 export function isVowel(c: string): boolean {
   const code = c.charCodeAt(0);
   return (
@@ -17,7 +19,7 @@ export function vowelCount(s: string): number {
   return count;
 }
 
-export function vowelRelation(s: string, relation: ">" | "=" | "<") {
+export function vowelRelation(s: string, relation: Relation) {
   const vowels = vowelCount(s);
   const consonants = s.length - vowels;
   switch (relation) {
@@ -97,7 +99,7 @@ export function isPalindrome(s: string): boolean {
 export function positionTypeMatches(
   s: string,
   position: number,
-  type: "vowel" | "consonant",
+  type: LetterType,
 ): boolean {
   if (s.length - 1 < position) return false;
 
@@ -124,4 +126,21 @@ export function lowestValueEquals(s: string, testValue: number): boolean {
     if (value < lowest) lowest = value;
   }
   return lowest === testValue;
+}
+
+export function firstLastRelation(password: string): Relation {
+  const first = password[0].charCodeAt(0) - 64;
+  const last = password[password.length - 1].charCodeAt(0) - 64;
+
+  if (first > last) return ">";
+  if (first === last) return "=";
+  return "<";
+}
+
+export function firstLastRelationMatches(
+  password: string,
+  relation: Relation,
+): boolean {
+  if (!password.length) return false;
+  return firstLastRelation(password) === relation;
 }

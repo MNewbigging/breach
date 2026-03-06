@@ -11,6 +11,7 @@ import {
   highestValueEquals,
   lowestValueEquals,
   distinctCount,
+  firstLastRelationMatches,
 } from "./tests";
 
 export interface Vulnerability {
@@ -70,5 +71,10 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return { spec, test: (s: string) => distinctCount(s) === spec.count };
     case "min-distinct-count":
       return { spec, test: (s: string) => distinctCount(s) >= spec.min };
+    case "first-last-relation":
+      return {
+        spec,
+        test: (s: string) => firstLastRelationMatches(s, spec.relation),
+      };
   }
 }
