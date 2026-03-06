@@ -12,6 +12,7 @@ import {
   lowestValueEquals,
   distinctCount,
   firstLastRelationMatches,
+  spanValue,
 } from "./tests";
 
 export interface Vulnerability {
@@ -75,6 +76,11 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return {
         spec,
         test: (s: string) => firstLastRelationMatches(s, spec.relation),
+      };
+    case "span":
+      return {
+        spec,
+        test: (s: string) => spanValue(s) === spec.span,
       };
   }
 }

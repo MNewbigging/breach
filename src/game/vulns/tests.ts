@@ -108,6 +108,24 @@ export function positionTypeMatches(
   return isVowel(c) === false;
 }
 
+export function highestLetterValue(password: string) {
+  let highest = 0;
+  for (let i = 0; i < password.length; i++) {
+    const value = password[i].charCodeAt(0) - 64; // 1..26
+    if (value > highest) highest = value;
+  }
+  return highest;
+}
+
+export function lowestLetterValue(password: string) {
+  let lowest = 27;
+  for (let i = 0; i < password.length; i++) {
+    const value = password[i].charCodeAt(0) - 64;
+    if (value < lowest) lowest = value;
+  }
+  return lowest;
+}
+
 export function highestValueEquals(s: string, testValue: number): boolean {
   let highest = 0;
   for (let i = 0; i < s.length; i++) {
@@ -128,9 +146,9 @@ export function lowestValueEquals(s: string, testValue: number): boolean {
   return lowest === testValue;
 }
 
-export function firstLastRelation(password: string): Relation {
-  const first = password[0].charCodeAt(0) - 64;
-  const last = password[password.length - 1].charCodeAt(0) - 64;
+export function firstLastRelation(s: string): Relation {
+  const first = s[0].charCodeAt(0) - 64;
+  const last = s[s.length - 1].charCodeAt(0) - 64;
 
   if (first > last) return ">";
   if (first === last) return "=";
@@ -143,4 +161,10 @@ export function firstLastRelationMatches(
 ): boolean {
   if (!password.length) return false;
   return firstLastRelation(password) === relation;
+}
+
+export function spanValue(s: string): number {
+  const highest = highestLetterValue(s);
+  const lowest = lowestLetterValue(s);
+  return highest - lowest;
 }

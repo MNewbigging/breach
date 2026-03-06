@@ -9,6 +9,9 @@ import {
   isVowel,
   distinctCount,
   firstLastRelation,
+  highestLetterValue,
+  lowestLetterValue,
+  spanValue,
 } from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
@@ -80,6 +83,7 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   specs.push({ type: "sum", sum: sumLetters(password) });
   specs.push({ type: "highest-value", value: highestLetterValue(password) });
   specs.push({ type: "lowest-value", value: lowestLetterValue(password) });
+  specs.push({ type: "span", span: spanValue(password) });
 
   return specs;
 }
@@ -184,22 +188,4 @@ function positionInSetValues(password: string, rng: () => number) {
   const position = randomIndex(rng, password.length);
   const set = getRandomSetFor(password[position], rng);
   return { position, mask: maskFromLetters(set) };
-}
-
-function highestLetterValue(password: string) {
-  let highest = 0;
-  for (let i = 0; i < password.length; i++) {
-    const value = password[i].charCodeAt(0) - 64; // 1..26
-    if (value > highest) highest = value;
-  }
-  return highest;
-}
-
-function lowestLetterValue(password: string) {
-  let lowest = 27;
-  for (let i = 0; i < password.length; i++) {
-    const value = password[i].charCodeAt(0) - 64;
-    if (value < lowest) lowest = value;
-  }
-  return lowest;
 }
