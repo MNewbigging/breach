@@ -15,6 +15,7 @@ import {
   spanValue,
   exactCount,
   highestPosition,
+  lowestPosition,
 } from "./tests";
 
 export interface Vulnerability {
@@ -93,6 +94,11 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return {
         spec,
         test: (s: string) => highestPosition(s) === spec.position,
+      };
+    case "lowest-position":
+      return {
+        spec,
+        test: (s: string) => lowestPosition(s) === spec.position,
       };
   }
 }

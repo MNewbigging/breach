@@ -167,6 +167,19 @@ export function lowestValueEquals(s: string, testValue: number): boolean {
   return lowest === testValue;
 }
 
+export function lowestPosition(s: string): number {
+  let position = 0;
+  let lowest = 27;
+  for (let i = 0; i < s.length; i++) {
+    const value = s[i].charCodeAt(0) - 64;
+    if (value < lowest) {
+      lowest = value;
+      position = i;
+    }
+  }
+  return position;
+}
+
 export function firstLastRelation(s: string): Relation {
   const first = s[0].charCodeAt(0) - 64;
   const last = s[s.length - 1].charCodeAt(0) - 64;

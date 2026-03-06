@@ -220,7 +220,7 @@ class Game {
     const seed = 1234;
     const vulnPool = getVulnerabilitySpecs(corePassword, seed);
     const awardedVulns: VulnerabilitySpec[] = [];
-    const hint = vulnPool.find((vs) => vs.type === "highest-position");
+    const hint = vulnPool.find((vs) => vs.type === "lowest-position");
     if (hint) awardedVulns.push(hint);
 
     const testBreach: Breach = {
