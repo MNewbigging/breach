@@ -5,4 +5,5 @@ export type VulnerabilitySpec =
   | { type: "vowel-min"; minVowels: number }
   | { type: "sum"; sum: number }
   | { type: "at-least-AM"; minAM: number }
-  | { type: "duplicate-characters"; hasDuplicates: boolean };
+  | { type: "duplicate-characters"; hasDuplicates: boolean }
+  | { type: "contains-one-of"; mask: number };

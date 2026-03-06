@@ -14,6 +14,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `${spec.hasDuplicates ? "Has" : "no"} duplicate characters`;
     case "at-least-AM":
       return `At least ${spec.minAM} from A-M`;
+    case "contains-one-of":
+      return `At least 1 in [${lettersFromMask(spec.mask).join(", ")}]`;
     default:
       return assertNever(spec);
   }
@@ -21,4 +23,16 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
 
 export function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${JSON.stringify(x)}`);
+}
+
+function lettersFromMask(mask: number): string[] {
+  const letters: string[] = [];
+
+  for (let i = 0; i < 26; i++) {
+    if (mask & (1 << i)) {
+      letters.push(String.fromCharCode(65 + i));
+    }
+  }
+
+  return letters;
 }

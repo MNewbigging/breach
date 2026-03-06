@@ -43,3 +43,11 @@ export function amCount(s: string): number {
   }
   return count;
 }
+
+export function containsOneOf(s: string, mask: number): boolean {
+  for (let i = 0; i < s.length; i++) {
+    const bit = 1 << (s.charCodeAt(i) - 65);
+    if (mask & bit) return true;
+  }
+  return false;
+}

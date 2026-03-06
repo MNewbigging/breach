@@ -1,5 +1,11 @@
 import { VulnerabilitySpec } from "./spec";
-import { vowelCount, sumLetters, hasDuplicateChars, amCount } from "./tests";
+import {
+  vowelCount,
+  sumLetters,
+  hasDuplicateChars,
+  amCount,
+  containsOneOf,
+} from "./tests";
 
 export interface Vulnerability {
   spec: VulnerabilitySpec;
@@ -23,5 +29,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       };
     case "at-least-AM":
       return { spec, test: (s: string) => amCount(s) >= spec.minAM };
+    case "contains-one-of":
+      return { spec, test: (s: string) => containsOneOf(s, spec.mask) };
   }
 }

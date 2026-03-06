@@ -12,3 +12,11 @@ export function rngFunctionFromSeed(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+
+export function randomLetter(rng: () => number) {
+  return String.fromCharCode(65 + Math.floor(rng() * 26));
+}
+
+export function randomIndex(rng: () => number, length: number) {
+  return Math.floor(rng() * length);
+}

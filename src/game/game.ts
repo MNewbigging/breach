@@ -112,14 +112,14 @@ class Game {
   }
 
   initiateBreach(breachOption: BreachOption) {
-    const corePassword = generateCorePassword();
-    const vulnPool = getVulnerabilitySpecs(corePassword);
-    const awardedVulns = [getExactLengthVulnSpec(corePassword)]; // Always start with length vuln
-
     // Generate breach seed
     const arr = new Uint32Array(1);
     crypto.getRandomValues(arr);
     const seed = arr[0];
+
+    const corePassword = generateCorePassword();
+    const vulnPool = getVulnerabilitySpecs(corePassword, seed);
+    const awardedVulns = [getExactLengthVulnSpec(corePassword)]; // Always start with length vuln
 
     // Setup the full breach object using selected option
     this.currentBreach = {

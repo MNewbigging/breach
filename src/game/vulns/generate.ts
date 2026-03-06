@@ -1,3 +1,4 @@
+import { randomIndex, rngFunctionFromSeed } from "../seeded-random";
 import { VulnerabilitySpec } from "./spec";
 import { vowelCount, sumLetters, hasDuplicateChars, amCount } from "./tests";
 
@@ -5,8 +6,10 @@ export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
   return { type: "exact-length", exactLength: password.length };
 }
 
-export function getVulnerabilitySpecs(password: string) {
+export function getVulnerabilitySpecs(password: string, seed: number) {
   const specs: VulnerabilitySpec[] = [];
+
+  const rng = rngFunctionFromSeed(seed);
 
   // Vowels - exact is strong
   specs.push({ type: "vowel-exact", vowelCount: vowelCount(password) });
@@ -27,6 +30,10 @@ export function getVulnerabilitySpecs(password: string) {
   if (minAM > 0) {
     specs.push({ type: "at-least-AM", minAM });
   }
+
+  // Set
+  const mask = getSetMask(password, rng);
+  specs.push({ type: "contains-one-of", mask });
 
   return specs;
 }
@@ -49,4 +56,39 @@ function minVowelCount(s: string) {
 function atLeastFromAM(s: string) {
   const exact = amCount(s);
   return biasedMin(exact);
+}
+
+function getSetMask(password: string, rng: () => number) {
+  // Pick one random letter from the password
+  const chosen = password[randomIndex(rng, password.length)];
+
+  // Make an alphabet array to pick two other random letters from
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    .split("")
+    .filter((c) => c !== chosen);
+
+  // Pick two distinct letters
+  const firstPick = alphabet.splice(randomIndex(rng, alphabet.length), 1)[0];
+  const secondPick = alphabet.splice(randomIndex(rng, alphabet.length), 1)[0];
+
+  // Shuffle the set
+  const setLetters = shuffle([chosen, firstPick, secondPick], rng);
+
+  // Return the mask
+  return maskFromLetters(setLetters);
+}
+
+function shuffle<T>(arr: T[], rng: () => number): T[] {
+  const out = arr.slice(); // clone so we don't mutate original
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+function maskFromLetters(letters: string[]) {
+  let mask = 0;
+  for (const c of letters) mask |= 1 << (c.charCodeAt(0) - 65);
+  return mask;
 }
