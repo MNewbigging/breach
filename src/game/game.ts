@@ -216,11 +216,11 @@ class Game {
     // When testing, return manually created state here
     const testing = true;
 
-    const corePassword = "ABCD";
+    const corePassword = "ABBC";
     const seed = 12346;
     const vulnPool = getVulnerabilitySpecs(corePassword, seed);
     const awardedVulns: VulnerabilitySpec[] = [];
-    const hint = vulnPool.find((vs) => vs.type === "contains-none-of");
+    const hint = vulnPool.find((vs) => vs.type === "distinct-count");
     if (hint) awardedVulns.push(hint);
 
     const testBreach: Breach = {

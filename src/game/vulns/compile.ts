@@ -10,6 +10,7 @@ import {
   positionTypeMatches,
   highestValueEquals,
   lowestValueEquals,
+  distinctCount,
 } from "./tests";
 
 export interface Vulnerability {
@@ -65,5 +66,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return { spec, test: (s: string) => lowestValueEquals(s, spec.value) };
     case "contains-none-of":
       return { spec, test: (s: string) => !containsOneOf(s, spec.mask) };
+    case "distinct-count":
+      return { spec, test: (s: string) => distinctCount(s) === spec.count };
   }
 }

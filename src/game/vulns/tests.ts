@@ -40,6 +40,20 @@ export function hasDuplicateChars(s: string): boolean {
   return false;
 }
 
+export function distinctCount(s: string): number {
+  let count = 0;
+  let seen = 0;
+  for (let i = 0; i < s.length; i++) {
+    const bit = 1 << (s.charCodeAt(i) - 65);
+    if ((seen & bit) === 0) {
+      count++;
+      seen |= bit;
+    }
+  }
+
+  return count;
+}
+
 export function sumLetters(s: string): number {
   let sum = 0;
   for (let i = 0; i < s.length; i++) {

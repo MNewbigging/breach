@@ -7,6 +7,7 @@ import {
   amCount,
   isPalindrome,
   isVowel,
+  distinctCount,
 } from "./tests";
 
 export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
@@ -43,6 +44,8 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
     type: "duplicate-characters",
     hasDuplicates: hasDuplicateChars(password),
   });
+
+  specs.push({ type: "distinct-count", count: distinctCount(password) });
 
   const minAM = atLeastFromAM(password, rng);
   if (minAM > 0) specs.push({ type: "at-least-AM", minAM });
