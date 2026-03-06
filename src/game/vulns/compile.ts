@@ -68,5 +68,7 @@ export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
       return { spec, test: (s: string) => !containsOneOf(s, spec.mask) };
     case "distinct-count":
       return { spec, test: (s: string) => distinctCount(s) === spec.count };
+    case "min-distinct-count":
+      return { spec, test: (s: string) => distinctCount(s) >= spec.min };
   }
 }

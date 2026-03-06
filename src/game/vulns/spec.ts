@@ -19,4 +19,5 @@ export type VulnerabilitySpec =
   | { type: "highest-value"; value: number }
   | { type: "lowest-value"; value: number }
   | { type: "contains-none-of"; mask: number }
-  | { type: "distinct-count"; count: number };
+  | { type: "distinct-count"; count: number }
+  | { type: "min-distinct-count"; min: number };

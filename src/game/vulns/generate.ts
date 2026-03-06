@@ -46,6 +46,13 @@ export function getVulnerabilitySpecs(password: string, seed: number) {
   });
 
   specs.push({ type: "distinct-count", count: distinctCount(password) });
+  const minDistinct = minDistinctCount(password, rng);
+  if (minDistinct > 1) {
+    specs.push({
+      type: "min-distinct-count",
+      min: minDistinctCount(password, rng),
+    });
+  }
 
   const minAM = atLeastFromAM(password, rng);
   if (minAM > 0) specs.push({ type: "at-least-AM", minAM });
@@ -85,6 +92,11 @@ function biasedMin(exact: number, rng: () => number, floor = 1) {
 function minVowelCount(s: string, rng: () => number) {
   const vowels = vowelCount(s);
   return biasedMin(vowels, rng);
+}
+
+function minDistinctCount(s: string, rng: () => number) {
+  const distinct = distinctCount(s);
+  return biasedMin(distinct, rng);
 }
 
 function atLeastFromAM(s: string, rng: () => number) {

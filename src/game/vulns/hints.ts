@@ -34,6 +34,8 @@ export function getVulnHintFor(spec: VulnerabilitySpec) {
       return `Contains none of [${lettersFromMask(spec.mask).join(", ")}]`;
     case "distinct-count":
       return `${spec.count} distinct letters`;
+    case "min-distinct-count":
+      return `At least ${spec.min} distinct letters`;
     default:
       return assertNever(spec);
   }
