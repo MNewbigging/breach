@@ -10,6 +10,7 @@ import { BreachProgressScreen } from "./breach-progress-screen/breach-progress-s
 import { Level } from "./level/level";
 import { CoreAccessScreen } from "./core-access-screen/core-access-screen";
 import { BreachOverScreen } from "./breach-over-screen/breach-over-screen";
+import { MemoryDefragLevel } from "./memory-defrag-level/memory-defrag-level";
 
 export function App() {
   useEventUpdater("screen-changed");
@@ -32,13 +33,13 @@ export function App() {
         {screen === "breach-progress" && (
           <BreachProgressScreen key="breach-progress-screen" />
         )}
-        {screen === "level" && <Level key="level" />}
         {screen === "core-access" && breach && (
           <CoreAccessScreen key="core-access-screen" breach={breach} />
         )}
         {screen === "breach-over" && (
           <BreachOverScreen key="breach-over-screen" />
         )}
+        {screen === "memory-defrag-level" && <MemoryDefragLevel />}
       </AnimatePresence>
     </div>
   );

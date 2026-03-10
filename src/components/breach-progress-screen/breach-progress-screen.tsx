@@ -1,4 +1,4 @@
-import { game } from "../../game/game";
+import { game, Breach } from "../../game/game";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
@@ -12,10 +12,7 @@ export function BreachProgressScreen() {
   if (!breach) return null;
 
   // Get the next level name
-  const nextLevelName =
-    breach.nextLayerPointer < breach.securityLayers.length
-      ? breach.securityLayers[breach.nextLayerPointer].name
-      : "Breach Core";
+  const nextLevelName = getNextLevelName(breach);
 
   function onNextLevel() {
     const breach = game.currentBreach;
@@ -49,4 +46,18 @@ export function BreachProgressScreen() {
       </AnimatedBlock>
     </Screen>
   );
+}
+
+function getNextLevelName(breach: Breach) {
+  // First check if there is a next level
+  if (breach.nextLayerPointer < breach.securityLayers.length) {
+    const nextLayerType = breach.securityLayers[breach.nextLayerPointer].type;
+    switch (nextLayerType) {
+      case "memory-defrag":
+        return "Memory Defrag";
+    }
+  }
+
+  // Otherwise it's the core access next
+  return "Breach Core";
 }

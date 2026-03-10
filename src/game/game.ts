@@ -7,13 +7,14 @@ import {
 } from "./vulns/generate";
 import { VulnerabilitySpec } from "./vulns/spec";
 
-type SceenName =
+export type SceenName =
   | "loading"
   | "breach-select"
   | "breach-progress"
   | "level"
   | "core-access"
-  | "breach-over";
+  | "breach-over"
+  | "memory-defrag-level";
 
 export type VictoryResult = "win" | "lose";
 export type BreachResult = VictoryResult | "abandoned";
@@ -23,8 +24,9 @@ export interface SecurityLayerResult {
   gainedXp: number;
 }
 
+export type SecurityLayerType = "memory-defrag";
 export interface SecurityLayer {
-  name: string;
+  type: SecurityLayerType;
   baseXp: number;
 }
 
@@ -80,15 +82,15 @@ class Game {
   getSystemOptions(): BreachOption[] {
     const securityLayers: SecurityLayer[] = [
       {
-        name: "Layer 1",
+        type: "memory-defrag",
         baseXp: 1,
       },
       {
-        name: "Layer 2",
+        type: "memory-defrag",
         baseXp: 1,
       },
       {
-        name: "Layer 3",
+        type: "memory-defrag",
         baseXp: 1,
       },
     ];
@@ -141,8 +143,16 @@ class Game {
   nextLayer() {
     if (!this.currentBreach) return;
 
-    // For now
-    this.changeScreen("level");
+    const nextLayerType =
+      this.currentBreach.securityLayers[this.currentBreach.nextLayerPointer]
+        .type;
+
+    // todo - could possibly use ScreenName instead of SecurityLayerType to avoid this switch
+    switch (nextLayerType) {
+      case "memory-defrag":
+        this.changeScreen("memory-defrag-level");
+        break;
+    }
   }
 
   concludeLayer(stats: SecurityLayerResult) {
@@ -214,7 +224,7 @@ class Game {
 
   private getSavedBreach() {
     // When testing, return manually created state here
-    const testing = true;
+    const testing = false;
 
     const corePassword = "AK";
     const seed = 1234;
@@ -225,7 +235,7 @@ class Game {
 
     const testBreach: Breach = {
       systemName: "Test",
-      securityLayers: [{ name: "Test Layer", baseXp: 1 }], // might want a layer generator later
+      securityLayers: [{ type: "memory-defrag", baseXp: 1 }], // might want a layer generator later
       securityLayerResults: [{ result: "win", gainedXp: 1 }],
       nextLayerPointer: 1,
       seed,
