@@ -1,4 +1,4 @@
-import { randomIndex, rngFunctionFromSeed } from "../seeded-random";
+import { randomIndex, rngFunctionFromSeed, shuffle } from "../seeded-random";
 import { LetterType, Relation, VulnerabilitySpec } from "./spec";
 import {
   vowelCount,
@@ -161,15 +161,6 @@ function getRandomSetFor(chosen: string, rng: () => number, setLength = 3) {
   }
 
   return shuffle(set, rng);
-}
-
-function shuffle<T>(arr: T[], rng: () => number): T[] {
-  const out = arr.slice(); // clone so we don't mutate original
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
-  }
-  return out;
 }
 
 function maskFromLetters(letters: string[]) {

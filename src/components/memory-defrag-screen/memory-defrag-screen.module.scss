@@ -1,0 +1,39 @@
+@use "../common-styles.scss" as *;
+
+.screen-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.top-bar {
+  height: 50px;
+  border: $border-default;
+}
+
+.letter-pool {
+  padding: 10px;
+  border: $border-default;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  .letter {
+    padding: 2px 4px;
+    border: $border-default;
+    user-select: none;
+  }
+}
+
+.word-bar {
+  height: 50px;
+  border: $border-default;
+}
+
+.word-bank {
+  flex: 1 1 auto;
+  min-height: 50px;
+  border: $border-default;
+}

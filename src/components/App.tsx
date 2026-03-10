@@ -7,10 +7,9 @@ import { useEventUpdater } from "./hooks/use-event-updater";
 import { game } from "../game/game";
 import { SystemSelectScreen } from "./system-select-screen/system-select-screen";
 import { BreachProgressScreen } from "./breach-progress-screen/breach-progress-screen";
-import { Level } from "./level/level";
 import { CoreAccessScreen } from "./core-access-screen/core-access-screen";
 import { BreachOverScreen } from "./breach-over-screen/breach-over-screen";
-import { MemoryDefragLevel } from "./memory-defrag-level/memory-defrag-level";
+import { MemoryDefragScreen } from "./memory-defrag-screen/memory-defrag-screen";
 
 export function App() {
   useEventUpdater("screen-changed");
@@ -39,7 +38,9 @@ export function App() {
         {screen === "breach-over" && (
           <BreachOverScreen key="breach-over-screen" />
         )}
-        {screen === "memory-defrag-level" && <MemoryDefragLevel />}
+        {screen === "memory-defrag-level" && game.memoryDefragLevel && (
+          <MemoryDefragScreen levelState={game.memoryDefragLevel} />
+        )}
       </AnimatePresence>
     </div>
   );

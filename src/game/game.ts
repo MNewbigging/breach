@@ -1,6 +1,7 @@
 import { eventDispatcher } from "../events/event-dispatcher";
 import { generateCorePassword } from "./core-password-generator";
-import { loadDictionary } from "./load-dictionary";
+import { Dictionary, loadDictionary } from "./load-dictionary";
+import { MemoryDefragLevel } from "./memory-defrag-level";
 import {
   getVulnerabilitySpecs,
   getExactLengthVulnSpec,
@@ -49,7 +50,10 @@ class Game {
   currentScreen: SceenName = "loading";
   currentBreach?: Breach;
 
-  private dictionary?: Set<string>;
+  // Level states - defined when level is next/active
+  memoryDefragLevel?: MemoryDefragLevel;
+
+  private dictionary?: Dictionary;
 
   async load() {
     // Track time it took to load
@@ -141,7 +145,7 @@ class Game {
   }
 
   nextLayer() {
-    if (!this.currentBreach) return;
+    if (!this.currentBreach || !this.dictionary) return;
 
     const nextLayerType =
       this.currentBreach.securityLayers[this.currentBreach.nextLayerPointer]
@@ -150,6 +154,10 @@ class Game {
     // todo - could possibly use ScreenName instead of SecurityLayerType to avoid this switch
     switch (nextLayerType) {
       case "memory-defrag":
+        this.memoryDefragLevel = new MemoryDefragLevel(
+          this.dictionary,
+          this.currentBreach.seed,
+        );
         this.changeScreen("memory-defrag-level");
         break;
     }
