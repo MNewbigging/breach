@@ -251,8 +251,6 @@ class Game {
   }
 
   private awardVulnerability(breach: Breach) {
-    // I award a v based on how much I want to reduce search space at this time
-
     // Remove a v from the pool and add to awarded list
     const rnd = Math.floor(Math.random() * breach.vulnPool.length);
     const removed = breach.vulnPool.splice(rnd, 1);

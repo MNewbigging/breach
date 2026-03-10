@@ -4,7 +4,7 @@ export type VulnerabilityTier = "weak" | "medium" | "strong";
 
 export type VulnerabilitySpec =
   // Positional
-  | { type: "position-exact"; position: number; letter: string }
+  | { type: "position-exact"; position: number; letter: string } // is this too strong? sort of boring
   | { type: "position-in-set"; position: number; mask: number }
   | { type: "highest-position"; position: number }
   | { type: "lowest-position"; position: number }
@@ -38,3 +38,20 @@ export type VulnerabilitySpec =
   | { type: "lowest-value"; value: number }
   | { type: "max-span"; maxSpan: number }
   | { type: "even-letter-count"; count: number };
+
+/**
+ * Mutually exclusive hints list:
+ *
+ * position-exact
+ * position-in-set
+ * position-type
+ * -- when the position is the same (which it would be due to seeded randomIndex)
+ *
+ * highest-position
+ * lowest-position
+ * -- if password is all one letter, these positions would be the same
+ *
+ * vowel-exact
+ * vowel-min
+ * -- exactly 2 and at least 1 is useless together
+ */

@@ -1,8 +1,37 @@
-import { rngFunctionFromSeed } from "../seeded-random";
+import { Breach } from "../game";
+import { randomIndex, rngFunctionFromSeed } from "../seeded-random";
 import { getVulnerabilitySpecs } from "./generate";
 import { VulnerabilitySpec } from "./spec";
 
-export function awardVulnerability(
+export function awardVulnerability(breach: Breach) {
+  const { seed, vulnPool } = breach;
+
+  // Picking randomly for now
+  const rng = rngFunctionFromSeed(seed);
+  const rnd = randomIndex(rng, vulnPool.length);
+
+  // Remove from pool and add to awarded
+  const removed = breach.vulnPool.splice(rnd, 1);
+  breach.awardedVulns.push(removed[0]);
+
+  // Ensure any redundant hints are removed from the pool too
+}
+
+function removeRedundantHints(
+  awarded: VulnerabilitySpec,
+  pool: VulnerabilitySpec[],
+) {
+  let trimmed = [...pool];
+
+  switch (awarded.type) {
+    case "position-exact":
+      {
+      }
+      break;
+  }
+}
+
+function award(
   awarded: VulnerabilitySpec[],
   password: string,
   seed: number,
