@@ -1,5 +1,8 @@
 import { useEffect } from "react";
-import { MDLetter, MemoryDefragLevel } from "../../game/memory-defrag-level";
+import {
+  MDPoolLetter,
+  MemoryDefragLevel,
+} from "../../game/memory-defrag-level";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./memory-defrag-screen.module.scss";
@@ -13,6 +16,8 @@ interface MemoryDefragScreenProps {
 export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
   useEventUpdater("md-word-bar-updated");
   const { letterPool, wordBar } = levelState;
+
+  console.log("MDS render", letterPool);
 
   // React controls listeners
   useEffect(() => {
@@ -28,8 +33,12 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
       <AnimatedBlock className={styles["top-bar"]}></AnimatedBlock>
 
       <AnimatedBlock className={styles["letter-pool"]}>
-        {letterPool.map((mdl, index) => (
-          <MDLetterTag key={`pool-letter-${index}`} mdl={mdl} />
+        {letterPool.map((letter, index) => (
+          <PoolLetter
+            key={`pool-letter-${index}`}
+            levelState={levelState}
+            letter={letter}
+          />
         ))}
       </AnimatedBlock>
 
@@ -39,8 +48,12 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
         </span>
 
         <div className={styles["word-input"]}>
-          {wordBar.map((mdl, index) => (
-            <MDLetterTag key={`bar-letter-${index}`} mdl={mdl} />
+          {wordBar.map((id, index) => (
+            <BarLetter
+              key={`bar-letter-${index}`}
+              levelState={levelState}
+              id={id}
+            />
           ))}
         </div>
       </AnimatedBlock>
@@ -50,10 +63,38 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
   );
 }
 
-function MDLetterTag({ mdl }: { mdl: MDLetter }) {
+interface PoolLetterProps {
+  levelState: MemoryDefragLevel;
+  letter: MDPoolLetter;
+}
+
+function PoolLetter({ levelState, letter }: PoolLetterProps) {
   return (
-    <div className={clsx(styles["letter-tag"], styles[mdl.state])}>
-      {mdl.char}
+    <div
+      className={clsx(styles["pool-letter"], styles[letter.state])}
+      onClick={() => levelState.onTapPoolLetter(letter)}
+    >
+      {letter.char}
+    </div>
+  );
+}
+
+interface BarLetterProps {
+  levelState: MemoryDefragLevel;
+  id: string;
+}
+
+function BarLetter({ levelState, id }: BarLetterProps) {
+  // Get the corresponding letter
+  const letter = levelState.letterPool.find((letter) => letter.id === id);
+  if (!letter) return null;
+
+  return (
+    <div
+      className={clsx(styles["bar-letter"])}
+      onClick={() => levelState.onTapBarLetter(id)}
+    >
+      {letter.char}
     </div>
   );
 }

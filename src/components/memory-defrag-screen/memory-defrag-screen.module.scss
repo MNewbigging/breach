@@ -48,7 +48,7 @@
   border: $border-default;
 }
 
-.letter-tag {
+.pool-letter {
   padding: 2px 4px;
   border: $border-default;
   user-select: none;
@@ -68,4 +68,14 @@
   &.used {
     opacity: 0.3;
   }
+}
+
+.bar-letter {
+  padding: 2px 4px;
+  border: $border-default;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
