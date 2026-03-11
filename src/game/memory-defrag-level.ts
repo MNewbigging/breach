@@ -4,15 +4,21 @@ import { rngFunctionFromSeed, shuffle } from "./seeded-random";
 
 export type MDLetterState = "unused" | "in-use" | "used";
 
-export interface MDPoolLetter {
+export interface MDLetter {
   id: string;
   char: string;
   state: MDLetterState;
 }
 
+export interface MDBankWord {
+  lettersUsed: string[]; // ids
+  word: string;
+}
+
 export class MemoryDefragLevel {
-  letterPool: MDPoolLetter[] = [];
-  wordBar: string[] = []; // ids of pool letters
+  letterPool: MDLetter[] = [];
+  wordBar: MDLetter[] = []; // refs into letter pool
+  wordBank: MDBankWord[] = [];
 
   constructor(
     private dictionary: Dictionary,
@@ -45,35 +51,52 @@ export class MemoryDefragLevel {
   };
 
   submit() {
-    console.log("Submit");
-
     // Get the word from the bar
+    const word = this.wordBar
+      .map((letter) => letter.char)
+      .join("")
+      .toLowerCase();
+    if (!word) return;
+
+    // Is it in the dictionary
+    if (this.dictionary.set.has(word)) {
+      // Add to bank
+      const bankWord: MDBankWord = {
+        lettersUsed: this.wordBar.map((wbLetter) => wbLetter.id),
+        word,
+      };
+      this.wordBank.push(bankWord);
+
+      // Set letters to used
+      this.wordBar.forEach((letter) => (letter.state = "used"));
+
+      // Clear bar
+      this.wordBar.length = 0;
+
+      eventDispatcher.fire("md-word-bar-updated", null);
+    } else {
+      // Not ok, update UI somehow
+    }
   }
 
-  onTapPoolLetter(letter: MDPoolLetter) {
+  onTapPoolLetter(letter: MDLetter) {
     // Add it if unused
     if (letter.state === "unused") this.addLetterToWordBar(letter);
   }
 
-  onTapBarLetter(removeId: string) {
-    // Remove it from the bar
-    const poolLetter = this.letterPool.find((letter) => letter.id === removeId);
-    if (!poolLetter) return;
-
-    poolLetter.state = "unused";
-    this.wordBar = this.wordBar.filter((id) => id !== removeId);
+  onTapBarLetter(letter: MDLetter) {
+    letter.state = "unused";
+    this.wordBar = this.wordBar.filter((wbLetter) => wbLetter.id !== letter.id);
     eventDispatcher.fire("md-word-bar-updated", null);
   }
 
-  private addLetterToWordBar(letter: MDPoolLetter) {
+  private addLetterToWordBar(letter: MDLetter) {
     letter.state = "in-use";
-    this.wordBar.push(letter.id);
+    this.wordBar.push(letter);
     eventDispatcher.fire("md-word-bar-updated", null);
   }
 
   private onTypeCharacter = (character: string) => {
-    console.log(character);
-
     // Is there a matching unused letter
     const letter = this.letterPool.find(
       (l) => l.char === character && l.state === "unused",
@@ -84,21 +107,15 @@ export class MemoryDefragLevel {
   };
 
   private deleteLast() {
-    const id = this.wordBar.pop();
-    if (!id) return;
-
-    const letter = this.letterPool.find((letter) => letter.id === id);
-    if (!letter) return;
-
-    letter.state = "unused";
+    const wbLetter = this.wordBar.pop();
+    if (!wbLetter) return;
+    wbLetter.state = "unused";
     eventDispatcher.fire("md-word-bar-updated", null);
   }
 
   private deleteAll() {
-    this.wordBar.forEach((id) => {
-      const letter = this.letterPool.find((letter) => letter.id === id);
-      if (!letter) return;
-      letter.state = "unused";
+    this.wordBar.forEach((wbLetter) => {
+      wbLetter.state = "unused";
     });
 
     this.wordBar.length = 0;
@@ -129,7 +146,7 @@ export class MemoryDefragLevel {
   private getStartingLetterPool(
     wordPool: string[],
     rng: () => number,
-  ): MDPoolLetter[] {
+  ): MDLetter[] {
     const letters: string[] = [];
 
     wordPool.forEach((word) =>

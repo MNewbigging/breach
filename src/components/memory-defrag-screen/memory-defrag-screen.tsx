@@ -1,8 +1,5 @@
 import { useEffect } from "react";
-import {
-  MDPoolLetter,
-  MemoryDefragLevel,
-} from "../../game/memory-defrag-level";
+import { MDLetter, MemoryDefragLevel } from "../../game/memory-defrag-level";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./memory-defrag-screen.module.scss";
@@ -16,8 +13,6 @@ interface MemoryDefragScreenProps {
 export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
   useEventUpdater("md-word-bar-updated");
   const { letterPool, wordBar } = levelState;
-
-  console.log("MDS render", letterPool);
 
   // React controls listeners
   useEffect(() => {
@@ -48,11 +43,11 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
         </span>
 
         <div className={styles["word-input"]}>
-          {wordBar.map((id, index) => (
+          {wordBar.map((letter, index) => (
             <BarLetter
               key={`bar-letter-${index}`}
               levelState={levelState}
-              id={id}
+              letter={letter}
             />
           ))}
         </div>
@@ -72,7 +67,7 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
 
 interface PoolLetterProps {
   levelState: MemoryDefragLevel;
-  letter: MDPoolLetter;
+  letter: MDLetter;
 }
 
 function PoolLetter({ levelState, letter }: PoolLetterProps) {
@@ -88,18 +83,14 @@ function PoolLetter({ levelState, letter }: PoolLetterProps) {
 
 interface BarLetterProps {
   levelState: MemoryDefragLevel;
-  id: string;
+  letter: MDLetter;
 }
 
-function BarLetter({ levelState, id }: BarLetterProps) {
-  // Get the corresponding letter
-  const letter = levelState.letterPool.find((letter) => letter.id === id);
-  if (!letter) return null;
-
+function BarLetter({ levelState, letter }: BarLetterProps) {
   return (
     <div
       className={clsx(styles["bar-letter"])}
-      onClick={() => levelState.onTapBarLetter(id)}
+      onClick={() => levelState.onTapBarLetter(letter)}
     >
       {letter.char}
     </div>
