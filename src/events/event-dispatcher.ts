@@ -1,5 +1,6 @@
 export interface EventMap {
   "screen-changed": null;
+  "md-word-bar-updated": null;
 }
 
 export type EventCallback<T = any> = (event: T) => void;

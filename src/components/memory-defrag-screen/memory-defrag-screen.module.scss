@@ -19,21 +19,53 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-
-  .letter {
-    padding: 2px 4px;
-    border: $border-default;
-    user-select: none;
-  }
 }
 
 .word-bar {
+  padding: 10px;
   height: 50px;
   border: $border-default;
+
+  display: flex;
+  align-items: center;
+
+  .input-prefix {
+    margin-right: 4px;
+    font-size: larger;
+  }
+
+  .word-input {
+    font-size: large;
+
+    display: flex;
+    gap: 2px;
+  }
 }
 
 .word-bank {
   flex: 1 1 auto;
   min-height: 50px;
   border: $border-default;
+}
+
+.letter-tag {
+  padding: 2px 4px;
+  border: $border-default;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.unused {
+    opacity: 1;
+  }
+
+  &.in-use {
+    opacity: 0.75;
+  }
+
+  &.used {
+    opacity: 0.3;
+  }
 }
