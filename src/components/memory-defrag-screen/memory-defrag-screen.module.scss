@@ -35,17 +35,15 @@
   }
 
   .word-input {
+    flex: 1;
     font-size: large;
-
     display: flex;
     gap: 2px;
   }
-}
 
-.word-bank {
-  flex: 1 1 auto;
-  min-height: 50px;
-  border: $border-default;
+  .submit-button {
+    cursor: pointer;
+  }
 }
 
 .pool-letter {
@@ -78,4 +76,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.word-bank {
+  flex: 1 1 auto;
+  min-height: 50px;
+  border: $border-default;
 }

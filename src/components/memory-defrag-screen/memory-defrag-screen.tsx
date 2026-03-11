@@ -56,6 +56,13 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
             />
           ))}
         </div>
+
+        <div
+          className={styles["submit-button"]}
+          onClick={() => levelState.submit()}
+        >
+          ⏎
+        </div>
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["word-bank"]}></AnimatedBlock>

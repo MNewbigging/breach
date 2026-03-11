@@ -46,6 +46,8 @@ export class MemoryDefragLevel {
 
   submit() {
     console.log("Submit");
+
+    // Get the word from the bar
   }
 
   onTapPoolLetter(letter: MDPoolLetter) {

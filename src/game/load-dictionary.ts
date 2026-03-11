@@ -12,6 +12,7 @@ let cached: Promise<Dictionary> | null = null;
 
 export interface Dictionary {
   wordsByLength: Map<number, string[]>;
+  set: Set<string>;
 }
 
 export function loadDictionary(): Promise<Dictionary> {
@@ -24,6 +25,7 @@ export function loadDictionary(): Promise<Dictionary> {
     const text = await res.text();
 
     const wordsByLength = new Map<number, string[]>();
+    const set = new Set<string>();
 
     for (const raw of text.split(/\r?\n/)) {
       const word = raw.trim().toLowerCase();
@@ -33,9 +35,11 @@ export function loadDictionary(): Promise<Dictionary> {
       const bucket = wordsByLength.get(length) ?? [];
       bucket.push(word);
       wordsByLength.set(length, bucket);
+
+      set.add(word);
     }
 
-    return { wordsByLength };
+    return { wordsByLength, set };
   })();
 
   return cached;
