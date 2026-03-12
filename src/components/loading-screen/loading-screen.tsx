@@ -11,8 +11,6 @@ export function LoadingScreen() {
     game.load();
   }, []);
 
-  // todo if needed later - after 2 seconds show loading text (if loading would ever take that long)
-
   return (
     <Screen className={styles["loading-screen"]}>
       <AnimatedBlock className={styles["logo-container"]}>

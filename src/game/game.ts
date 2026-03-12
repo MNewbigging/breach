@@ -26,9 +26,8 @@ export interface SecurityLayerResult {
   gainedXp: number;
 }
 
-export type SecurityLayerType = "memory-defrag";
 export interface SecurityLayer {
-  type: SecurityLayerType;
+  screen: SceenName;
   baseXp: number;
 }
 
@@ -84,18 +83,28 @@ class Game {
     }, swapScreenDelay);
   }
 
+  getNextLayer() {
+    if (!this.currentBreach) return;
+
+    const { securityLayers, nextLayerPointer } = this.currentBreach;
+
+    if (nextLayerPointer < securityLayers.length) {
+      return securityLayers[nextLayerPointer];
+    }
+  }
+
   getSystemOptions(): BreachOption[] {
     const securityLayers: SecurityLayer[] = [
       {
-        type: "memory-defrag",
+        screen: "memory-defrag-level",
         baseXp: 1,
       },
       {
-        type: "memory-defrag",
+        screen: "memory-defrag-level",
         baseXp: 1,
       },
       {
-        type: "memory-defrag",
+        screen: "memory-defrag-level",
         baseXp: 1,
       },
     ];
@@ -145,18 +154,18 @@ class Game {
     this.changeScreen("breach-progress");
   }
 
-  nextLayer() {
+  startNextLayer() {
     if (!this.currentBreach || !this.dictionary) return;
 
     const { securityLayers, nextLayerPointer, seed } = this.currentBreach;
 
-    const nextLayer = securityLayers[nextLayerPointer];
+    const nextLayer = this.getNextLayer();
+    if (!nextLayer) return;
 
     const nextLayerSeed = splitmix32((seed + nextLayerPointer) >>> 0);
 
-    // todo - could possibly use ScreenName instead of SecurityLayerType to avoid this switch
-    switch (nextLayer.type) {
-      case "memory-defrag":
+    switch (nextLayer.screen) {
+      case "memory-defrag-level":
         this.memoryDefragLevel = new MemoryDefragLevel(
           this.dictionary,
           nextLayerSeed,
@@ -248,7 +257,7 @@ class Game {
 
     const testBreach: Breach = {
       systemName: "Test",
-      securityLayers: [{ type: "memory-defrag", baseXp: 1 }], // might want a layer generator later
+      securityLayers: [{ screen: "memory-defrag-level", baseXp: 1 }], // might want a layer generator later
       securityLayerResults: [{ result: "win", gainedXp: 1 }],
       nextLayerPointer: 1,
       seed,
