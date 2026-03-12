@@ -90,6 +90,17 @@ export class MemoryDefragLevel {
     eventDispatcher.fire("memory-defrag-update", null);
   }
 
+  clearWord(bankWord: MDBankWord) {
+    // Free up the used letters
+    bankWord.lettersUsed.forEach((id) => {
+      const letter = this.letterPool.find((letter) => letter.id === id);
+      if (letter) letter.state = "unused";
+    });
+
+    this.wordBank = this.wordBank.filter((bw) => bw !== bankWord);
+    eventDispatcher.fire("memory-defrag-update", null);
+  }
+
   private addLetterToWordBar(letter: MDLetter) {
     letter.state = "in-use";
     this.wordBar.push(letter);

@@ -70,7 +70,11 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
 
       <AnimatedBlock className={styles["word-bank"]}>
         {wordBank.map((bankWord, index) => (
-          <WordTag key={`bank-word-${index}`} bankWord={bankWord} />
+          <WordTag
+            key={`bank-word-${index}`}
+            bankWord={bankWord}
+            onClick={() => levelState.clearWord(bankWord)}
+          />
         ))}
       </AnimatedBlock>
     </Screen>
@@ -91,11 +95,19 @@ function Letter({ className, onClick, letter }: LetterProps) {
   );
 }
 
-function WordTag({ bankWord }: { bankWord: MDBankWord }) {
+function WordTag({
+  bankWord,
+  onClick,
+}: {
+  bankWord: MDBankWord;
+  onClick: () => void;
+}) {
   return (
     <div className={styles["word-tag"]}>
       <div>{bankWord.word}</div>
-      <div className={styles["tag-clear"]}>[x]</div>
+      <div className={styles["tag-clear"]} onClick={onClick}>
+        [x]
+      </div>
     </div>
   );
 }
