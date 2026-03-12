@@ -29,3 +29,11 @@ export function shuffle<T>(arr: T[], rng: () => number): T[] {
   }
   return out;
 }
+
+export function splitmix32(seed: number): number {
+  seed = (seed >>> 0) + 0x9e3779b1;
+  let z = seed >>> 0;
+  z = Math.imul(z ^ (z >>> 15), z | 1) >>> 0;
+  z ^= (z + Math.imul(z ^ (z >>> 7), z | 61)) >>> 0;
+  return (z ^ (z >>> 14)) >>> 0;
+}

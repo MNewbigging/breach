@@ -153,6 +153,7 @@ export class MemoryDefragLevel {
   private setupGame() {
     const rng = rngFunctionFromSeed(this.seed);
     const wordPool = this.getStartingWordPool(rng);
+    console.log(wordPool);
     this.letterPool = this.getStartingLetterPool(wordPool, rng);
   }
 

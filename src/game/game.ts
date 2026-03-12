@@ -2,6 +2,7 @@ import { eventDispatcher } from "../events/event-dispatcher";
 import { generateCorePassword } from "./core-password-generator";
 import { Dictionary, loadDictionary } from "./load-dictionary";
 import { MemoryDefragLevel } from "./memory-defrag-level";
+import { splitmix32 } from "./seeded-random";
 import {
   getVulnerabilitySpecs,
   getExactLengthVulnSpec,
@@ -147,15 +148,18 @@ class Game {
   nextLayer() {
     if (!this.currentBreach || !this.dictionary) return;
 
-    const nextLayer =
-      this.currentBreach.securityLayers[this.currentBreach.nextLayerPointer];
+    const { securityLayers, nextLayerPointer, seed } = this.currentBreach;
+
+    const nextLayer = securityLayers[nextLayerPointer];
+
+    const nextLayerSeed = splitmix32((seed + nextLayerPointer) >>> 0);
 
     // todo - could possibly use ScreenName instead of SecurityLayerType to avoid this switch
     switch (nextLayer.type) {
       case "memory-defrag":
         this.memoryDefragLevel = new MemoryDefragLevel(
           this.dictionary,
-          this.currentBreach.seed,
+          nextLayerSeed,
           nextLayer.baseXp,
           (stats) => this.concludeLayer(stats),
         );
