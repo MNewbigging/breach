@@ -147,16 +147,17 @@ class Game {
   nextLayer() {
     if (!this.currentBreach || !this.dictionary) return;
 
-    const nextLayerType =
-      this.currentBreach.securityLayers[this.currentBreach.nextLayerPointer]
-        .type;
+    const nextLayer =
+      this.currentBreach.securityLayers[this.currentBreach.nextLayerPointer];
 
     // todo - could possibly use ScreenName instead of SecurityLayerType to avoid this switch
-    switch (nextLayerType) {
+    switch (nextLayer.type) {
       case "memory-defrag":
         this.memoryDefragLevel = new MemoryDefragLevel(
           this.dictionary,
           this.currentBreach.seed,
+          nextLayer.baseXp,
+          (stats) => this.concludeLayer(stats),
         );
         this.changeScreen("memory-defrag-level");
         break;

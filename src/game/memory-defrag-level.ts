@@ -1,4 +1,5 @@
 import { eventDispatcher } from "../events/event-dispatcher";
+import { SecurityLayerResult } from "./game";
 import { Dictionary } from "./load-dictionary";
 import { rngFunctionFromSeed, shuffle } from "./seeded-random";
 
@@ -23,6 +24,8 @@ export class MemoryDefragLevel {
   constructor(
     private dictionary: Dictionary,
     private seed: number,
+    private baseXp: number,
+    private onConclude: (stats: SecurityLayerResult) => void,
   ) {
     this.setupGame();
   }
@@ -73,9 +76,19 @@ export class MemoryDefragLevel {
       // Clear bar
       this.wordBar.length = 0;
 
+      // Is this game over?
+      if (this.isGameOver()) {
+        const stats: SecurityLayerResult = {
+          result: "win",
+          gainedXp: this.baseXp, // plus any bonuses
+        };
+        this.onConclude(stats);
+      }
+
       eventDispatcher.fire("memory-defrag-update", null);
     } else {
       // Not ok, update UI somehow
+      // Some lose condition?
     }
   }
 
@@ -131,6 +144,10 @@ export class MemoryDefragLevel {
 
     this.wordBar.length = 0;
     eventDispatcher.fire("memory-defrag-update", null);
+  }
+
+  private isGameOver() {
+    return this.letterPool.every((letter) => letter.state === "used");
   }
 
   private setupGame() {
