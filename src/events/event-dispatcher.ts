@@ -1,6 +1,6 @@
 export interface EventMap {
   "screen-changed": null;
-  "md-word-bar-updated": null;
+  "memory-defrag-update": null;
 }
 
 export type EventCallback<T = any> = (event: T) => void;

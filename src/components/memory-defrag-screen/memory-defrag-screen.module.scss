@@ -10,6 +10,8 @@
 .top-bar {
   height: 50px;
   border: $border-default;
+  display: grid;
+  place-items: center;
 }
 
 .letter-pool {
@@ -79,7 +81,31 @@
 }
 
 .word-bank {
+  padding: 10px;
   flex: 1 1 auto;
   min-height: 50px;
   border: $border-default;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.word-tag {
+  padding: 2px 4px;
+  height: fit-content;
+  user-select: none;
+  display: flex;
+  gap: 2px;
+  border: $border-default;
+  letter-spacing: 1px;
+}
+
+.tag-clear {
+  user-select: none;
+  cursor: pointer;
+  opacity: 0.75;
+
+  &:hover {
+    opacity: 1;
+  }
 }

@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { MDLetter, MemoryDefragLevel } from "../../game/memory-defrag-level";
+import {
+  MDBankWord,
+  MDLetter,
+  MemoryDefragLevel,
+} from "../../game/memory-defrag-level";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./memory-defrag-screen.module.scss";
@@ -11,8 +15,8 @@ interface MemoryDefragScreenProps {
 }
 
 export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
-  useEventUpdater("md-word-bar-updated");
-  const { letterPool, wordBar } = levelState;
+  useEventUpdater("memory-defrag-update");
+  const { letterPool, wordBar, wordBank } = levelState;
 
   // React controls listeners
   useEffect(() => {
@@ -25,7 +29,9 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
 
   return (
     <Screen className={styles["screen-container"]}>
-      <AnimatedBlock className={styles["top-bar"]}></AnimatedBlock>
+      <AnimatedBlock className={styles["top-bar"]}>
+        {`>MEMORY DEFRAGMENTATION<`}
+      </AnimatedBlock>
 
       <AnimatedBlock className={styles["letter-pool"]}>
         {letterPool.map((letter, index) => (
@@ -62,7 +68,11 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
         </div>
       </AnimatedBlock>
 
-      <AnimatedBlock className={styles["word-bank"]}></AnimatedBlock>
+      <AnimatedBlock className={styles["word-bank"]}>
+        {wordBank.map((bankWord, index) => (
+          <WordTag key={`bank-word-${index}`} bankWord={bankWord} />
+        ))}
+      </AnimatedBlock>
     </Screen>
   );
 }
@@ -77,6 +87,15 @@ function Letter({ className, onClick, letter }: LetterProps) {
   return (
     <div className={className} onClick={onClick}>
       {letter.char}
+    </div>
+  );
+}
+
+function WordTag({ bankWord }: { bankWord: MDBankWord }) {
+  return (
+    <div className={styles["word-tag"]}>
+      <div>{bankWord.word}</div>
+      <div className={styles["tag-clear"]}>[x]</div>
     </div>
   );
 }

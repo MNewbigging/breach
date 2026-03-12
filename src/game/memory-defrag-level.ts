@@ -63,7 +63,7 @@ export class MemoryDefragLevel {
       // Add to bank
       const bankWord: MDBankWord = {
         lettersUsed: this.wordBar.map((wbLetter) => wbLetter.id),
-        word,
+        word: word.toUpperCase(),
       };
       this.wordBank.push(bankWord);
 
@@ -73,7 +73,7 @@ export class MemoryDefragLevel {
       // Clear bar
       this.wordBar.length = 0;
 
-      eventDispatcher.fire("md-word-bar-updated", null);
+      eventDispatcher.fire("memory-defrag-update", null);
     } else {
       // Not ok, update UI somehow
     }
@@ -87,13 +87,13 @@ export class MemoryDefragLevel {
   onTapBarLetter(letter: MDLetter) {
     letter.state = "unused";
     this.wordBar = this.wordBar.filter((wbLetter) => wbLetter.id !== letter.id);
-    eventDispatcher.fire("md-word-bar-updated", null);
+    eventDispatcher.fire("memory-defrag-update", null);
   }
 
   private addLetterToWordBar(letter: MDLetter) {
     letter.state = "in-use";
     this.wordBar.push(letter);
-    eventDispatcher.fire("md-word-bar-updated", null);
+    eventDispatcher.fire("memory-defrag-update", null);
   }
 
   private onTypeCharacter = (character: string) => {
@@ -110,7 +110,7 @@ export class MemoryDefragLevel {
     const wbLetter = this.wordBar.pop();
     if (!wbLetter) return;
     wbLetter.state = "unused";
-    eventDispatcher.fire("md-word-bar-updated", null);
+    eventDispatcher.fire("memory-defrag-update", null);
   }
 
   private deleteAll() {
@@ -119,7 +119,7 @@ export class MemoryDefragLevel {
     });
 
     this.wordBar.length = 0;
-    eventDispatcher.fire("md-word-bar-updated", null);
+    eventDispatcher.fire("memory-defrag-update", null);
   }
 
   private setupGame() {
