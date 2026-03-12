@@ -29,10 +29,11 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
 
       <AnimatedBlock className={styles["letter-pool"]}>
         {letterPool.map((letter, index) => (
-          <PoolLetter
+          <Letter
             key={`pool-letter-${index}`}
-            levelState={levelState}
             letter={letter}
+            className={clsx(styles["pool-letter"], styles[letter.state])}
+            onClick={() => levelState.onTapPoolLetter(letter)}
           />
         ))}
       </AnimatedBlock>
@@ -44,10 +45,11 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
 
         <div className={styles["word-input"]}>
           {wordBar.map((letter, index) => (
-            <BarLetter
+            <Letter
               key={`bar-letter-${index}`}
-              levelState={levelState}
               letter={letter}
+              className={styles["bar-letter"]}
+              onClick={() => levelState.onTapBarLetter(letter)}
             />
           ))}
         </div>
@@ -65,33 +67,15 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
   );
 }
 
-interface PoolLetterProps {
-  levelState: MemoryDefragLevel;
+interface LetterProps {
+  className: string; // different styling for pool/bar
+  onClick: () => void;
   letter: MDLetter;
 }
 
-function PoolLetter({ levelState, letter }: PoolLetterProps) {
+function Letter({ className, onClick, letter }: LetterProps) {
   return (
-    <div
-      className={clsx(styles["pool-letter"], styles[letter.state])}
-      onClick={() => levelState.onTapPoolLetter(letter)}
-    >
-      {letter.char}
-    </div>
-  );
-}
-
-interface BarLetterProps {
-  levelState: MemoryDefragLevel;
-  letter: MDLetter;
-}
-
-function BarLetter({ levelState, letter }: BarLetterProps) {
-  return (
-    <div
-      className={clsx(styles["bar-letter"])}
-      onClick={() => levelState.onTapBarLetter(letter)}
-    >
+    <div className={className} onClick={onClick}>
       {letter.char}
     </div>
   );
