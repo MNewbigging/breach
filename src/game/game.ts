@@ -44,6 +44,7 @@ export interface Breach extends BreachOption {
   vulnPool: VulnerabilitySpec[];
   awardedVulns: VulnerabilitySpec[];
   breachResult?: BreachResult;
+  exploitTokens: number;
 }
 
 class Game {
@@ -146,6 +147,7 @@ class Game {
       corePassword,
       vulnPool,
       awardedVulns,
+      exploitTokens: 1,
     };
 
     this.saveBreach();
@@ -157,7 +159,7 @@ class Game {
   startNextLayer() {
     if (!this.currentBreach || !this.dictionary) return;
 
-    const { securityLayers, nextLayerPointer, seed } = this.currentBreach;
+    const { nextLayerPointer, seed } = this.currentBreach;
 
     const nextLayer = this.getNextLayer();
     if (!nextLayer) return;
@@ -190,6 +192,7 @@ class Game {
     // Award a vulnerability if won
     if (stats.result === "win") {
       this.awardVulnerability(breach);
+      this.awardExploitTokens(breach);
     }
 
     // Save progress
@@ -264,6 +267,7 @@ class Game {
       corePassword,
       vulnPool,
       awardedVulns,
+      exploitTokens: 1,
     };
 
     if (testing) return testBreach;
@@ -287,6 +291,10 @@ class Game {
     const rnd = Math.floor(Math.random() * breach.vulnPool.length);
     const removed = breach.vulnPool.splice(rnd, 1);
     breach.awardedVulns.push(removed[0]);
+  }
+
+  private awardExploitTokens(breach: Breach) {
+    breach.exploitTokens += 2;
   }
 }
 

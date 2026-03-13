@@ -29,6 +29,9 @@ export function BreachProgressScreen() {
     <Screen className={styles["breach-progress-screen"]}>
       <AnimatedBlock className={styles["top"]}>
         <ProgressTracker />
+        <div className={styles["exploit-area"]}>
+          Exploit Tokens: {breach.exploitTokens}
+        </div>
         <Button text="Abandon Run" onClick={() => game.abandonBreach()} />
       </AnimatedBlock>
 

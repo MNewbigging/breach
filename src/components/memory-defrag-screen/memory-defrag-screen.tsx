@@ -9,12 +9,17 @@ import { Screen } from "../screen/screen";
 import styles from "./memory-defrag-screen.module.scss";
 import { useEventUpdater } from "../hooks/use-event-updater";
 import clsx from "clsx";
+import { Breach } from "../../game/game";
 
 interface MemoryDefragScreenProps {
   levelState: MemoryDefragLevel;
+  breach: Breach;
 }
 
-export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
+export function MemoryDefragScreen({
+  levelState,
+  breach,
+}: MemoryDefragScreenProps) {
   useEventUpdater("memory-defrag-update");
   const { letterPool, wordBar, wordBank } = levelState;
 
@@ -30,7 +35,7 @@ export function MemoryDefragScreen({ levelState }: MemoryDefragScreenProps) {
   return (
     <Screen className={styles["screen-container"]}>
       <AnimatedBlock className={styles["top-bar"]}>
-        {`>MEMORY DEFRAGMENTATION<`}
+        <div>Exploit Tokens: {breach.exploitTokens}</div>
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["letter-pool"]}>

@@ -38,9 +38,14 @@ export function App() {
         {screen === "breach-over" && (
           <BreachOverScreen key="breach-over-screen" />
         )}
-        {screen === "memory-defrag-level" && game.memoryDefragLevel && (
-          <MemoryDefragScreen levelState={game.memoryDefragLevel} />
-        )}
+        {screen === "memory-defrag-level" &&
+          game.memoryDefragLevel &&
+          breach && (
+            <MemoryDefragScreen
+              levelState={game.memoryDefragLevel}
+              breach={breach}
+            />
+          )}
       </AnimatePresence>
     </div>
   );
