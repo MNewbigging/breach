@@ -1,6 +1,6 @@
-import { VulnerabilitySpec } from "./spec";
+import { HintSpec } from "./spec";
 
-export function getVulnHintFor(spec: VulnerabilitySpec) {
+export function getVulnHintFor(spec: HintSpec) {
   switch (spec.type) {
     case "exact-length":
       return `Length is ${spec.exactLength}`;

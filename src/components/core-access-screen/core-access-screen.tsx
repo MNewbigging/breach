@@ -8,8 +8,8 @@ import { VulnerabilityChecker } from "./vuln-checker/vuln-checker";
 import { PasswordFeedback } from "./password-feedback/password-feedback";
 import { SumHelper } from "./sum-helper/sum-helper";
 import { CheatSheet } from "./cheat-sheet/cheat-sheet";
-import { getBreachAttempts } from "../../game/vulns/search-space";
-import { compileVulnerability } from "../../game/vulns/compile";
+import { getBreachAttempts } from "../../game/hints/search-space";
+import { compileHint } from "../../game/hints/compile";
 import { AttemptsLeft } from "./attempts-left/attempts-left";
 
 interface CoreAccessScreenProps {
@@ -24,7 +24,7 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
 
   // Get hydrated V classes for each awarded vSpec in the breach
   const vCheckers = useMemo(
-    () => breach.awardedVulns.map((spec) => compileVulnerability(spec)),
+    () => breach.awardedVulns.map((spec) => compileHint(spec)),
     [breach.awardedVulns],
   );
 

@@ -1,5 +1,5 @@
 import { randomIndex, rngFunctionFromSeed, shuffle } from "../seeded-random";
-import { LetterType, Relation, VulnerabilitySpec } from "./spec";
+import { LetterType, Relation, HintSpec } from "./spec";
 import {
   vowelCount,
   sumLetters,
@@ -19,12 +19,12 @@ import {
   evenRelation,
 } from "./tests";
 
-export function getExactLengthVulnSpec(password: string): VulnerabilitySpec {
+export function getExactLengthHintSpec(password: string): HintSpec {
   return { type: "exact-length", exactLength: password.length };
 }
 
-export function getVulnerabilitySpecs(password: string, seed: number) {
-  const specs: VulnerabilitySpec[] = [];
+export function getHintSpecs(password: string, seed: number) {
+  const specs: HintSpec[] = [];
 
   const rng = rngFunctionFromSeed(seed);
 

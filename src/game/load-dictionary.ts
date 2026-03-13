@@ -1,15 +1,5 @@
 let cached: Promise<Dictionary> | null = null;
 
-/**
- * Old method for making one Set of all words:
- *   const words = new Set(
-      text
-        .split(/\r?\n/)
-        .map((w) => w.trim().toLowerCase())
-        .filter(Boolean),
-    );
- */
-
 export interface Dictionary {
   wordsByLength: Map<number, string[]>;
   set: Set<string>;

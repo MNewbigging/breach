@@ -1,14 +1,13 @@
-import { game } from "../../../game/game";
+import { LevelStats } from "../../../game/types";
 import styles from "./level-results.module.scss";
 
-export function LevelResults() {
-  const breach = game.currentBreach;
-  if (!breach) return null;
+interface LevelResultsProps {
+  stats: LevelStats[];
+}
 
+export function LevelResults({ stats }: LevelResultsProps) {
   // Grab last level stats
-  const lastStats = breach.securityLayerResults.length
-    ? breach.securityLayerResults[breach.securityLayerResults.length - 1]
-    : undefined;
+  const lastStats = stats.length ? stats[stats.length - 1] : undefined;
 
   return (
     <div className={styles["level-results"]}>

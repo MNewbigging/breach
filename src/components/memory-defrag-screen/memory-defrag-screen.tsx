@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   MDBankWord,
   MDLetter,
@@ -9,28 +9,36 @@ import { Screen } from "../screen/screen";
 import styles from "./memory-defrag-screen.module.scss";
 import { useEventUpdater } from "../hooks/use-event-updater";
 import clsx from "clsx";
-import { Breach } from "../../game/game";
+import { Breach } from "../../game/breach";
+import { Dictionary } from "../../game/load-dictionary";
 
 interface MemoryDefragScreenProps {
-  levelState: MemoryDefragLevel;
   breach: Breach;
+  dictionary: Dictionary;
 }
 
 export function MemoryDefragScreen({
-  levelState,
   breach,
+  dictionary,
 }: MemoryDefragScreenProps) {
   useEventUpdater("memory-defrag-update");
-  const { letterPool, wordBar, wordBank } = levelState;
+  const levelStateRef = useRef<MemoryDefragLevel>(
+    new MemoryDefragLevel(
+      dictionary,
+      breach.getNextLevelSeed(),
+      breach.getNextLevel().baseXp,
+      breach.concludeLevel,
+    ),
+  );
 
-  // React controls listeners
+  const levelState = levelStateRef.current;
+
   useEffect(() => {
     window.addEventListener("keydown", levelState.onKeyDown);
+    return () => window.removeEventListener("keydown", levelState.onKeyDown);
+  }, []);
 
-    return () => {
-      window.removeEventListener("keydown", levelState.onKeyDown);
-    };
-  });
+  const { letterPool, wordBar, wordBank } = levelState;
 
   return (
     <Screen className={styles["screen-container"]}>

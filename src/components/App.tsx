@@ -20,7 +20,7 @@ export function App() {
   }, []);
 
   const screen = game.currentScreen;
-  const breach = game.currentBreach;
+  const breach = game.breach;
 
   return (
     <div className={styles["app"]}>
@@ -29,23 +29,18 @@ export function App() {
         {screen === "breach-select" && (
           <SystemSelectScreen key="system-select-screen" />
         )}
-        {screen === "breach-progress" && (
-          <BreachProgressScreen key="breach-progress-screen" />
+        {screen === "breach-progress" && breach && (
+          <BreachProgressScreen key="breach-progress-screen" breach={breach} />
         )}
         {screen === "core-access" && breach && (
           <CoreAccessScreen key="core-access-screen" breach={breach} />
         )}
-        {screen === "breach-over" && (
-          <BreachOverScreen key="breach-over-screen" />
+        {screen === "breach-over" && breach && (
+          <BreachOverScreen key="breach-over-screen" breach={breach} />
         )}
-        {screen === "memory-defrag-level" &&
-          game.memoryDefragLevel &&
-          breach && (
-            <MemoryDefragScreen
-              levelState={game.memoryDefragLevel}
-              breach={breach}
-            />
-          )}
+        {screen === "memory-defrag-level" && game.dictionary && breach && (
+          <MemoryDefragScreen dictionary={game.dictionary} breach={breach} />
+        )}
       </AnimatePresence>
     </div>
   );

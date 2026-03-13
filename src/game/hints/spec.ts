@@ -1,8 +1,8 @@
 export type Relation = ">" | "=" | "<";
 export type LetterType = "vowel" | "consonant";
-export type VulnerabilityTier = "weak" | "medium" | "strong";
+export type HintTier = "weak" | "medium" | "strong";
 
-export type VulnerabilitySpec =
+export type HintSpec =
   // Positional
   | { type: "position-exact"; position: number; letter: string } // is this too strong? sort of boring
   | { type: "position-in-set"; position: number; mask: number }

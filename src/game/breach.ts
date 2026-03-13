@@ -1,20 +1,118 @@
+import { getExactLengthHintSpec, getHintSpecs } from "./hints/generate";
+import { HintSpec } from "./hints/spec";
+import { Dictionary } from "./load-dictionary";
 import {
   randomIndex,
   randomLetterString,
   randomSeed,
   rngFunctionFromSeed,
+  splitmix32,
 } from "./seeded-random";
-import { Difficulty, Level } from "./types";
+import {
+  BreachResult,
+  CONFIG,
+  Difficulty,
+  Level,
+  LevelStats,
+  ScreenName,
+} from "./types";
 
-export class Breach {
+export interface BreachDTO {
+  difficulty: Difficulty;
   seed: number;
   corePassword: string;
   levels: Level[];
+  levelStats: LevelStats[];
+  nextLevelPointer: number;
+  hintPool: HintSpec[];
+  awardedHints: HintSpec[];
+  exploitTokens: number;
+  breachResult?: BreachResult;
+}
+
+export class Breach {
+  seed: number = 0;
+  corePassword: string = "";
+  levels: Level[] = [];
+  levelStats: LevelStats[] = [];
+  hintPool: HintSpec[] = [];
+  awardedHints: HintSpec[] = [];
+  exploitTokens: number = 0;
+  breachResult?: BreachResult;
+
+  private nextLevelPointer = 0;
 
   constructor(
-    public readonly systemName: string, // displayed prior to breach starting, so it's given to the breach
     public readonly difficulty: Difficulty, // used to determine number of security levels & their base difficulty
+    private readonly dictionary: Dictionary,
+    private readonly changeScreen: (screen: ScreenName) => void,
+    dto?: BreachDTO,
   ) {
+    // Either load from DTO or setup new default values
+    if (dto) {
+      this.fromDTO(dto);
+    } else {
+      this.setup();
+    }
+  }
+
+  getNextLevel() {
+    return this.levels[this.nextLevelPointer];
+  }
+
+  getNextLevelSeed() {
+    return splitmix32((this.seed + this.nextLevelPointer) >>> 0);
+  }
+
+  save() {
+    try {
+      const data = JSON.stringify(this.toDTO());
+      localStorage.setItem("savedBreach", data);
+    } catch (e) {
+      console.error(`Failed to save breach data: ${e}`);
+    }
+  }
+
+  abandon() {
+    this.breachResult = "abandoned";
+    this.changeScreen("breach-over");
+  }
+
+  startNextLevel() {
+    this.changeScreen(this.getNextLevel().screen);
+  }
+
+  concludeLevel = (stats: LevelStats) => {
+    this.levelStats.push(stats);
+    this.nextLevelPointer++;
+
+    if (stats.result === "win") {
+      this.awardHint();
+      this.awardExploitTokens();
+    }
+
+    this.save();
+
+    // Was it the last level?
+    if (stats.screen === "core-access") {
+      this.breachResult = stats.result;
+      this.changeScreen("breach-over");
+    } else {
+      this.changeScreen("breach-progress");
+    }
+  };
+
+  private awardHint() {
+    const rnd = Math.floor(Math.random() * this.hintPool.length);
+    const removed = this.hintPool.splice(rnd, 1);
+    this.awardedHints.push(removed[0]);
+  }
+
+  private awardExploitTokens() {
+    this.exploitTokens += 2;
+  }
+
+  private setup() {
     // Each breach has its own random seed used in all breach content random generation
     this.seed = randomSeed();
     const rng = rngFunctionFromSeed(this.seed);
@@ -22,16 +120,20 @@ export class Breach {
     // Core password is generated immediately, in order to inform hint choices
     this.corePassword = randomLetterString(rng, 4);
 
-    // Generate levels
-    this.levels = this.generateLevels(difficulty);
+    this.hintPool = getHintSpecs(this.corePassword, this.seed);
+    this.awardedHints = [getExactLengthHintSpec(this.corePassword)]; // length hint is given at start
 
-    // Length hint is given at start
+    // Generate levels
+    this.levels = this.generateLevels(this.difficulty);
+
+    // Starting tokens
+    this.exploitTokens = CONFIG[this.difficulty].startingTokens;
   }
 
   private generateLevels(difficulty: Difficulty) {
     const rng = rngFunctionFromSeed(this.seed);
     const levelChoices = getLevelChoices();
-    const levelCount = getLevelCountForDifficulty(difficulty);
+    const levelCount = CONFIG[difficulty].levelCount;
 
     const levels: Level[] = [];
     for (let i = 0; i < levelCount; i++) {
@@ -45,14 +147,47 @@ export class Breach {
 
     return levels;
   }
+
+  private toDTO(): BreachDTO {
+    const {
+      difficulty,
+      seed,
+      corePassword,
+      levels,
+      levelStats,
+      nextLevelPointer,
+      hintPool,
+      awardedHints,
+      exploitTokens,
+    } = this;
+
+    return {
+      difficulty,
+      seed,
+      corePassword,
+      levels,
+      levelStats,
+      nextLevelPointer,
+      hintPool,
+      awardedHints,
+      exploitTokens,
+    };
+  }
+
+  private fromDTO(dto: BreachDTO) {
+    this.seed = dto.seed;
+    this.corePassword = dto.corePassword;
+    this.levels = dto.levels;
+    this.levelStats = dto.levelStats;
+    this.nextLevelPointer = dto.nextLevelPointer;
+    this.hintPool = dto.hintPool;
+    this.awardedHints = dto.awardedHints;
+    this.exploitTokens = dto.exploitTokens;
+    this.breachResult = dto.breachResult;
+  }
 }
 
-function getLevelCountForDifficulty(difficulty: Difficulty): number {
-  if (difficulty === "easy") return 3;
-  if (difficulty === "medium") return 4;
-  return 5;
-}
-
+// todo - possibly define elsewhere?
 function getLevelChoices(): Level[] {
   return [
     {

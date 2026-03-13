@@ -1,4 +1,4 @@
-import { VulnerabilitySpec } from "./spec";
+import { HintSpec } from "./spec";
 import {
   vowelCount,
   sumLetters,
@@ -20,12 +20,12 @@ import {
   evenRelation,
 } from "./tests";
 
-export interface Vulnerability {
-  spec: VulnerabilitySpec;
+export interface Hint {
+  spec: HintSpec;
   test: (candidate: string) => boolean;
 }
 
-export function compileVulnerability(spec: VulnerabilitySpec): Vulnerability {
+export function compileHint(spec: HintSpec): Hint {
   switch (spec.type) {
     case "exact-length":
       return { spec, test: (s: string) => s.length === spec.exactLength };

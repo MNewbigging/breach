@@ -1,7 +1,7 @@
 import { Breach } from "../game";
 import { rngFunctionFromSeed } from "../seeded-random";
-import { compileVulnerability } from "./compile";
-import { VulnerabilitySpec } from "./spec";
+import { compileHint } from "./compile";
+import { HintSpec } from "./spec";
 
 // Accepts rng
 function randomUppercaseString(len: number, rng: () => number) {
@@ -53,18 +53,14 @@ export function getBreachAttempts(breach: Breach) {
   return clamp(attempts, minAttempts, maxAttempts);
 }
 
-function getSampledPassRate(
-  pwLength: number,
-  specs: VulnerabilitySpec[],
-  seed: number,
-) {
+function getSampledPassRate(pwLength: number, specs: HintSpec[], seed: number) {
   // Algorithm constraints
   const minDraws = 30_000;
   const maxDraws = 220_000;
   const targetPasses = 600;
 
   const rng = rngFunctionFromSeed(seed);
-  const tests = specs.map((spec) => compileVulnerability(spec).test);
+  const tests = specs.map((spec) => compileHint(spec).test);
   let draws = 0;
   let passes = 0;
 

@@ -1,16 +1,18 @@
-import { Breach, BreachResult, game } from "../../game/game";
+import { Breach } from "../../game/breach";
+import { game } from "../../game/game";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
 import styles from "./breach-over-screen.module.scss";
 
-export function BreachOverScreen() {
-  const breach = game.currentBreach;
-  if (!breach) return null;
+interface BreachOverScreenProps {
+  breach: Breach;
+}
 
+export function BreachOverScreen({ breach }: BreachOverScreenProps) {
   const resultString = getBreachResultString(breach);
 
-  const totalXp = breach.securityLayerResults.reduce(
+  const totalXp = breach.levelStats.reduce(
     (sum, layer) => (sum += layer.gainedXp),
     0,
   );
@@ -33,12 +35,9 @@ export function BreachOverScreen() {
 function getBreachResultString(breach: Breach) {
   const { breachResult } = breach;
 
-  if (breachResult === "win")
-    return `You breached the ${breach.systemName} system core`;
-  if (breachResult === "lose")
-    return `You failed to breach the ${breach.systemName} system core`;
-  if (breachResult === "abandoned")
-    return `You abandoned the breach attempt. ${breach.systemName} thanks you`;
+  if (breachResult === "win") return `You breached the system core`;
+  if (breachResult === "lose") return `You failed to breach the system core`;
+  if (breachResult === "abandoned") return `You abandoned the breach attempt`;
 
   return ">PARSING ERROR<";
 }

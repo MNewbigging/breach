@@ -1,10 +1,10 @@
-import { Vulnerability } from "../../../game/vulns/compile";
-import { getVulnHintFor } from "../../../game/vulns/hints";
+import { Hint } from "../../../game/hints/compile";
+import { getVulnHintFor } from "../../../game/hints/hints";
 import { VulnCheckerRow } from "./vuln-checker-row/vuln-checker-row";
 import styles from "./vuln-checker.module.scss";
 
 interface VulnerabilityCheckerProps {
-  vCheckers: Vulnerability[];
+  vCheckers: Hint[];
   candidate: string;
   shakeSignal: number;
 }

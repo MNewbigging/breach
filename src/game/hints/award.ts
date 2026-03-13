@@ -1,7 +1,7 @@
 import { Breach } from "../game";
 import { randomIndex, rngFunctionFromSeed } from "../seeded-random";
-import { getVulnerabilitySpecs } from "./generate";
-import { VulnerabilitySpec } from "./spec";
+import { getHintSpecs } from "./generate";
+import { HintSpec } from "./spec";
 
 export function awardVulnerability(breach: Breach) {
   const { seed, vulnPool } = breach;
@@ -17,10 +17,7 @@ export function awardVulnerability(breach: Breach) {
   // Ensure any redundant hints are removed from the pool too
 }
 
-function removeRedundantHints(
-  awarded: VulnerabilitySpec,
-  pool: VulnerabilitySpec[],
-) {
+function removeRedundantHints(awarded: HintSpec, pool: HintSpec[]) {
   let trimmed = [...pool];
 
   switch (awarded.type) {
@@ -32,13 +29,13 @@ function removeRedundantHints(
 }
 
 function award(
-  awarded: VulnerabilitySpec[],
+  awarded: HintSpec[],
   password: string,
   seed: number,
   levelDifficulty = "easy",
 ) {
   // Get all specs
-  const allSpecs = getVulnerabilitySpecs(password, seed);
+  const allSpecs = getHintSpecs(password, seed);
 
   // Get rid of already-awarded and redundant hints based on awarded
 
@@ -47,10 +44,7 @@ function award(
   // Pick one using random seeded rng function
 }
 
-function trimPoolByAwarded(
-  pool: VulnerabilitySpec[],
-  awarded: VulnerabilitySpec[],
-) {
+function trimPoolByAwarded(pool: HintSpec[], awarded: HintSpec[]) {
   // Store type keywords to filter out by
   const blacklist: string[] = [];
 
@@ -68,7 +62,7 @@ function trimPoolByAwarded(
   return pool.filter((s) => !blacklist.some((bl) => s.type.includes(bl)));
 }
 
-function classifySpec(spec: VulnerabilitySpec): "weak" | "medium" | "strong" {
+function classifySpec(spec: HintSpec): "weak" | "medium" | "strong" {
   switch (spec.type) {
     case "exact-length":
     case "contains-none-of":
@@ -114,7 +108,7 @@ type HintFamily =
   | "mathematical"
   | "structural";
 
-function getHintFamily(spec: VulnerabilitySpec): HintFamily {
+function getHintFamily(spec: HintSpec): HintFamily {
   switch (spec.type) {
     // Positional
     case "position-exact":

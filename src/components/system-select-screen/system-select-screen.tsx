@@ -1,28 +1,28 @@
 import { useState } from "react";
-import { game, BreachOption } from "../../game/game";
+import { game } from "../../game/game";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Button } from "../button/button";
 import { Screen } from "../screen/screen";
 import styles from "./system-select-screen.module.scss";
 import clsx from "clsx";
+import { Difficulty } from "../../game/types";
 
 export function SystemSelectScreen() {
-  const [selectedSystem, setSelectedSystem] = useState<BreachOption | null>(
-    null,
-  );
+  const [selectedDifficulty, setSelectedDifficulty] =
+    useState<Difficulty | null>(null);
 
   // Get the target system options to display
-  const targetSystemOptions = game.getSystemOptions();
+  const breachOptions = game.getBreachOptions();
 
   // Style system option when selected
-  const isSelected = (option: BreachOption) => {
-    if (!selectedSystem) return false;
-    return selectedSystem.systemName === option.systemName;
+  const isSelected = (option: Difficulty) => {
+    if (!selectedDifficulty) return false;
+    return selectedDifficulty === option;
   };
 
   function onInitiateBreach() {
-    if (selectedSystem) {
-      game.initiateBreach(selectedSystem);
+    if (selectedDifficulty) {
+      game.initiateBreach(selectedDifficulty);
     }
   }
 
@@ -33,24 +33,17 @@ export function SystemSelectScreen() {
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["system-options"]}>
-        {targetSystemOptions.map((option) => (
+        {breachOptions.map(({ difficulty, levelCount }, index) => (
           <div
-            key={option.systemName}
+            key={`breach-${index}-${difficulty}`}
             className={clsx(
               styles["system-option"],
-              isSelected(option) && styles["selected"],
+              isSelected(difficulty) && styles["selected"],
             )}
-            onClick={() => setSelectedSystem(option)}
+            onClick={() => setSelectedDifficulty(difficulty)}
           >
-            <span> {option.systemName} System</span>
-            <span>Security Layers: {option.securityLayers.length}</span>
-            <span>
-              XP:{" "}
-              {option.securityLayers.reduce(
-                (sum, layer) => (sum += layer.baseXp),
-                0,
-              )}
-            </span>
+            <span>Difficulty: {difficulty}</span>
+            <span>Security Layers: {levelCount}</span>
           </div>
         ))}
       </AnimatedBlock>
@@ -58,7 +51,7 @@ export function SystemSelectScreen() {
       <AnimatedBlock>
         <Button
           text="Initiate Breach"
-          disabled={!selectedSystem}
+          disabled={!selectedDifficulty}
           onClick={onInitiateBreach}
         />
       </AnimatedBlock>

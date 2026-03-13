@@ -1,21 +1,20 @@
 import { ReactElement } from "react";
-import { game, VictoryResult } from "../../../game/game";
 import styles from "./progress-tracker.module.scss";
 import clsx from "clsx";
+import { Level, LevelStats, VictoryResult } from "../../../game/types";
 
-export function ProgressTracker() {
-  const breach = game.currentBreach;
-  if (!breach) return null;
+interface ProgressTrackerProps {
+  levels: Level[];
+  levelStats: LevelStats[];
+}
 
-  const layers = breach.securityLayers;
-  const results = breach.securityLayerResults;
-
+export function ProgressTracker({ levels, levelStats }: ProgressTrackerProps) {
   // Work out which icon to use for each layer
   const icons: ReactElement[] = [];
-  for (let i = 0; i < layers.length; i++) {
+  for (let i = 0; i < levels.length; i++) {
     // If stats exist for this layer, it is completed
-    if (i < results.length) {
-      const layerStats = results[i];
+    if (i < levelStats.length) {
+      const layerStats = levelStats[i];
       icons.push(
         <LayerCompletedIcon
           key={`layer-icon-${i}`}
@@ -30,7 +29,7 @@ export function ProgressTracker() {
 
   return (
     <div className={styles["progress-tracker"]}>
-      {`${breach.systemName.toUpperCase()} PROGRESS`} {icons}
+      {`SYSTEM PROGRESS`} {icons}
     </div>
   );
 }
