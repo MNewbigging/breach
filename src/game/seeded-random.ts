@@ -17,6 +17,14 @@ export function randomLetter(rng: () => number): string {
   return String.fromCharCode(65 + Math.floor(rng() * 26));
 }
 
+export function randomLetterString(rng: () => number, length: number): string {
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += randomLetter(rng);
+  }
+  return result;
+}
+
 export function randomIndex(rng: () => number, length: number): number {
   return Math.floor(rng() * length);
 }

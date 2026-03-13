@@ -299,3 +299,11 @@ class Game {
 }
 
 export const game = new Game();
+
+/**
+ * Problem to solve:
+ * - breach possibly undefined
+ * - dictionary possibly undefined
+ *
+ * - levels undefined an issue? just used by App.tsx...
+ */
