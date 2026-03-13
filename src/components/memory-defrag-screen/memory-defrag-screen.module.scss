@@ -8,10 +8,12 @@
 }
 
 .top-bar {
+  padding: 0px 10px;
   height: 50px;
   border: $border-default;
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .letter-pool {
@@ -108,4 +110,10 @@
   &:hover {
     opacity: 1;
   }
+}
+
+.exploit-button {
+  border: $border-default;
+  padding: 4px;
+  cursor: pointer;
 }

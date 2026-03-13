@@ -114,6 +114,8 @@ export class MemoryDefragLevel {
     eventDispatcher.fire("memory-defrag-update", null);
   }
 
+  useWildExploit() {}
+
   private addLetterToWordBar(letter: MDLetter) {
     letter.state = "in-use";
     this.wordBar.push(letter);
