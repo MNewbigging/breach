@@ -1,4 +1,5 @@
 import { eventDispatcher } from "../events/event-dispatcher";
+import { Breach } from "./breach";
 import { Dictionary } from "./load-dictionary";
 import { rngFunctionFromSeed, shuffle } from "./seeded-random";
 import { LevelStats } from "./types";
@@ -22,10 +23,8 @@ export class MemoryDefragLevel {
   wordBank: MDBankWord[] = [];
 
   constructor(
+    private breach: Breach,
     private dictionary: Dictionary,
-    private seed: number,
-    private baseXp: number,
-    private onConclude: (stats: LevelStats) => void,
   ) {
     this.setupGame();
   }
@@ -81,9 +80,9 @@ export class MemoryDefragLevel {
         const stats: LevelStats = {
           screen: "memory-defrag-level",
           result: "win",
-          gainedXp: this.baseXp, // plus any bonuses
+          gainedXp: this.breach.getNextLevel().baseXp, // plus any bonuses
         };
-        this.onConclude(stats);
+        this.breach.concludeLevel(stats);
       }
 
       eventDispatcher.fire("memory-defrag-update", null);
@@ -154,7 +153,7 @@ export class MemoryDefragLevel {
   }
 
   private setupGame() {
-    const rng = rngFunctionFromSeed(this.seed);
+    const rng = rngFunctionFromSeed(this.breach.getNextLevelSeed());
     const wordPool = this.getStartingWordPool(rng);
     console.log(wordPool);
     this.letterPool = this.getStartingLetterPool(wordPool, rng);
