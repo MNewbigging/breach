@@ -56,6 +56,10 @@ export class Breach {
     }
   }
 
+  spendTokens(count: number) {
+    this.exploitTokens -= count;
+  }
+
   getNextLevel() {
     return this.levels[this.nextLevelPointer];
   }

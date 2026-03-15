@@ -42,7 +42,12 @@ export function MemoryDefragScreen({
     <Screen className={styles["screen-container"]}>
       <AnimatedBlock className={styles["top-bar"]}>
         <div>
-          <div className={styles["exploit-button"]}>WILD: 1</div>
+          <div
+            className={styles["exploit-button"]}
+            onClick={() => levelState.useWildExploit()}
+          >
+            WILD: {levelState.wildExploitCost}
+          </div>
         </div>
         <div>Exploit Tokens: {breach.exploitTokens}</div>
       </AnimatedBlock>

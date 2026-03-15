@@ -22,6 +22,8 @@ export class MemoryDefragLevel {
   wordBar: MDLetter[] = []; // refs into letter pool
   wordBank: MDBankWord[] = [];
 
+  readonly wildExploitCost = 1;
+
   constructor(
     private breach: Breach,
     private dictionary: Dictionary,
@@ -57,39 +59,38 @@ export class MemoryDefragLevel {
     const word = this.wordBar
       .map((letter) => letter.char)
       .join("")
-      .toLowerCase();
+      .toLowerCase(); // all dictionary words are lower case, but UI is upper
     if (!word) return;
 
     // Is it in the dictionary
-    if (this.dictionary.set.has(word)) {
-      // Add to bank
-      const bankWord: MDBankWord = {
-        lettersUsed: this.wordBar.map((wbLetter) => wbLetter.id),
-        word: word.toUpperCase(),
-      };
-      this.wordBank.push(bankWord);
-
-      // Set letters to used
-      this.wordBar.forEach((letter) => (letter.state = "used"));
-
-      // Clear bar
-      this.wordBar.length = 0;
-
-      // Is this game over?
-      if (this.isGameOver()) {
-        const stats: LevelStats = {
-          screen: "memory-defrag-level",
-          result: "win",
-          gainedXp: this.breach.getNextLevel().baseXp, // plus any bonuses
-        };
-        this.breach.concludeLevel(stats);
-      }
-
-      eventDispatcher.fire("memory-defrag-update", null);
-    } else {
+    if (!this.inDictionary(word)) {
       // Not ok, update UI somehow
       // Some lose condition?
+      return;
     }
+
+    // Add to bank
+    const bankWord: MDBankWord = {
+      lettersUsed: this.wordBar.map((wbLetter) => wbLetter.id),
+      word: word.toUpperCase(),
+    };
+    this.wordBank.push(bankWord);
+
+    // It was in the dictionary, set letters to used & clear bar
+    this.wordBar.forEach((letter) => (letter.state = "used"));
+    this.wordBar.length = 0;
+
+    // Is this game over?
+    if (this.isGameOver()) {
+      const stats: LevelStats = {
+        screen: "memory-defrag-level",
+        result: "win",
+        gainedXp: this.breach.getNextLevel().baseXp, // plus any bonuses
+      };
+      this.breach.concludeLevel(stats);
+    }
+
+    eventDispatcher.fire("memory-defrag-update");
   }
 
   onTapPoolLetter(letter: MDLetter) {
@@ -100,7 +101,7 @@ export class MemoryDefragLevel {
   onTapBarLetter(letter: MDLetter) {
     letter.state = "unused";
     this.wordBar = this.wordBar.filter((wbLetter) => wbLetter.id !== letter.id);
-    eventDispatcher.fire("memory-defrag-update", null);
+    eventDispatcher.fire("memory-defrag-update");
   }
 
   clearWord(bankWord: MDBankWord) {
@@ -111,15 +112,28 @@ export class MemoryDefragLevel {
     });
 
     this.wordBank = this.wordBank.filter((bw) => bw !== bankWord);
-    eventDispatcher.fire("memory-defrag-update", null);
+    eventDispatcher.fire("memory-defrag-update");
   }
 
-  useWildExploit() {}
+  useWildExploit() {
+    if (this.breach.exploitTokens < this.wildExploitCost) return; // can't afford it!
+
+    this.breach.spendTokens(this.wildExploitCost);
+
+    // Add the wild letter
+    this.letterPool.push({
+      id: `wild-${crypto.randomUUID()}`,
+      char: "*",
+      state: "unused",
+    });
+
+    eventDispatcher.fire("memory-defrag-update");
+  }
 
   private addLetterToWordBar(letter: MDLetter) {
     letter.state = "in-use";
     this.wordBar.push(letter);
-    eventDispatcher.fire("memory-defrag-update", null);
+    eventDispatcher.fire("memory-defrag-update");
   }
 
   private onTypeCharacter = (character: string) => {
@@ -136,7 +150,7 @@ export class MemoryDefragLevel {
     const wbLetter = this.wordBar.pop();
     if (!wbLetter) return;
     wbLetter.state = "unused";
-    eventDispatcher.fire("memory-defrag-update", null);
+    eventDispatcher.fire("memory-defrag-update");
   }
 
   private deleteAll() {
@@ -145,7 +159,28 @@ export class MemoryDefragLevel {
     });
 
     this.wordBar.length = 0;
-    eventDispatcher.fire("memory-defrag-update", null);
+    eventDispatcher.fire("memory-defrag-update");
+  }
+
+  private inDictionary(candidate: string) {
+    // If there is no asterisk, can perform a simple search
+    if (!candidate.includes("*")) return this.dictionary.set.has(candidate);
+
+    // Predicate search function that accepts * as a wild letter
+    const matchesWithWild = (s: string, word: string) => {
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (c === "*") continue; // allowed
+        if (c !== word[i]) return false; // not a match
+      }
+      return true;
+    };
+
+    // Narrow search space to same-length dictionary words
+    const bucket = this.dictionary.wordsByLength.get(candidate.length);
+    if (!bucket) return false;
+
+    return bucket.some((word) => matchesWithWild(candidate, word));
   }
 
   private isGameOver() {
@@ -195,5 +230,5 @@ export class MemoryDefragLevel {
 }
 
 function isLetterAZ(letter: string) {
-  return /^[A-Z]$/.test(letter);
+  return /^[A-Z*]$/.test(letter);
 }
