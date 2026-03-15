@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import { Breach, game } from "../../game/game";
+import { useMemo, useRef, useState } from "react";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./core-access-screen.module.scss";
@@ -8,75 +7,48 @@ import { VulnerabilityChecker } from "./vuln-checker/vuln-checker";
 import { PasswordFeedback } from "./password-feedback/password-feedback";
 import { SumHelper } from "./sum-helper/sum-helper";
 import { CheatSheet } from "./cheat-sheet/cheat-sheet";
-import { getBreachAttempts } from "../../game/hints/search-space";
 import { compileHint } from "../../game/hints/compile";
 import { AttemptsLeft } from "./attempts-left/attempts-left";
+import { Breach } from "../../game/breach";
+import { CoreAccessLevel } from "../../game/core-access-level";
+import { useEventUpdater } from "../hooks/use-event-updater";
 
 interface CoreAccessScreenProps {
   breach: Breach;
 }
 
 export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
+  useEventUpdater("core-access-update");
+
+  const levelStateRef = useRef<CoreAccessLevel | null>(null);
+  if (!levelStateRef.current) {
+    levelStateRef.current = new CoreAccessLevel(breach);
+  }
+  const levelState = levelStateRef.current;
+
   const [candidate, setCandidate] = useState("");
   const [shakeSignal, setShakeSignal] = useState(0);
-  const [feedback, setFeedback] = useState<CandidateFeedback[]>([]);
-  const [attempts, setAttempts] = useState(getBreachAttempts(breach));
 
-  // Get hydrated V classes for each awarded vSpec in the breach
-  const vCheckers = useMemo(
-    () => breach.awardedVulns.map((spec) => compileHint(spec)),
-    [breach.awardedVulns],
+  // Get hydrated hint classes for each awarded hint spec in the breach
+  const hintCheckers = useMemo(
+    () => breach.awardedHints.map((spec) => compileHint(spec)),
+    [breach.awardedHints],
   );
 
-  const allChecksPassed = vCheckers.every((v) => v.test(candidate));
-  const showSumHelper = breach.awardedVulns.some((v) => v.type === "sum");
-
-  // On submit input, run mastermind feedback checks and display
-  function onSubmit() {
-    if (attempts === 0) return;
-
-    // Prevent re-submitting passwords
-    const alreadySubmitted = feedback.some((fb) => fb.candidate === candidate);
-    if (alreadySubmitted) return;
-
-    const { charsCorrect, positionsCorrect, charFeedback } =
-      getCandidateFeedback(candidate, breach.corePassword);
-
-    setFeedback([
-      ...feedback,
-      { candidate, charsCorrect, positionsCorrect, charFeedback },
-    ]);
-
-    const reducedAttempts = attempts - 1;
-    if (reducedAttempts > 0) {
-      setAttempts(reducedAttempts);
-    } else {
-      // Lose
-      setAttempts(0);
-      // Play some cool animation
-      setTimeout(() => {
-        game.concludeCore("lose");
-      }, 1000);
-    }
-
-    // Check for a win
-    if (positionsCorrect === breach.corePassword.length) {
-      // Play some cool animation
-      setTimeout(() => {
-        game.concludeCore("win");
-      }, 1000);
-    }
-  }
+  const allChecksPassed = hintCheckers.every((checker) =>
+    checker.test(candidate),
+  );
+  const showSumHelper = breach.awardedHints.some((spec) => spec.type === "sum");
 
   return (
     <Screen className={styles["core-access-screen"]}>
       <AnimatedBlock>
-        <div>{`>ACCESS ${breach.systemName.toUpperCase()} SYSTEM CORE<`}</div>
+        <div>{`>ACCESS SYSTEM CORE<`}</div>
       </AnimatedBlock>
 
       <AnimatedBlock>
         <VulnerabilityChecker
-          vCheckers={vCheckers}
+          vCheckers={hintCheckers}
           candidate={candidate}
           shakeSignal={shakeSignal}
         />
@@ -85,7 +57,7 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
       <AnimatedBlock>
         <PasswordInput
           allChecksPassed={allChecksPassed}
-          onSubmit={onSubmit}
+          onSubmit={() => levelState.submit(candidate)}
           onChecksFailed={() => setShakeSignal((s) => s + 1)}
           password={candidate}
           setPassword={(pw) => setCandidate(pw)}
@@ -99,7 +71,7 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
       )}
 
       <AnimatedBlock>
-        <AttemptsLeft attempts={attempts} />
+        <AttemptsLeft attempts={levelState.attempts} />
       </AnimatedBlock>
 
       <AnimatedBlock>
@@ -107,53 +79,8 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["scroll-container"]}>
-        <PasswordFeedback feedback={feedback} />
+        <PasswordFeedback feedback={levelState.feedback} />
       </AnimatedBlock>
     </Screen>
   );
-}
-
-export type CharFeedbackType = "pos-match" | "char-match" | "miss";
-
-export interface CandidateFeedback {
-  candidate: string;
-  charsCorrect: number;
-  positionsCorrect: number;
-  charFeedback: CharFeedbackType[];
-}
-
-function getCandidateFeedback(candidate: string, pw: string) {
-  let charsCorrect = 0;
-  let positionsCorrect = 0;
-
-  const pwArr = [...pw];
-  const candidateArr = [...candidate];
-  const charFeedback: CharFeedbackType[] = Array(candidate.length).fill("miss");
-
-  // First pass — exact matches
-  for (let i = 0; i < candidateArr.length; i++) {
-    if (candidateArr[i] === pwArr[i]) {
-      positionsCorrect++;
-      charFeedback[i] = "pos-match";
-      pwArr[i] = null as any; // consume
-      candidateArr[i] = null as any; // consume
-    }
-  }
-
-  // Second pass — character matches (wrong position)
-  for (let i = 0; i < candidateArr.length; i++) {
-    if (candidateArr[i] && pwArr.includes(candidateArr[i])) {
-      charsCorrect++;
-      charFeedback[i] = "char-match";
-
-      const index = pwArr.indexOf(candidateArr[i]);
-      pwArr[index] = null as any; // consume matched char so dupes don't re-match
-    }
-  }
-
-  return {
-    charsCorrect,
-    positionsCorrect,
-    charFeedback,
-  };
 }

@@ -83,8 +83,11 @@ export class Breach {
   }
 
   concludeLevel = (stats: LevelStats) => {
+    // Record the results of the level
     this.levelStats.push(stats);
-    this.nextLevelPointer++;
+
+    // If there is another level to go, increase the pointer
+    if (this.nextLevelPointer < this.levels.length - 1) this.nextLevelPointer++;
 
     if (stats.result === "win") {
       this.awardHint();

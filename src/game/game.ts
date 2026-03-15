@@ -67,6 +67,8 @@ class Game {
   initiateBreach(difficulty: Difficulty) {
     this.breach = new Breach(difficulty, this.dictionary, this.changeScreen);
 
+    this.breach.save();
+
     // Change to progress screen
     this.changeScreen("breach-progress");
   }

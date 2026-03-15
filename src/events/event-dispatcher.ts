@@ -1,6 +1,7 @@
 export interface EventMap {
   "screen-changed": null;
   "memory-defrag-update": null;
+  "core-access-update": null;
 }
 
 export type EventCallback<T = any> = (event: T) => void;
@@ -33,7 +34,7 @@ class EventDispatcher {
     }
   }
 
-  fire<E extends keyof EventMap>(type: E, event: EventMap[E]) {
+  fire<E extends keyof EventMap>(type: E, event: EventMap[E] = null) {
     const callbacks = this.callbacks.get(type) ?? [];
     callbacks.forEach((cb) => cb(event));
   }

@@ -1,4 +1,4 @@
-import { Breach } from "../game";
+import { Breach } from "../breach";
 import { rngFunctionFromSeed } from "../seeded-random";
 import { compileHint } from "./compile";
 import { HintSpec } from "./spec";
@@ -33,7 +33,7 @@ export function getBreachAttempts(breach: Breach) {
   // Get a rough number of possible pws that pass hints
   const passPercent = getSampledPassRate(
     pwLength,
-    breach.awardedVulns,
+    breach.awardedHints,
     breach.seed,
   );
   const estimatedSearchSize = Math.max(1, maxSize * passPercent); // in case nothing passes

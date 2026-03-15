@@ -22,14 +22,17 @@ export function MemoryDefragScreen({
   dictionary,
 }: MemoryDefragScreenProps) {
   useEventUpdater("memory-defrag-update");
-  const levelStateRef = useRef<MemoryDefragLevel>(
-    new MemoryDefragLevel(
+
+  // Instantiate level state inside ref
+  const levelStateRef = useRef<MemoryDefragLevel | null>(null);
+  if (!levelStateRef.current) {
+    levelStateRef.current = new MemoryDefragLevel(
       dictionary,
       breach.getNextLevelSeed(),
       breach.getNextLevel().baseXp,
       breach.concludeLevel,
-    ),
-  );
+    );
+  }
 
   const levelState = levelStateRef.current;
 

@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useRef } from "react";
-import { CandidateFeedback } from "../core-access-screen";
 import { FeedbackRow } from "./password-feedback-row/password-feedback-row";
 import styles from "./password-feedback.module.scss";
+import { CandidateFeedback } from "../../../game/core-access-level";
+import { useEventUpdater } from "../../hooks/use-event-updater";
 
 interface PasswordFeedbackProps {
   feedback: CandidateFeedback[];
 }
 
 export function PasswordFeedback({ feedback }: PasswordFeedbackProps) {
+  useEventUpdater("core-access-update");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const newestFirst = useMemo(() => {
-    return [...feedback].reverse();
-  }, [feedback]);
+  const newestFirst = [...feedback].reverse();
 
   useEffect(() => {
     if (containerRef.current) {
