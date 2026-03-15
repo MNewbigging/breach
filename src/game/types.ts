@@ -5,7 +5,8 @@ export type ScreenName =
   | "level"
   | "core-access"
   | "breach-over"
-  | "memory-defrag-level";
+  | "memory-defrag-level"
+  | "word-transform-level";
 
 export type Difficulty = "easy" | "medium" | "hard";
 

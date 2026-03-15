@@ -53,6 +53,8 @@ function getNextLevelName(breach: Breach) {
   switch (nextLevel.screen) {
     case "memory-defrag-level":
       return "Memory Defrag";
+    case "word-transform-level":
+      return "Word Transform";
     case "core-access":
       return "Breach Core";
     default:

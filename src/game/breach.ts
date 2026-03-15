@@ -202,6 +202,10 @@ export class Breach {
 function getLevelChoices(): Level[] {
   return [
     {
+      screen: "word-transform-level",
+      baseXp: 1,
+    },
+    {
       screen: "memory-defrag-level",
       baseXp: 1,
     },

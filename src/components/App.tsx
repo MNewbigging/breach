@@ -10,6 +10,7 @@ import { BreachProgressScreen } from "./breach-progress-screen/breach-progress-s
 import { CoreAccessScreen } from "./core-access-screen/core-access-screen";
 import { BreachOverScreen } from "./breach-over-screen/breach-over-screen";
 import { MemoryDefragScreen } from "./memory-defrag-screen/memory-defrag-screen";
+import { WordTransformScreen } from "./word-transform-screen/word-transform-screen";
 
 export function App() {
   useEventUpdater("screen-changed");
@@ -40,6 +41,9 @@ export function App() {
         )}
         {screen === "memory-defrag-level" && game.dictionary && breach && (
           <MemoryDefragScreen dictionary={game.dictionary} breach={breach} />
+        )}
+        {screen === "word-transform-level" && game.dictionary && breach && (
+          <WordTransformScreen breach={breach} dictionary={game.dictionary} />
         )}
       </AnimatePresence>
     </div>

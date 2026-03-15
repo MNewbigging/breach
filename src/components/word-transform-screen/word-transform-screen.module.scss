@@ -1,0 +1,32 @@
+@use "../common-styles.scss" as *;
+
+.screen-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.top-bar {
+  padding: 10px;
+  border: $border-default;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.word-area {
+  padding: 10px;
+  border: $border-default;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.target-area {
+  padding: 10px;
+  border: $border-default;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
