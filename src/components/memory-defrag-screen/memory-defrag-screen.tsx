@@ -63,6 +63,7 @@ export function MemoryDefragScreen({
           >
             WILD: {levelState.wildExploitCost}
           </div>
+
           <div
             className={clsx(
               styles["exploit-button"],
@@ -72,8 +73,9 @@ export function MemoryDefragScreen({
           >
             PURGE: {levelState.purgeExploitCost}
           </div>
+
+          <div>Exploit Tokens: {breach.exploitTokens}</div>
         </div>
-        <div>Exploit Tokens: {breach.exploitTokens}</div>
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["letter-pool"]}>
