@@ -54,6 +54,7 @@
   padding: 2px 4px;
   border: $border-default;
   user-select: none;
+  cursor: pointer;
 
   display: flex;
   align-items: center;
@@ -69,6 +70,13 @@
 
   &.used {
     opacity: 0.3;
+  }
+
+  &.purge-active {
+    &:hover {
+      color: red;
+      border-color: red;
+    }
   }
 }
 
@@ -112,8 +120,18 @@
   }
 }
 
+.exploit-area {
+  display: flex;
+  gap: 12px;
+}
+
 .exploit-button {
   border: $border-default;
   padding: 4px;
   cursor: pointer;
+}
+
+.purging {
+  color: red;
+  border-color: red;
 }

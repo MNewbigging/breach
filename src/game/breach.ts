@@ -56,8 +56,12 @@ export class Breach {
     }
   }
 
-  spendTokens(count: number) {
-    this.exploitTokens -= count;
+  canAffordExploit(cost: number) {
+    return this.exploitTokens >= cost;
+  }
+
+  spendTokens(cost: number) {
+    this.exploitTokens -= cost;
   }
 
   getNextLevel() {

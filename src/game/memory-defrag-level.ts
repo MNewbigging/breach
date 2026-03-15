@@ -23,6 +23,7 @@ export class MemoryDefragLevel {
   wordBank: MDBankWord[] = [];
 
   readonly wildExploitCost = 1;
+  readonly purgeExploitCost = 1;
 
   constructor(
     private breach: Breach,
@@ -116,7 +117,7 @@ export class MemoryDefragLevel {
   }
 
   useWildExploit() {
-    if (this.breach.exploitTokens < this.wildExploitCost) return; // can't afford it!
+    if (!this.breach.canAffordExploit(this.wildExploitCost)) return; // can't afford it!
 
     this.breach.spendTokens(this.wildExploitCost);
 
@@ -127,6 +128,15 @@ export class MemoryDefragLevel {
       state: "unused",
     });
 
+    eventDispatcher.fire("memory-defrag-update");
+  }
+
+  usePurgeExploit(letter: MDLetter) {
+    this.breach.spendTokens(this.purgeExploitCost);
+
+    // Remove letter entirely
+    this.letterPool = this.letterPool.filter((l) => l.id !== letter.id);
+    console.log("removed");
     eventDispatcher.fire("memory-defrag-update");
   }
 
