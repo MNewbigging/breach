@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import styles from "./password-feedback-row.module.scss";
-import { CandidateFeedback } from "../../../../game/core-access-level";
+import { CandidateFeedback } from "../../../../game/levels/core-access-level";
 
 export function FeedbackRow({ feedback }: { feedback: CandidateFeedback }) {
   // Create the character feedback icons

@@ -1,7 +1,7 @@
-import { eventDispatcher } from "../events/event-dispatcher";
-import { Breach } from "./breach";
-import { getBreachAttempts } from "./hints/search-space";
-import { LevelStats } from "./types";
+import { eventDispatcher } from "../../events/event-dispatcher";
+import { Breach } from "../breach";
+import { getBreachAttempts } from "../hints/search-space";
+import { LevelStats } from "../types";
 
 export type CharFeedbackType = "pos-match" | "char-match" | "miss";
 

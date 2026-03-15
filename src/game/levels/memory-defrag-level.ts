@@ -1,8 +1,8 @@
-import { eventDispatcher } from "../events/event-dispatcher";
-import { Breach } from "./breach";
-import { Dictionary } from "./load-dictionary";
-import { rngFunctionFromSeed, shuffle } from "./seeded-random";
-import { LevelStats } from "./types";
+import { eventDispatcher } from "../../events/event-dispatcher";
+import { Breach } from "../breach";
+import { Dictionary } from "../load-dictionary";
+import { rngFunctionFromSeed, shuffle } from "../seeded-random";
+import { LevelStats } from "../types";
 
 export type MDLetterState = "unused" | "in-use" | "used";
 

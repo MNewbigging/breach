@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FeedbackRow } from "./password-feedback-row/password-feedback-row";
 import styles from "./password-feedback.module.scss";
-import { CandidateFeedback } from "../../../game/core-access-level";
 import { useEventUpdater } from "../../hooks/use-event-updater";
+import { CandidateFeedback } from "../../../game/levels/core-access-level";
 
 interface PasswordFeedbackProps {
   feedback: CandidateFeedback[];

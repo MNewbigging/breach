@@ -1,9 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  MDBankWord,
-  MDLetter,
-  MemoryDefragLevel,
-} from "../../game/memory-defrag-level";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./memory-defrag-screen.module.scss";
@@ -11,6 +6,11 @@ import { useEventUpdater } from "../hooks/use-event-updater";
 import clsx from "clsx";
 import { Breach } from "../../game/breach";
 import { Dictionary } from "../../game/load-dictionary";
+import {
+  MDBankWord,
+  MDLetter,
+  MemoryDefragLevel,
+} from "../../game/levels/memory-defrag-level";
 
 interface MemoryDefragScreenProps {
   breach: Breach;

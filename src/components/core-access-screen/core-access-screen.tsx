@@ -10,8 +10,8 @@ import { CheatSheet } from "./cheat-sheet/cheat-sheet";
 import { compileHint } from "../../game/hints/compile";
 import { AttemptsLeft } from "./attempts-left/attempts-left";
 import { Breach } from "../../game/breach";
-import { CoreAccessLevel } from "../../game/core-access-level";
 import { useEventUpdater } from "../hooks/use-event-updater";
+import { CoreAccessLevel } from "../../game/levels/core-access-level";
 
 interface CoreAccessScreenProps {
   breach: Breach;
