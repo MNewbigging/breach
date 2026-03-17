@@ -89,6 +89,17 @@ export function containsOneOf(s: string, mask: number): boolean {
   return false;
 }
 
+export function positionIsOneOf(
+  s: string,
+  position: number,
+  mask: number,
+): boolean {
+  const char = s[position];
+  const bit = 1 << (char.charCodeAt(0) - 65);
+  if (mask & bit) return true;
+  return false;
+}
+
 export function isPalindrome(s: string): boolean {
   if (s.length === 0) return false;
 

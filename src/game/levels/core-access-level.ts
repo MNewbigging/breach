@@ -46,8 +46,8 @@ export class CoreAccessLevel {
     let charsCorrect = 0;
     let positionsCorrect = 0;
 
-    const pwArr = [...this.breach.corePassword];
-    const candidateArr = [...candidate];
+    const pwArr = [...this.breach.corePassword.toLowerCase()];
+    const candidateArr = [...candidate.toLowerCase()];
     const charFeedback: CharFeedbackType[] = Array(candidate.length).fill(
       "miss",
     );

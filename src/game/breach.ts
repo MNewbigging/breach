@@ -128,8 +128,9 @@ export class Breach {
     this.seed = randomSeed();
     const rng = rngFunctionFromSeed(this.seed);
 
-    // Core password is generated immediately, in order to inform hint choices
-    this.corePassword = randomLetterString(rng, 4);
+    // Core password is generated immediately in order to inform hint choices
+    // Password should be a word from the dictionary
+    this.corePassword = this.generatePassword(); //randomLetterString(rng, 4);
 
     this.hintPool = getHintSpecs(this.corePassword, this.seed);
     this.awardedHints = [getExactLengthHintSpec(this.corePassword)]; // length hint is given at start
@@ -139,6 +140,15 @@ export class Breach {
 
     // Starting tokens
     this.exploitTokens = CONFIG[this.difficulty].startingTokens;
+  }
+
+  private generatePassword() {
+    const length =
+      this.difficulty === "easy" ? 4 : this.difficulty === "medium" ? 5 : 6;
+    const words = this.dictionary.wordsByLength.get(length)!;
+
+    const rng = rngFunctionFromSeed(this.seed);
+    return words[randomIndex(rng, words.length)];
   }
 
   private generateLevels(difficulty: Difficulty) {

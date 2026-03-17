@@ -18,6 +18,7 @@ import {
   lowestPosition,
   evenCount,
   evenRelation,
+  positionIsOneOf,
 } from "./tests";
 
 export interface Hint {
@@ -49,7 +50,9 @@ export function compileHint(spec: HintSpec): Hint {
     case "position-exact":
       return {
         spec,
-        test: (s: string) => s[spec.position] === spec.letter,
+        test: (s: string) =>
+          s.length > spec.position &&
+          s[spec.position].toLowerCase() === spec.letter.toLowerCase(),
       };
     case "vowel-relation":
       return {
@@ -65,7 +68,9 @@ export function compileHint(spec: HintSpec): Hint {
     case "position-in-set":
       return {
         spec,
-        test: (s: string) => containsOneOf(s, spec.mask),
+        test: (s: string) =>
+          s.length > spec.position &&
+          positionIsOneOf(s, spec.position, spec.mask),
       };
     case "highest-value":
       return { spec, test: (s: string) => highestValueEquals(s, spec.value) };

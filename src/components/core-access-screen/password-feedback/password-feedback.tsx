@@ -25,6 +25,7 @@ export function PasswordFeedback({ feedback }: PasswordFeedbackProps) {
       {newestFirst.map((fb, index) => (
         <FeedbackRow key={`fb-${fb.candidate}-${index}`} feedback={fb} />
       ))}
+      {newestFirst.length === 0 && <span>AWAITING INPUT</span>}
     </div>
   );
 }
