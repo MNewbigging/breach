@@ -91,7 +91,6 @@ class Game {
     const testing = false;
 
     const testBreach: BreachDTO = {
-      version: "test",
       difficulty: "easy",
       seed: 1234,
       corePassword: "ABCD",
@@ -109,10 +108,6 @@ class Game {
     const data = localStorage.getItem("savedBreach");
     if (data) {
       const breach: BreachDTO = JSON.parse(data);
-
-      // Old version no good
-      if (__APP_VERSION__ !== breach.version) return undefined;
-
       return breach;
     }
 
