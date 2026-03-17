@@ -74,13 +74,17 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
         <AttemptsLeft attempts={levelState.attempts} />
       </AnimatedBlock>
 
-      <AnimatedBlock>
-        <CheatSheet />
-      </AnimatedBlock>
+      {window.innerHeight >= 1000 && (
+        <AnimatedBlock>
+          <CheatSheet />
+        </AnimatedBlock>
+      )}
 
-      <AnimatedBlock className={styles["scroll-container"]}>
-        <PasswordFeedback feedback={levelState.feedback} />
-      </AnimatedBlock>
+      {levelState.feedback.length > 0 && (
+        <AnimatedBlock className={styles["scroll-container"]}>
+          <PasswordFeedback feedback={levelState.feedback} />
+        </AnimatedBlock>
+      )}
     </Screen>
   );
 }

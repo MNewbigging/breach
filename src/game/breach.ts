@@ -201,10 +201,10 @@ export class Breach {
 // todo - possibly define elsewhere?
 function getLevelChoices(): Level[] {
   return [
-    {
-      screen: "word-transform-level",
-      baseXp: 1,
-    },
+    // {
+    //   screen: "word-transform-level",
+    //   baseXp: 1,
+    // },
     {
       screen: "memory-defrag-level",
       baseXp: 1,

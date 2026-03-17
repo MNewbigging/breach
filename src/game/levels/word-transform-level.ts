@@ -21,7 +21,7 @@ export class WordTransformLevel {
   ) {
     // todo difficulty affects word length
     const fourLetterWords = [...dictionary.wordsByLength.get(4)!]; // make a copy since it'll be modified
-
+    console.log("number of 4 letter words: ", fourLetterWords.length);
     this.adjacencyMap = this.buildAdjacencyMap(fourLetterWords);
 
     // todo Difficulty determines number of required transforms

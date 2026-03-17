@@ -18,14 +18,16 @@ export function BreachProgressScreen({ breach }: BreachProgressScreenProps) {
   return (
     <Screen className={styles["breach-progress-screen"]}>
       <AnimatedBlock className={styles["top"]}>
+        <Button text="Abandon Run" onClick={() => breach.abandon()} />
+
+        <div className={styles["exploit-area"]}>
+          Exploit Tokens: {breach.exploitTokens}
+        </div>
+
         <ProgressTracker
           levels={breach.levels}
           levelStats={breach.levelStats}
         />
-        <div className={styles["exploit-area"]}>
-          Exploit Tokens: {breach.exploitTokens}
-        </div>
-        <Button text="Abandon Run" onClick={() => breach.abandon()} />
       </AnimatedBlock>
 
       <AnimatedBlock className={styles["middle"]}>

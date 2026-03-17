@@ -1,6 +1,7 @@
 @use "../common-styles.scss" as *;
 
 .system-select-screen {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,6 +20,9 @@
 
 .system-options {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
 
   .system-option {

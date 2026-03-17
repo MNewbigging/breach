@@ -82,14 +82,7 @@ export class MemoryDefragLevel {
     this.wordBar.length = 0;
 
     // Is this game over?
-    if (this.isGameOver()) {
-      const stats: LevelStats = {
-        screen: "memory-defrag-level",
-        result: "win",
-        gainedXp: this.breach.getNextLevel().baseXp, // plus any bonuses
-      };
-      this.breach.concludeLevel(stats);
-    }
+    if (this.isGameOver()) this.endGame();
 
     eventDispatcher.fire("memory-defrag-update");
   }
@@ -136,7 +129,10 @@ export class MemoryDefragLevel {
 
     // Remove letter entirely
     this.letterPool = this.letterPool.filter((l) => l.id !== letter.id);
-    console.log("removed");
+
+    // Check if this ended the game
+    if (this.isGameOver()) this.endGame();
+
     eventDispatcher.fire("memory-defrag-update");
   }
 
@@ -195,6 +191,15 @@ export class MemoryDefragLevel {
 
   private isGameOver() {
     return this.letterPool.every((letter) => letter.state === "used");
+  }
+
+  private endGame() {
+    const stats: LevelStats = {
+      screen: "memory-defrag-level",
+      result: "win",
+      gainedXp: this.breach.getNextLevel().baseXp, // plus any bonuses
+    };
+    this.breach.concludeLevel(stats);
   }
 
   private setupGame() {
