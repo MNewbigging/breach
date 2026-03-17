@@ -1,8 +1,8 @@
 import { eventDispatcher } from "../../events/event-dispatcher";
 import { Breach } from "../breach";
 import { Dictionary } from "../load-dictionary";
-import { rngFunctionFromSeed, shuffle } from "../seeded-random";
-import { LevelStats } from "../types";
+import { randomIndex, rngFunctionFromSeed, shuffle } from "../seeded-random";
+import { Difficulty, LevelStats } from "../types";
 
 export type MDLetterState = "unused" | "in-use" | "used";
 
@@ -25,10 +25,13 @@ export class MemoryDefragLevel {
   readonly wildExploitCost = 1;
   readonly purgeExploitCost = 1;
 
+  private difficulty: Difficulty;
+
   constructor(
     private breach: Breach,
     private dictionary: Dictionary,
   ) {
+    this.difficulty = breach.getNextLevelDifficulty();
     this.setupGame();
   }
 
@@ -210,16 +213,29 @@ export class MemoryDefragLevel {
   }
 
   private getStartingWordPool(rng: () => number) {
-    // Start simple - pick 3 seeded-random 4-letter words
-    const fourLetterWords = this.dictionary.wordsByLength.get(4) ?? [];
-    const shuffled = shuffle([...fourLetterWords], rng);
-
+    // Get the word-gen config for this difficulty
+    const config = getWordGenConfig(this.difficulty);
+    console.log("config", config);
     const wordPool: string[] = [];
 
-    for (let i = 0; i < 3; i++) {
-      const word = shuffled.pop();
-      if (word) wordPool.push(word);
+    for (const [length, count] of config) {
+      const words = this.dictionary.wordsByLength.get(length)!;
+      for (let i = 0; i < count; i++) {
+        const word = words[randomIndex(rng, words.length)];
+        wordPool.push(word);
+      }
     }
+
+    // Start simple - pick 3 seeded-random 4-letter words
+    // const fourLetterWords = this.dictionary.wordsByLength.get(4) ?? [];
+    // const shuffled = shuffle([...fourLetterWords], rng);
+
+    // const wordPool: string[] = [];
+
+    // for (let i = 0; i < 3; i++) {
+    //   const word = shuffled.pop();
+    //   if (word) wordPool.push(word);
+    // }
 
     return wordPool;
   }
@@ -246,4 +262,29 @@ export class MemoryDefragLevel {
 
 function isLetterAZ(letter: string) {
   return /^[A-Z*]$/.test(letter);
+}
+
+function getWordGenConfig(difficulty: Difficulty) {
+  const config = new Map<number, number>(); // length of word, count
+
+  if (difficulty === "easy") {
+    // 19 letters
+    config.set(3, 2);
+    config.set(4, 2);
+    config.set(5, 1);
+  } else if (difficulty === "medium") {
+    // 22
+    config.set(4, 1);
+    config.set(5, 1);
+    config.set(6, 1);
+    config.set(7, 1);
+  } else {
+    // 24
+    config.set(3, 1);
+    config.set(4, 1);
+    config.set(8, 1);
+    config.set(9, 1);
+  }
+
+  return config;
 }

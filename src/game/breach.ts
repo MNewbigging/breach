@@ -72,6 +72,35 @@ export class Breach {
     return splitmix32((this.seed + this.nextLevelPointer) >>> 0);
   }
 
+  // todo should this be on the level object instead?
+  getNextLevelDifficulty() {
+    if (this.difficulty === "easy") {
+      // Easy has 3 levels... this shouldn't be so hardcoded!
+      const easyScale: Difficulty[] = ["easy", "medium", "hard"];
+      return easyScale[this.nextLevelPointer];
+    }
+
+    if (this.difficulty === "medium") {
+      const mediumScale: Difficulty[] = [
+        "easy",
+        "easy",
+        "medium",
+        "medium",
+        "hard",
+      ];
+      return mediumScale[this.nextLevelPointer];
+    }
+
+    const hardScale: Difficulty[] = [
+      "easy",
+      "medium",
+      "medium",
+      "hard",
+      "hard",
+    ];
+    return hardScale[this.nextLevelPointer];
+  }
+
   save() {
     try {
       const data = JSON.stringify(this.toDTO());
@@ -148,7 +177,7 @@ export class Breach {
     const words = this.dictionary.wordsByLength.get(length)!;
 
     const rng = rngFunctionFromSeed(this.seed);
-    return words[randomIndex(rng, words.length)];
+    return words[randomIndex(rng, words.length)].toUpperCase();
   }
 
   private generateLevels(difficulty: Difficulty) {

@@ -55,6 +55,10 @@ export function MemoryDefragScreen({
 
   return (
     <Screen className={styles["screen-container"]}>
+      <AnimatedBlock
+        className={styles["title-bar"]}
+      >{`>MEMORY DEFRAG<`}</AnimatedBlock>
+
       <AnimatedBlock className={styles["top-bar"]}>
         <div className={styles["exploit-area"]}>
           <div
