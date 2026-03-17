@@ -18,6 +18,7 @@ import {
 } from "./types";
 
 export interface BreachDTO {
+  version: string;
   difficulty: Difficulty;
   seed: number;
   corePassword: string;
@@ -212,6 +213,7 @@ export class Breach {
     } = this;
 
     return {
+      version: __APP_VERSION__,
       difficulty,
       seed,
       corePassword,
