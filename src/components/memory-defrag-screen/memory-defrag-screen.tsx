@@ -12,6 +12,7 @@ import {
   MemoryDefragLevel,
 } from "../../game/levels/memory-defrag-level";
 import { Button } from "../button/button";
+import { SideMenu } from "../side-menu/side-menu";
 
 interface MemoryDefragScreenProps {
   breach: Breach;
@@ -56,8 +57,9 @@ export function MemoryDefragScreen({
 
   return (
     <Screen className={styles["screen-container"]}>
-      <AnimatedBlock className={styles["section"]}>
+      <AnimatedBlock className={clsx(styles["section"], styles["title-bar"])}>
         {`>MEMORY DEFRAG<`}
+        <SideMenu breach={breach} />
       </AnimatedBlock>
 
       <AnimatedBlock

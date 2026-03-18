@@ -5,16 +5,24 @@ interface ButtonProps {
   text: string;
   onClick: () => void;
   size: "s" | "m" | "l";
+  className?: string;
   disabled?: boolean;
 }
 
-export function Button({ text, onClick, size, disabled = false }: ButtonProps) {
+export function Button({
+  text,
+  onClick,
+  size,
+  className,
+  disabled = false,
+}: ButtonProps) {
   return (
     <div
       className={clsx(
         styles["button"],
         disabled ? styles["disabled"] : styles["enabled"],
         styles[size],
+        className,
       )}
       onClick={onClick}
     >
