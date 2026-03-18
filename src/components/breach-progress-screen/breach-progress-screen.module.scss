@@ -3,41 +3,26 @@
 .breach-progress-screen {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  gap: 20px;
+  gap: $section-gap;
 }
 
-.top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.middle {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-}
-
-.block {
-  padding: 20px;
+.section {
+  padding: $section-padding;
   border: $border-default;
 }
 
-.bot {
+.centered {
   display: flex;
+  align-items: center;
   justify-content: center;
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.exploit-area {
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: $border-default;
+.can-grow {
+  flex: 1;
 }

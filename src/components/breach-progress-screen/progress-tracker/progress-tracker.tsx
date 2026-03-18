@@ -11,6 +11,7 @@ interface ProgressTrackerProps {
 export function ProgressTracker({ levels, levelStats }: ProgressTrackerProps) {
   // Work out which icon to use for each layer
   const icons: ReactElement[] = [];
+  let addedFirstUncompleted = false;
   for (let i = 0; i < levels.length; i++) {
     // If stats exist for this layer, it is completed
     if (i < levelStats.length) {
@@ -23,19 +24,22 @@ export function ProgressTracker({ levels, levelStats }: ProgressTrackerProps) {
       );
     } else {
       // Otherwise, it is ahead
-      icons.push(<LayerUncompletedIcon key={`layer-icon-${i}`} />);
+      const className = addedFirstUncompleted ? undefined : styles["first"];
+      icons.push(
+        <LayerUncompletedIcon key={`layer-icon-${i}`} className={className} />,
+      );
+
+      if (!addedFirstUncompleted) addedFirstUncompleted = true;
     }
   }
 
-  return (
-    <div className={styles["progress-tracker"]}>
-      {`SYSTEM PROGRESS`} {icons}
-    </div>
-  );
+  return <div className={styles["progress-tracker"]}>{icons}</div>;
 }
 
-function LayerUncompletedIcon() {
-  return <div className={styles["layer-icon"]}></div>;
+function LayerUncompletedIcon({ className }: { className?: string }) {
+  return (
+    <div className={clsx(styles["layer-icon"], className && className)}></div>
+  );
 }
 
 function LayerCompletedIcon({ result }: { result: VictoryResult }) {

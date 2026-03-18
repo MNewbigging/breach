@@ -157,11 +157,10 @@ export class Breach {
   private setup() {
     // Each breach has its own random seed used in all breach content random generation
     this.seed = randomSeed();
-    const rng = rngFunctionFromSeed(this.seed);
 
     // Core password is generated immediately in order to inform hint choices
     // Password should be a word from the dictionary
-    this.corePassword = this.generatePassword(); //randomLetterString(rng, 4);
+    this.corePassword = this.generatePassword();
 
     this.hintPool = getHintSpecs(this.corePassword, this.seed);
     this.awardedHints = [getExactLengthHintSpec(this.corePassword)]; // length hint is given at start

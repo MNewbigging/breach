@@ -1,9 +1,7 @@
 @use "../../common-styles.scss" as *;
 
 .progress-tracker {
-  padding: 20px;
-  border: $border-default;
-
+  padding: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +18,10 @@
   justify-content: center;
   align-items: center;
   font-size: 14px;
+
+  &.first {
+    border-width: 3px;
+  }
 }
 
 .filled {

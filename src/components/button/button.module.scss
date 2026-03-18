@@ -5,6 +5,10 @@
   transition: all 0.15s ease-out;
   user-select: none;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   &:hover {
     box-shadow: $glow-2;
     border: $border-strong;
