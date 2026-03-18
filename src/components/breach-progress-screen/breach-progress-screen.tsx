@@ -25,6 +25,11 @@ export function BreachProgressScreen({ breach }: BreachProgressScreenProps) {
   // const lastLevel =  const lastStats = stats.length ? stats[stats.length - 1] : undefined;
   const lastLevelStats = breach.levelStats.slice(-1)[0];
 
+  const nextLevelDifficulty =
+    nextLevel.screen === "core-access"
+      ? breach.difficulty
+      : breach.getNextLevelDifficulty();
+
   return (
     <Screen className={styles["breach-progress-screen"]}>
       <AnimatedBlock className={clsx(styles["section"], styles["title-bar"])}>
@@ -60,7 +65,7 @@ export function BreachProgressScreen({ breach }: BreachProgressScreenProps) {
 
       <AnimatedBlock className={clsx(styles["section"], styles["can-grow"])}>
         <div>
-          Next: {nextLevelName} - {breach.getNextLevelDifficulty()}
+          Next: {nextLevelName} {`(${nextLevelDifficulty})`}
         </div>
         <br />
         <div>Rewards:</div>
