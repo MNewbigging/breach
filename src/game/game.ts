@@ -2,6 +2,7 @@ import { eventDispatcher } from "../events/event-dispatcher";
 import { Dictionary, loadDictionary } from "./load-dictionary";
 import { ScreenName, Difficulty, CONFIG } from "./types";
 import { Breach, BreachDTO } from "./breach";
+import { VERSION } from "../version";
 
 class Game {
   // One source of truth for the current screen being shown
@@ -91,6 +92,7 @@ class Game {
     const testing = false;
 
     const testBreach: BreachDTO = {
+      version: VERSION,
       difficulty: "easy",
       seed: 1234,
       corePassword: "ABCD",
@@ -108,6 +110,10 @@ class Game {
     const data = localStorage.getItem("savedBreach");
     if (data) {
       const breach: BreachDTO = JSON.parse(data);
+
+      // Discard old versions for now
+      if (breach.version !== VERSION) return undefined;
+
       return breach;
     }
 

@@ -11,13 +11,14 @@ import { CoreAccessScreen } from "./core-access-screen/core-access-screen";
 import { BreachOverScreen } from "./breach-over-screen/breach-over-screen";
 import { MemoryDefragScreen } from "./memory-defrag-screen/memory-defrag-screen";
 import { WordTransformScreen } from "./word-transform-screen/word-transform-screen";
+import { VERSION } from "../version";
 
 export function App() {
   useEventUpdater("screen-changed");
 
   // Puts version in title
   useEffect(() => {
-    document.title = `Breach v${__APP_VERSION__}`;
+    document.title = `Breach v${VERSION}`;
   }, []);
 
   const screen = game.currentScreen;

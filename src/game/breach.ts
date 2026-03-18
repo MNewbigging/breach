@@ -1,3 +1,4 @@
+import { VERSION } from "../version";
 import { getExactLengthHintSpec, getHintSpecs } from "./hints/generate";
 import { HintSpec } from "./hints/spec";
 import { Dictionary } from "./load-dictionary";
@@ -18,6 +19,7 @@ import {
 } from "./types";
 
 export interface BreachDTO {
+  version: string;
   difficulty: Difficulty;
   seed: number;
   corePassword: string;
@@ -212,6 +214,7 @@ export class Breach {
     } = this;
 
     return {
+      version: VERSION,
       difficulty,
       seed,
       corePassword,
