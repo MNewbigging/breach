@@ -1,0 +1,34 @@
+@use "../../common-styles.scss" as *;
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2px;
+}
+
+.key {
+  padding: 2px 4px;
+  border: $border-default;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.key-value {
+  font-size: 14px;
+}
+
+.key-char {
+  font-size: 22px;
+}

@@ -12,6 +12,10 @@ import { AttemptsLeft } from "./attempts-left/attempts-left";
 import { Breach } from "../../game/breach";
 import { useEventUpdater } from "../hooks/use-event-updater";
 import { CoreAccessLevel } from "../../game/levels/core-access-level";
+import clsx from "clsx";
+import { SideMenu } from "../side-menu/side-menu";
+import { Button } from "../button/button";
+import { Keyboard } from "./keyboard/keyboard";
 
 interface CoreAccessScreenProps {
   breach: Breach;
@@ -39,6 +43,49 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
     checker.test(candidate),
   );
   const showSumHelper = breach.awardedHints.some((spec) => spec.type === "sum");
+
+  return (
+    <Screen className={styles["core-access-screen"]}>
+      <AnimatedBlock className={clsx(styles["section"], styles["title-bar"])}>
+        {`>SYSTEM CORE ACCESS<`}
+        <SideMenu breach={breach} />
+      </AnimatedBlock>
+
+      <AnimatedBlock className={clsx(styles["scroll-container"])}>
+        <PasswordFeedback feedback={levelState.feedback} />
+      </AnimatedBlock>
+
+      <AnimatedBlock className={clsx(styles["v-split"])}>
+        <div>
+          <VulnerabilityChecker
+            vCheckers={hintCheckers}
+            candidate={candidate}
+            shakeSignal={shakeSignal}
+          />
+        </div>
+        <div className={styles["exploits"]}>
+          <div>Exploit tokens: {breach.exploitTokens}</div>
+          <Button size="s" text="Weak Hint: 1" onClick={() => {}} disabled />
+          <Button size="s" text="Medium Hint: 2" onClick={() => {}} disabled />
+          <Button size="s" text="Strong Hint: 3" onClick={() => {}} disabled />
+        </div>
+      </AnimatedBlock>
+
+      <AnimatedBlock>
+        <PasswordInput
+          allChecksPassed={allChecksPassed}
+          onSubmit={() => levelState.submit(candidate)}
+          onChecksFailed={() => setShakeSignal((s) => s + 1)}
+          password={candidate}
+          setPassword={(pw) => setCandidate(pw)}
+        />
+      </AnimatedBlock>
+
+      <AnimatedBlock>
+        <Keyboard onKeyPress={(key) => console.log("pressed", key)} />
+      </AnimatedBlock>
+    </Screen>
+  );
 
   return (
     <Screen className={styles["core-access-screen"]}>

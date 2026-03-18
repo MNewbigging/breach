@@ -1,7 +1,7 @@
 @use "../../common-styles.scss" as *;
 
 .vuln-checker {
-  padding: 12px;
+  padding: $section-gap;
   border: $border-default;
   display: flex;
   flex-direction: column;
