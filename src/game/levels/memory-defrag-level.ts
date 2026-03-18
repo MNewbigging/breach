@@ -222,7 +222,6 @@ export class MemoryDefragLevel {
   private getStartingWordPool(rng: () => number) {
     // Get the word-gen config for this difficulty
     const config = getWordGenConfig(this.difficulty);
-    console.log("config", config);
     const wordPool: string[] = [];
 
     for (const [length, count] of config) {
@@ -232,17 +231,6 @@ export class MemoryDefragLevel {
         wordPool.push(word);
       }
     }
-
-    // Start simple - pick 3 seeded-random 4-letter words
-    // const fourLetterWords = this.dictionary.wordsByLength.get(4) ?? [];
-    // const shuffled = shuffle([...fourLetterWords], rng);
-
-    // const wordPool: string[] = [];
-
-    // for (let i = 0; i < 3; i++) {
-    //   const word = shuffled.pop();
-    //   if (word) wordPool.push(word);
-    // }
 
     return wordPool;
   }

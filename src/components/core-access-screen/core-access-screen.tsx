@@ -31,7 +31,7 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
   const levelState = levelStateRef.current;
 
   const [candidate, setCandidate] = useState("");
-  const [shakeSignal, setShakeSignal] = useState(0);
+  const [shakeSignal, setShakeSignal] = useState(0); // not in use for now
 
   // Get hydrated hint classes for each awarded hint spec in the breach
   const hintCheckers = useMemo(
@@ -43,6 +43,16 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
     checker.test(candidate),
   );
   const showSumHelper = breach.awardedHints.some((spec) => spec.type === "sum");
+
+  function onClickBarLetter(index: number) {
+    const candidateArr = [...candidate];
+    candidateArr.splice(index, 1);
+    setCandidate(candidateArr.join(""));
+  }
+
+  function onPressKey(char: string) {
+    setCandidate(candidate + char.toUpperCase());
+  }
 
   return (
     <Screen className={styles["core-access-screen"]}>
@@ -71,65 +81,95 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
         </div>
       </AnimatedBlock>
 
-      <AnimatedBlock>
-        <PasswordInput
-          allChecksPassed={allChecksPassed}
-          onSubmit={() => levelState.submit(candidate)}
-          onChecksFailed={() => setShakeSignal((s) => s + 1)}
-          password={candidate}
-          setPassword={(pw) => setCandidate(pw)}
-        />
+      <AnimatedBlock className={styles["input-section"]}>
+        <div className={styles["word-bar"]}>
+          <span className={styles["input-prefix"]} aria-hidden="true">
+            &gt;
+          </span>
+
+          <div className={styles["word-input"]}>
+            {[...candidate].map((char, index) => (
+              <Letter
+                key={`letter-${index}`}
+                char={char}
+                onClick={() => onClickBarLetter(index)}
+              />
+            ))}
+          </div>
+
+          <Button
+            size="s"
+            text="⏎"
+            onClick={() => levelState.submit(candidate)}
+            className={styles["submit-button"]}
+          />
+        </div>
+
+        <div className={styles["attempts"]}>
+          Attempts: {levelState.attempts}
+        </div>
       </AnimatedBlock>
 
       <AnimatedBlock>
-        <Keyboard onKeyPress={(key) => console.log("pressed", key)} />
+        <Keyboard onKeyPress={onPressKey} />
       </AnimatedBlock>
     </Screen>
   );
 
+  // return (
+  //   <Screen className={styles["core-access-screen"]}>
+  //     <AnimatedBlock>
+  //       <div>{`>ACCESS SYSTEM CORE<`}</div>
+  //     </AnimatedBlock>
+
+  //     <AnimatedBlock>
+  //       <VulnerabilityChecker
+  //         vCheckers={hintCheckers}
+  //         candidate={candidate}
+  //         shakeSignal={shakeSignal}
+  //       />
+  //     </AnimatedBlock>
+
+  //     <AnimatedBlock>
+  //       <PasswordInput
+  //         allChecksPassed={allChecksPassed}
+  //         onSubmit={() => levelState.submit(candidate)}
+  //         onChecksFailed={() => setShakeSignal((s) => s + 1)}
+  //         password={candidate}
+  //         setPassword={(pw) => setCandidate(pw)}
+  //       />
+  //     </AnimatedBlock>
+
+  //     {showSumHelper && (
+  //       <AnimatedBlock>
+  //         <SumHelper candidate={candidate} />
+  //       </AnimatedBlock>
+  //     )}
+
+  //     <AnimatedBlock>
+  //       <AttemptsLeft attempts={levelState.attempts} />
+  //     </AnimatedBlock>
+
+  //     <AnimatedBlock>
+  //       <CheatSheet />
+  //     </AnimatedBlock>
+
+  //     <AnimatedBlock className={styles["scroll-container"]}>
+  //       <PasswordFeedback feedback={levelState.feedback} />
+  //     </AnimatedBlock>
+  //   </Screen>
+  // );
+}
+
+interface LetterProps {
+  char: string;
+  onClick: () => void;
+}
+
+function Letter({ char, onClick }: LetterProps) {
   return (
-    <Screen className={styles["core-access-screen"]}>
-      <AnimatedBlock>
-        <div>{`>ACCESS SYSTEM CORE<`}</div>
-      </AnimatedBlock>
-
-      <AnimatedBlock>
-        <VulnerabilityChecker
-          vCheckers={hintCheckers}
-          candidate={candidate}
-          shakeSignal={shakeSignal}
-        />
-      </AnimatedBlock>
-
-      <AnimatedBlock>
-        <PasswordInput
-          allChecksPassed={allChecksPassed}
-          onSubmit={() => levelState.submit(candidate)}
-          onChecksFailed={() => setShakeSignal((s) => s + 1)}
-          password={candidate}
-          setPassword={(pw) => setCandidate(pw)}
-        />
-      </AnimatedBlock>
-
-      {showSumHelper && (
-        <AnimatedBlock>
-          <SumHelper candidate={candidate} />
-        </AnimatedBlock>
-      )}
-
-      <AnimatedBlock>
-        <AttemptsLeft attempts={levelState.attempts} />
-      </AnimatedBlock>
-
-      {/* {window.innerHeight >= 1000 && ( */}
-      <AnimatedBlock>
-        <CheatSheet />
-      </AnimatedBlock>
-      {/* )} */}
-
-      <AnimatedBlock className={styles["scroll-container"]}>
-        <PasswordFeedback feedback={levelState.feedback} />
-      </AnimatedBlock>
-    </Screen>
+    <div className={"letter"} onClick={onClick}>
+      {char}
+    </div>
   );
 }

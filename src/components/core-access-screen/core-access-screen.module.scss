@@ -18,6 +18,7 @@
 }
 
 .scroll-container {
+  flex: 1;
   overflow: hidden;
 }
 
@@ -36,4 +37,53 @@
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: nowrap;
+}
+
+.input-section {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2px;
+}
+
+.word-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border: $border-default;
+  padding: $section-gap;
+
+  .input-prefix {
+    margin-right: 4px;
+    font-size: larger;
+  }
+
+  .word-input {
+    flex: 1; // pushes submit button to the right edge
+    font-size: larger;
+    display: flex;
+    gap: 2px;
+    letter-spacing: 2px;
+  }
+
+  .submit-button {
+    cursor: pointer;
+  }
+
+  .letter {
+    padding: 2px 4px;
+    border: $border-default;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.attempts {
+  padding: $section-gap;
+  border: $border-default;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
