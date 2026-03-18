@@ -22,6 +22,30 @@
   overflow: hidden;
 }
 
+.how-to {
+  border: $border-default;
+  padding: $section-padding;
+  width: 100%;
+  height: 100%;
+
+  overflow-y: auto;
+  scrollbar-width: thin; // Firefox
+  scrollbar-color: #ccc #000; // thumb / track
+}
+
+/* Chrome, Edge, Safari */
+.how-to::-webkit-scrollbar {
+  width: 8px;
+}
+
+.how-to::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.how-to::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
 .v-split {
   display: flex;
   flex-wrap: nowrap;

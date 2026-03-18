@@ -39,6 +39,7 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
     [breach.awardedHints],
   );
 
+  // todo not used right now, clean up or move logic to state
   const allChecksPassed = hintCheckers.every((checker) =>
     checker.test(candidate),
   );
@@ -62,7 +63,35 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
       </AnimatedBlock>
 
       <AnimatedBlock className={clsx(styles["scroll-container"])}>
-        <PasswordFeedback feedback={levelState.feedback} />
+        {levelState.feedback.length > 0 && (
+          <PasswordFeedback feedback={levelState.feedback} />
+        )}
+        {levelState.feedback.length <= 0 && (
+          <div className={styles["how-to"]}>
+            <div>
+              You must determine the system password using the hints below.
+            </div>
+            <br />
+            <div>
+              Tap on the keyboard letters to form your guess then tap the submit
+              button. Tap letters on the input bar to remove them.
+            </div>
+            <br />
+            <div>
+              Feedback on your guess will be shown in this box. It will tell you
+              which letters were aligned or just matching the password.
+            </div>
+            <br />
+            <div>
+              You have limited attempts, shown to the right of the input bar -
+              guess wisely!
+            </div>
+            <br />
+            <div>
+              Coming soon - use your exploit tokens to buy more hints...
+            </div>
+          </div>
+        )}
       </AnimatedBlock>
 
       <AnimatedBlock className={clsx(styles["v-split"])}>
