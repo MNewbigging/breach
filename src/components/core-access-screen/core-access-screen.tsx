@@ -31,7 +31,6 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
   const levelState = levelStateRef.current;
 
   const [candidate, setCandidate] = useState("");
-  const [shakeSignal, setShakeSignal] = useState(0); // not in use for now
 
   // Get hydrated hint classes for each awarded hint spec in the breach
   const hintCheckers = useMemo(
@@ -40,6 +39,7 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
   );
 
   // todo not used right now, clean up or move logic to state
+  const [shakeSignal, setShakeSignal] = useState(0);
   const allChecksPassed = hintCheckers.every((checker) =>
     checker.test(candidate),
   );
