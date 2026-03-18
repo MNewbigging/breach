@@ -132,7 +132,12 @@ export function MemoryDefragScreen({
       </AnimatedBlock>
 
       <AnimatedBlock className={clsx(styles["section"], styles["centered"])}>
-        <Button size="s" text="FINISH" onClick={() => {}} />
+        <Button
+          size="s"
+          text="FINISH"
+          onClick={() => levelState.finish()}
+          disabled={!levelState.canFinish()}
+        />
       </AnimatedBlock>
     </Screen>
   );

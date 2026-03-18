@@ -87,9 +87,6 @@ export class MemoryDefragLevel {
     this.wordBar.forEach((letter) => (letter.state = "used"));
     this.wordBar.length = 0;
 
-    // Is this game over?
-    if (this.isGameOver()) this.endGame();
-
     eventDispatcher.fire("memory-defrag-update");
   }
 
@@ -136,10 +133,15 @@ export class MemoryDefragLevel {
     // Remove letter entirely
     this.letterPool = this.letterPool.filter((l) => l.id !== letter.id);
 
-    // Check if this ended the game
-    if (this.isGameOver()) this.endGame();
-
     eventDispatcher.fire("memory-defrag-update");
+  }
+
+  canFinish() {
+    return this.letterPool.every((letter) => letter.state === "used");
+  }
+
+  finish() {
+    if (this.canFinish()) this.endGame();
   }
 
   private addLetterToWordBar(letter: MDLetter) {
@@ -199,10 +201,6 @@ export class MemoryDefragLevel {
     if (!bucket) return false;
 
     return bucket.some((word) => matchesWithWild(candidate, word));
-  }
-
-  private isGameOver() {
-    return this.letterPool.every((letter) => letter.state === "used");
   }
 
   private endGame() {
