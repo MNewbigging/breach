@@ -53,6 +53,7 @@ export function SystemSelectScreen() {
           text="Initiate Breach"
           disabled={!selectedDifficulty}
           onClick={onInitiateBreach}
+          size="l"
         />
       </AnimatedBlock>
     </Screen>

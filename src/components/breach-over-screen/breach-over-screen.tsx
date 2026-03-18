@@ -26,7 +26,11 @@ export function BreachOverScreen({ breach }: BreachOverScreenProps) {
       </AnimatedBlock>
 
       <AnimatedBlock>
-        <Button text={"Conclude Breach"} onClick={() => game.finishBreach()} />
+        <Button
+          size="l"
+          text={"Conclude Breach"}
+          onClick={() => game.finishBreach()}
+        />
       </AnimatedBlock>
     </Screen>
   );

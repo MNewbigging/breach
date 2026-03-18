@@ -2,7 +2,6 @@
 
 .button {
   border: $border-default;
-  padding: 16px 28px;
   transition: all 0.15s ease-out;
   user-select: none;
 
@@ -13,6 +12,18 @@
 
   &:active {
     box-shadow: $glow-3;
+  }
+
+  &.s {
+    padding: 4px 8px;
+  }
+
+  &.m {
+    padding: 8px 16px;
+  }
+
+  &.l {
+    padding: 16px 32px;
   }
 }
 
@@ -26,4 +37,5 @@
   cursor: default;
   pointer-events: none;
   border: $border-muted;
+  color: rgba(255, 255, 255, 0.6);
 }

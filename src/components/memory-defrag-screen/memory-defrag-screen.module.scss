@@ -1,41 +1,68 @@
 @use "../common-styles.scss" as *;
 
 .screen-container {
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: $section-gap;
 }
 
-.title-bar {
+.section {
+  padding: $section-padding;
+  border: $border-default;
+}
+
+.centered {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.top-bar {
-  padding: 0px 4px;
-  height: 50px;
-  border: $border-default;
+.exploit-area {
+  flex: 0 0 50px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .letter-pool {
-  padding: 10px;
-  border: $border-default;
-
+  flex: 1 1 50%;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: flex-start;
   gap: 4px;
+
+  .pool-letter {
+    padding: 2px 4px;
+    border: $border-default;
+    cursor: pointer;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.unused {
+      opacity: 1;
+    }
+
+    &.in-use {
+      opacity: 0.75;
+    }
+
+    &.used {
+      opacity: 0.3;
+    }
+
+    &.purge-active {
+      &:hover {
+        color: red;
+        border-color: red;
+      }
+    }
+  }
 }
 
 .word-bar {
-  padding: 10px;
-  height: 50px;
-  border: $border-default;
-
   display: flex;
   align-items: center;
 
@@ -45,7 +72,7 @@
   }
 
   .word-input {
-    flex: 1;
+    flex: 1; // pushes submit button to the right edge
     font-size: large;
     display: flex;
     gap: 2px;
@@ -54,51 +81,19 @@
   .submit-button {
     cursor: pointer;
   }
-}
 
-.pool-letter {
-  padding: 2px 4px;
-  border: $border-default;
-  user-select: none;
-  cursor: pointer;
+  .bar-letter {
+    padding: 2px 4px;
+    border: $border-default;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.unused {
-    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-
-  &.in-use {
-    opacity: 0.75;
-  }
-
-  &.used {
-    opacity: 0.3;
-  }
-
-  &.purge-active {
-    &:hover {
-      color: red;
-      border-color: red;
-    }
-  }
-}
-
-.bar-letter {
-  padding: 2px 4px;
-  border: $border-default;
-  user-select: none;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .word-bank {
-  padding: 10px;
-  flex: 1 1 auto;
+  flex: 0 0 120px;
   min-height: 50px;
   border: $border-default;
   display: flex;
@@ -109,6 +104,24 @@
   overflow-y: auto;
   scrollbar-width: thin; // Firefox
   scrollbar-color: #ccc #000; // thumb / track
+
+  .word-tag {
+    padding: 2px 4px;
+    height: fit-content;
+    display: flex;
+    gap: 2px;
+    border: $border-default;
+    letter-spacing: 1px;
+
+    .tag-clear {
+      cursor: pointer;
+      opacity: 0.75;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
 }
 
 /* Chrome, Edge, Safari */
@@ -122,41 +135,4 @@
 
 .password-feedback::-webkit-scrollbar-thumb {
   background: #ccc;
-}
-
-.word-tag {
-  padding: 2px 4px;
-  height: fit-content;
-  user-select: none;
-  display: flex;
-  gap: 2px;
-  border: $border-default;
-  letter-spacing: 1px;
-}
-
-.tag-clear {
-  user-select: none;
-  cursor: pointer;
-  opacity: 0.75;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.exploit-area {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.exploit-button {
-  border: $border-default;
-  padding: 4px;
-  cursor: pointer;
-}
-
-.purging {
-  color: red;
-  border-color: red;
 }

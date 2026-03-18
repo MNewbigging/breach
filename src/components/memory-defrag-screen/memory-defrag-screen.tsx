@@ -11,6 +11,7 @@ import {
   MDLetter,
   MemoryDefragLevel,
 } from "../../game/levels/memory-defrag-level";
+import { Button } from "../button/button";
 
 interface MemoryDefragScreenProps {
   breach: Breach;
@@ -55,34 +56,31 @@ export function MemoryDefragScreen({
 
   return (
     <Screen className={styles["screen-container"]}>
-      <AnimatedBlock
-        className={styles["title-bar"]}
-      >{`>MEMORY DEFRAG<`}</AnimatedBlock>
-
-      <AnimatedBlock className={styles["top-bar"]}>
-        <div className={styles["exploit-area"]}>
-          <div
-            className={styles["exploit-button"]}
-            onClick={() => levelState.useWildExploit()}
-          >
-            WILD: {levelState.wildExploitCost}
-          </div>
-
-          <div
-            className={clsx(
-              styles["exploit-button"],
-              purging && styles["purging"],
-            )}
-            onClick={onPressPurge}
-          >
-            PURGE: {levelState.purgeExploitCost}
-          </div>
-
-          <div>Exploit Tokens: {breach.exploitTokens}</div>
-        </div>
+      <AnimatedBlock className={styles["section"]}>
+        {`>MEMORY DEFRAG<`}
       </AnimatedBlock>
 
-      <AnimatedBlock className={styles["letter-pool"]}>
+      <AnimatedBlock
+        className={clsx(styles["section"], styles["exploit-area"])}
+      >
+        <Button
+          size="s"
+          text={`WILD: ${levelState.wildExploitCost}`}
+          onClick={() => levelState.useWildExploit()}
+          disabled={breach.exploitTokens === 0}
+        />
+
+        <Button
+          size="s"
+          text={`PURGE: ${levelState.purgeExploitCost}`}
+          onClick={onPressPurge}
+          disabled={breach.exploitTokens === 0}
+        />
+
+        <div>Exploit Tokens: {breach.exploitTokens}</div>
+      </AnimatedBlock>
+
+      <AnimatedBlock className={clsx(styles["section"], styles["letter-pool"])}>
         {letterPool.map((letter, index) => (
           <Letter
             key={`pool-letter-${index}`}
@@ -97,7 +95,7 @@ export function MemoryDefragScreen({
         ))}
       </AnimatedBlock>
 
-      <AnimatedBlock className={styles["word-bar"]}>
+      <AnimatedBlock className={clsx(styles["section"], styles["word-bar"])}>
         <span className={styles["input-prefix"]} aria-hidden="true">
           &gt;
         </span>
@@ -121,7 +119,7 @@ export function MemoryDefragScreen({
         </div>
       </AnimatedBlock>
 
-      <AnimatedBlock className={styles["word-bank"]}>
+      <AnimatedBlock className={clsx(styles["section"], styles["word-bank"])}>
         {wordBank.map((bankWord, index) => (
           <WordTag
             key={`bank-word-${index}`}
@@ -129,6 +127,10 @@ export function MemoryDefragScreen({
             onClick={() => levelState.clearWord(bankWord)}
           />
         ))}
+      </AnimatedBlock>
+
+      <AnimatedBlock className={clsx(styles["section"], styles["centered"])}>
+        <Button size="s" text="FINISH" onClick={() => {}} />
       </AnimatedBlock>
     </Screen>
   );

@@ -28,6 +28,11 @@ $glow-4:
 $text-glow-1: 0 0 4px rgba(255, 255, 255, 0.25);
 $text-glow-2: 0 0 6px rgba(255, 255, 255, 0.4);
 
+// Spacing
+$screen-padding: 8px;
+$section-gap: 6px;
+$section-padding: 6px;
+
 // Globally applied font properties
 body {
   font-family: "Oxanium", sans-serif;
