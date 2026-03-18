@@ -66,6 +66,9 @@ export class MemoryDefragLevel {
       .toLowerCase(); // all dictionary words are lower case, but UI is upper
     if (!word) return;
 
+    // Don't allow dupes
+    if (this.inWordBank(word)) return;
+
     // Is it in the dictionary
     if (!this.inDictionary(word)) {
       // Not ok, update UI somehow
@@ -169,6 +172,12 @@ export class MemoryDefragLevel {
 
     this.wordBar.length = 0;
     eventDispatcher.fire("memory-defrag-update");
+  }
+
+  private inWordBank(word: string) {
+    return this.wordBank.some(
+      (wb) => wb.word.toLowerCase() === word.toLowerCase(),
+    );
   }
 
   private inDictionary(candidate: string) {

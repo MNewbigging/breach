@@ -36,7 +36,8 @@ function getBreachResultString(breach: Breach) {
   const { breachResult } = breach;
 
   if (breachResult === "win") return `You breached the system core`;
-  if (breachResult === "lose") return `You failed to breach the system core`;
+  if (breachResult === "lose")
+    return `You failed to guess the core password: ${breach.corePassword}`;
   if (breachResult === "abandoned") return `You abandoned the breach attempt`;
 
   return ">PARSING ERROR<";
