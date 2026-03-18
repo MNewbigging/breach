@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Breach } from "../../game/breach";
 import styles from "./side-menu.module.scss";
 import { Button } from "../button/button";
+import { VERSION } from "../../version";
 
 interface SideMenuProps {
   breach: Breach;
@@ -23,7 +24,7 @@ export function SideMenu({ breach }: SideMenuProps) {
             className={styles["close-button"]}
           />
 
-          <div>Version: 0.3.5</div>
+          <div>Version: {VERSION}</div>
           <div>
             Seed: <span className={styles["selectable"]}>{breach.seed}</span>
           </div>
