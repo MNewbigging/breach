@@ -1,19 +1,18 @@
-# Basic React Template
+# Developing
 
 To get started:
 
 - npm install
 - npm run start
 
-# Github Pages
+# Branching
 
-This repo uses an action workflow to automatically deploy anything pushed to the main or master branch.
+There are two 'main' branches:
 
-To setup, you must:
+- master: anything pushed to master will be published to the Github Pages site, do this sparingly
+- dev: our feature branches go into dev, not master, and then dev can be merged into master periodically or whenever publishing is required
 
-- Open `vite.config.ts` and edit the `base` property to read `/<your-repo-name>/`
-- In Github, go to your repo > Settings > Pages > Build and Deployment and under the Source dropdown, choose Github Actions
+For contributing:
 
-# Assets
-
-Drop your assets under the public folder, which is accessed in paths with a leading forward slash e.g `'/models/my-model.fbx'`
+- make your own feature branch (it can be long-lived under your name, or short-lived per feature)
+- when ready, make a PR from your branch into dev (not master)
