@@ -21,6 +21,12 @@ class Game {
     // Load dictionary
     this.dictionary = await loadDictionary();
 
+    console.log(this.dictionary);
+    console.log(
+      "has avg",
+      this.dictionary.wordsByLength.get(3)?.includes("avg"),
+    );
+
     // Load any persisted state from a previous session
     const dto = this.getSavedBreachDTO();
     if (dto)

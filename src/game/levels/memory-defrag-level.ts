@@ -218,7 +218,11 @@ export class MemoryDefragLevel {
     const wordPool: string[] = [];
 
     for (const [length, count] of config) {
-      const words = this.dictionary.wordsByLength.get(length)!;
+      const words = this.dictionary.wordsByLength.get(length);
+      if (!words) {
+        console.log("no words of length", length);
+        continue;
+      }
       for (let i = 0; i < count; i++) {
         const word = words[randomIndex(rng, words.length)];
         wordPool.push(word);
