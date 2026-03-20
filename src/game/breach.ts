@@ -14,7 +14,9 @@ import {
   CONFIG,
   Difficulty,
   Level,
+  levelDifficulties,
   LevelStats,
+  levelTypes,
   ScreenName,
 } from "./types";
 
@@ -72,35 +74,6 @@ export class Breach {
 
   getNextLevelSeed() {
     return splitmix32((this.seed + this.nextLevelPointer) >>> 0);
-  }
-
-  // todo should this be on the level object instead?
-  getNextLevelDifficulty() {
-    if (this.difficulty === "easy") {
-      // Easy has 3 levels... this shouldn't be so hardcoded!
-      const easyScale: Difficulty[] = ["easy", "medium", "hard"];
-      return easyScale[this.nextLevelPointer];
-    }
-
-    if (this.difficulty === "medium") {
-      const mediumScale: Difficulty[] = [
-        "easy",
-        "easy",
-        "medium",
-        "medium",
-        "hard",
-      ];
-      return mediumScale[this.nextLevelPointer];
-    }
-
-    const hardScale: Difficulty[] = [
-      "easy",
-      "medium",
-      "medium",
-      "hard",
-      "hard",
-    ];
-    return hardScale[this.nextLevelPointer];
   }
 
   save() {
@@ -183,18 +156,20 @@ export class Breach {
 
   private generateLevels(difficulty: Difficulty) {
     const rng = rngFunctionFromSeed(this.seed);
-    const levelChoices = getLevelChoices();
     const levelCount = CONFIG[difficulty].levelCount;
-
     const levels: Level[] = [];
+
     for (let i = 0; i < levelCount; i++) {
       // Randomly pick the levels using rng function
-      const idx = randomIndex(rng, levelChoices.length);
-      levels.push(levelChoices[idx]);
+      const idx = randomIndex(rng, levelTypes.length);
+      const screen = levelTypes[idx];
+      const baseXp = 1; // for now
+      const levelDiff = levelDifficulties[difficulty][i];
+      levels.push({ screen, baseXp, difficulty: levelDiff });
     }
 
     // Core access level is always last
-    levels.push({ screen: "core-access", baseXp: 1 });
+    levels.push({ screen: "core-access", baseXp: 1, difficulty }); // but the CA level doesn't use difficulty... should it be a 'level'?
 
     return levels;
   }
@@ -237,18 +212,4 @@ export class Breach {
     this.exploitTokens = dto.exploitTokens;
     this.breachResult = dto.breachResult;
   }
-}
-
-// todo - possibly define elsewhere?
-function getLevelChoices(): Level[] {
-  return [
-    // {
-    //   screen: "word-transform-level",
-    //   baseXp: 1,
-    // },
-    {
-      screen: "memory-defrag-level",
-      baseXp: 1,
-    },
-  ];
 }

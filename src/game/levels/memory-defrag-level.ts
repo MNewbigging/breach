@@ -25,13 +25,11 @@ export class MemoryDefragLevel {
   readonly wildExploitCost = 1;
   readonly purgeExploitCost = 1;
 
-  private difficulty: Difficulty;
-
   constructor(
     private breach: Breach,
     private dictionary: Dictionary,
+    private difficulty: Difficulty,
   ) {
-    this.difficulty = breach.getNextLevelDifficulty();
     this.setupGame();
   }
 

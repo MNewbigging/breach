@@ -29,7 +29,11 @@ export function MemoryDefragScreen({
   // Instantiate level state inside ref
   const levelStateRef = useRef<MemoryDefragLevel | null>(null);
   if (!levelStateRef.current) {
-    levelStateRef.current = new MemoryDefragLevel(breach, dictionary);
+    levelStateRef.current = new MemoryDefragLevel(
+      breach,
+      dictionary,
+      breach.getNextLevel().difficulty,
+    );
   }
 
   const levelState = levelStateRef.current;

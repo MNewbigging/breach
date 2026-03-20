@@ -24,11 +24,7 @@ export function BreachProgressScreen({ breach }: BreachProgressScreenProps) {
 
   // const lastLevel =  const lastStats = stats.length ? stats[stats.length - 1] : undefined;
   const lastLevelStats = breach.levelStats.slice(-1)[0];
-
-  const nextLevelDifficulty =
-    nextLevel.screen === "core-access"
-      ? breach.difficulty
-      : breach.getNextLevelDifficulty();
+  const nextLevelDifficulty = nextLevel.difficulty;
 
   return (
     <Screen className={styles["breach-progress-screen"]}>

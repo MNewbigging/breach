@@ -13,6 +13,7 @@ export type Difficulty = "easy" | "medium" | "hard";
 export type Level = {
   screen: ScreenName;
   baseXp: number;
+  difficulty: Difficulty;
 };
 
 export type VictoryResult = "win" | "lose";
@@ -37,4 +38,12 @@ export const CONFIG = {
     levelCount: 5,
     startingTokens: 3,
   },
+};
+
+export const levelTypes: ScreenName[] = ["memory-defrag-level"];
+
+export const levelDifficulties: Record<Difficulty, Difficulty[]> = {
+  easy: ["easy", "medium", "hard"],
+  medium: ["easy", "easy", "medium", "medium", "hard"],
+  hard: ["easy", "medium", "medium", "hard", "hard"],
 };
