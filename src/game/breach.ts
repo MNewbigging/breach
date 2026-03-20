@@ -48,7 +48,7 @@ export class Breach {
 
   constructor(
     public readonly difficulty: Difficulty, // used to determine number of security levels & their base difficulty
-    private readonly dictionary: Dictionary,
+    public readonly dictionary: Dictionary,
     private readonly changeScreen: (screen: ScreenName) => void,
     dto?: BreachDTO,
   ) {

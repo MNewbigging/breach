@@ -1,6 +1,10 @@
 import { eventDispatcher } from "../../events/event-dispatcher";
 import { Breach } from "../breach";
-import { getBreachAttempts } from "../hints/search-space";
+import {
+  getCoreAccessAttempts,
+  getGuessFeedback,
+  GuessFeedback,
+} from "../hints/search-space";
 import { LevelStats } from "../types";
 
 export type CharFeedbackType = "pos-match" | "char-match" | "miss";
@@ -17,7 +21,7 @@ export class CoreAccessLevel {
   attempts: number;
 
   constructor(private breach: Breach) {
-    this.attempts = getBreachAttempts(breach);
+    this.attempts = getCoreAccessAttempts(breach);
     console.log(breach.corePassword);
   }
 
@@ -43,40 +47,13 @@ export class CoreAccessLevel {
   }
 
   getCandidateFeedback(candidate: string) {
-    let charsCorrect = 0;
-    let positionsCorrect = 0;
-
-    const pwArr = [...this.breach.corePassword.toLowerCase()];
-    const candidateArr = [...candidate.toLowerCase()];
-    const charFeedback: CharFeedbackType[] = Array(candidate.length).fill(
-      "miss",
-    );
-
-    // First pass — exact matches
-    for (let i = 0; i < candidateArr.length; i++) {
-      if (candidateArr[i] === pwArr[i]) {
-        positionsCorrect++;
-        charFeedback[i] = "pos-match";
-        pwArr[i] = null as any; // consume
-        candidateArr[i] = null as any; // consume
-      }
-    }
-
-    // Second pass — character matches (wrong position)
-    for (let i = 0; i < candidateArr.length; i++) {
-      if (candidateArr[i] && pwArr.includes(candidateArr[i])) {
-        charsCorrect++;
-        charFeedback[i] = "char-match";
-
-        const index = pwArr.indexOf(candidateArr[i]);
-        pwArr[index] = null as any; // consume matched char so dupes don't re-match
-      }
-    }
+    const feedback = getGuessFeedback(candidate, this.breach.corePassword);
+    const charFeedback = buildCharFeedback(feedback);
 
     return {
       candidate,
-      charsCorrect,
-      positionsCorrect,
+      charsCorrect: feedback.charsCorrect,
+      positionsCorrect: feedback.positionsCorrect,
       charFeedback,
     };
   }
@@ -108,4 +85,12 @@ export class CoreAccessLevel {
 
     return undefined;
   }
+}
+
+function buildCharFeedback(feedback: GuessFeedback): CharFeedbackType[] {
+  return feedback.exactMatches.map((isExact, i) => {
+    if (isExact) return "pos-match";
+    if (feedback.charMatches[i]) return "char-match";
+    return "miss";
+  });
 }
