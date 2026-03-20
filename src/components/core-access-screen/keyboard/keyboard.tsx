@@ -5,14 +5,14 @@ interface KeyboardProps {
 }
 
 export function Keyboard({ onKeyPress }: KeyboardProps) {
-  const firstRow = [..."qwertyuiop"].map((c) => (
-    <Key key={c} char={c.toUpperCase()} onClick={() => onKeyPress(c)} />
+  const firstRow = [..."QWERTYUIOP"].map((c) => (
+    <Key key={c} char={c} onClick={() => onKeyPress(c)} />
   ));
-  const secondRow = [..."asdfghjkl"].map((c) => (
-    <Key key={c} char={c.toUpperCase()} onClick={() => onKeyPress(c)} />
+  const secondRow = [..."ASDFGHJKL"].map((c) => (
+    <Key key={c} char={c} onClick={() => onKeyPress(c)} />
   ));
-  const thirdRow = [..."zxcvbnm"].map((c) => (
-    <Key key={c} char={c.toUpperCase()} onClick={() => onKeyPress(c)} />
+  const thirdRow = [..."ZXCVBNM"].map((c) => (
+    <Key key={c} char={c} onClick={() => onKeyPress(c)} />
   ));
 
   return (

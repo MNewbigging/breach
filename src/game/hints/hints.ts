@@ -19,7 +19,7 @@ export function getVulnHintFor(spec: HintSpec) {
     case "is-palindrome":
       return `Is a palindrome`;
     case "position-exact":
-      return `Position ${spec.position + 1} is ${spec.letter.toUpperCase()}`;
+      return `Position ${spec.position + 1} is ${spec.letter}`;
     case "vowel-relation":
       return `Vowels ${spec.vowelRelation} consonants`;
     case "position-type":

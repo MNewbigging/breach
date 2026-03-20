@@ -79,7 +79,7 @@ export function getCoreAccessAttempts(breach: Breach) {
   const safeBitsPerGuess = Math.max(0.5, bitsPerGuess); // fallback for small sets
 
   const attempts = 1 + Math.ceil(bitsUntilSolve / safeBitsPerGuess);
-  console.log(attempts);
+
   const minAttempts = 3;
   const maxAttmpets = 12;
   return clamp(attempts, minAttempts, maxAttmpets);

@@ -4,7 +4,6 @@ import { HintSpec } from "./hints/spec";
 import { Dictionary } from "./load-dictionary";
 import {
   randomIndex,
-  randomLetterString,
   randomSeed,
   rngFunctionFromSeed,
   splitmix32,
@@ -151,7 +150,7 @@ export class Breach {
     const words = this.dictionary.wordsByLength.get(length)!;
 
     const rng = rngFunctionFromSeed(this.seed);
-    return words[randomIndex(rng, words.length)].toUpperCase();
+    return words[randomIndex(rng, words.length)];
   }
 
   private generateLevels(difficulty: Difficulty) {

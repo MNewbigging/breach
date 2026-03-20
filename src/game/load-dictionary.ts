@@ -1,5 +1,6 @@
 let cached: Promise<Dictionary> | null = null;
 
+// Note: all words are set to upper case (they appear as lower in dictionary.txt)
 export interface Dictionary {
   wordsByLength: Map<number, string[]>;
   set: Set<string>;
@@ -18,7 +19,7 @@ export function loadDictionary(): Promise<Dictionary> {
     const set = new Set<string>();
 
     for (const raw of text.split(/\r?\n/)) {
-      const word = raw.trim().toLowerCase();
+      const word = raw.trim().toUpperCase();
       if (!word) continue;
 
       const length = word.length;

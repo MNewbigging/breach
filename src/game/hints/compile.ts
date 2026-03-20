@@ -51,8 +51,7 @@ export function compileHint(spec: HintSpec): Hint {
       return {
         spec,
         test: (s: string) =>
-          s.length > spec.position &&
-          s[spec.position].toLowerCase() === spec.letter.toLowerCase(),
+          s.length > spec.position && s[spec.position] === spec.letter,
       };
     case "vowel-relation":
       return {

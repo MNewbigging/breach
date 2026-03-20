@@ -52,7 +52,7 @@ export function CoreAccessScreen({ breach }: CoreAccessScreenProps) {
   }
 
   function onPressKey(char: string) {
-    setCandidate(candidate + char.toUpperCase());
+    setCandidate(candidate + char);
   }
 
   return (

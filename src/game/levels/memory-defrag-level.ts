@@ -58,10 +58,7 @@ export class MemoryDefragLevel {
 
   submit() {
     // Get the word from the bar
-    const word = this.wordBar
-      .map((letter) => letter.char)
-      .join("")
-      .toLowerCase(); // all dictionary words are lower case, but UI is upper
+    const word = this.wordBar.map((letter) => letter.char).join("");
     if (!word) return;
 
     // Don't allow dupes
@@ -77,7 +74,7 @@ export class MemoryDefragLevel {
     // Add to bank
     const bankWord: MDBankWord = {
       lettersUsed: this.wordBar.map((wbLetter) => wbLetter.id),
-      word: word.toUpperCase(),
+      word,
     };
     this.wordBank.push(bankWord);
 
@@ -175,9 +172,7 @@ export class MemoryDefragLevel {
   }
 
   private inWordBank(word: string) {
-    return this.wordBank.some(
-      (wb) => wb.word.toLowerCase() === word.toLowerCase(),
-    );
+    return this.wordBank.some((wb) => wb.word === word);
   }
 
   private inDictionary(candidate: string) {
@@ -240,7 +235,7 @@ export class MemoryDefragLevel {
     const letters: string[] = [];
 
     wordPool.forEach((word) =>
-      word.split("").forEach((char) => letters.push(char.toUpperCase())),
+      word.split("").forEach((char) => letters.push(char)),
     );
 
     const shuffled = shuffle(letters, rng);

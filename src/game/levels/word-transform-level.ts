@@ -28,8 +28,8 @@ export class WordTransformLevel {
     const steps = 3;
     const chain = this.getWordChain(steps, fourLetterWords)!; // todo work out how to handle if it can't find any
 
-    this.startWord = chain.word.toUpperCase();
-    this.targetWord = this.getTargetWord(steps, chain).toUpperCase();
+    this.startWord = chain.word;
+    this.targetWord = this.getTargetWord(steps, chain);
   }
 
   private buildAdjacencyMap(pool: string[]) {
