@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatedBlock } from "../animated-block/animated-block";
 import { Screen } from "../screen/screen";
 import styles from "./memory-defrag-screen.module.scss";
@@ -13,6 +13,13 @@ import {
 } from "../../game/levels/memory-defrag-level";
 import { Button } from "../button/button";
 import { SideMenu } from "../side-menu/side-menu";
+import { isSortable, useSortable } from "@dnd-kit/react/sortable";
+import {
+  DragDropEventHandlers,
+  DragDropProvider,
+  PointerSensor,
+} from "@dnd-kit/react";
+import { PointerActivationConstraints } from "@dnd-kit/dom";
 
 interface MemoryDefragScreenProps {
   breach: Breach;
@@ -44,6 +51,48 @@ export function MemoryDefragScreen({
     window.addEventListener("keydown", levelState.onKeyDown);
     return () => window.removeEventListener("keydown", levelState.onKeyDown);
   }, []);
+
+  // This comp owns the custom visual ordering of the letters in pool
+  const [poolOrder, setPoolOrder] = useState<string[]>(() =>
+    letterPool.map((letter) => letter.id),
+  );
+
+  const orderedLetterPool = useMemo(() => {
+    const byId = new Map(letterPool.map((letter) => [letter.id, letter]));
+    return poolOrder
+      .map((id) => byId.get(id))
+      .filter((letter): letter is MDLetter => Boolean(letter));
+  }, [letterPool, poolOrder]);
+
+  useEffect(() => {
+    setPoolOrder((current) => {
+      const nextIds = letterPool.map((letter) => letter.id);
+      console.log("runs");
+      // Preserve existing order where possible & add new ids
+      const kept = current.filter((id) => nextIds.includes(id));
+      const appended = nextIds.filter((id) => !kept.includes(id));
+      return [...kept, ...appended];
+    });
+  }, [letterPool]);
+
+  function handleDragEnd(
+    event: Parameters<DragDropEventHandlers["onDragEnd"]>[0],
+  ) {
+    if (event.canceled) return;
+
+    const { source } = event.operation;
+    if (!isSortable(source)) return;
+
+    const { initialIndex, index } = source;
+    if (initialIndex === index) return;
+
+    setPoolOrder((current) => {
+      const next = [...current];
+      const [removed] = next.splice(initialIndex, 1);
+      next.splice(index, 0, removed);
+      return next;
+    });
+  }
 
   function onPressPurge() {
     if (!purging && !breach.canAffordExploit(levelState.purgeExploitCost))
@@ -87,18 +136,38 @@ export function MemoryDefragScreen({
       </AnimatedBlock>
 
       <AnimatedBlock className={clsx(styles["section"], styles["letter-pool"])}>
-        {letterPool.map((letter, index) => (
-          <Letter
-            key={`pool-letter-${index}`}
-            letter={letter}
-            className={clsx(
-              styles["pool-letter"],
-              styles[letter.state],
-              purging && styles["purge-active"],
-            )}
-            onClick={() => onClickPoolLetter(letter)}
-          />
-        ))}
+        <DragDropProvider
+          sensors={(defaults) =>
+            defaults.map((sensor) => {
+              if (sensor === PointerSensor) {
+                return PointerSensor.configure({
+                  activationConstraints: [
+                    new PointerActivationConstraints.Delay({
+                      value: 0,
+                      tolerance: 2,
+                    }),
+                  ],
+                });
+              }
+              return sensor;
+            })
+          }
+          onDragEnd={handleDragEnd}
+        >
+          {orderedLetterPool.map((letter, index) => (
+            <SortableLetter
+              key={letter.id}
+              index={index}
+              className={clsx(
+                styles["pool-letter"],
+                styles[letter.state],
+                purging && styles["purge-active"],
+              )}
+              onClick={() => onClickPoolLetter(letter)}
+              letter={letter}
+            />
+          ))}
+        </DragDropProvider>
       </AnimatedBlock>
 
       <AnimatedBlock className={clsx(styles["section"], styles["word-bar"])}>
@@ -144,6 +213,33 @@ export function MemoryDefragScreen({
         />
       </AnimatedBlock>
     </Screen>
+  );
+}
+
+interface SortableLetterProps {
+  index: number;
+  className: string;
+  onClick: () => void;
+  letter: MDLetter;
+}
+
+function SortableLetter({
+  index,
+  className,
+  onClick,
+  letter,
+}: SortableLetterProps) {
+  const { ref } = useSortable({ id: letter.id, index });
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      onClick={onClick}
+      style={{ touchAction: "none" }}
+    >
+      {letter.char}
+    </div>
   );
 }
 

@@ -79,7 +79,7 @@ function isSafeAbbrLookalike(word: string) {
 }
 
 function isKnownAbbr(word: string) {
-  const abbrs = ["CIR"];
+  const abbrs = ["CIR", "ENC", "DIST"];
 
   return abbrs.includes(word);
 }
