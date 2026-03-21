@@ -10,7 +10,7 @@ export function loadDictionary(): Promise<Dictionary> {
   if (cached) return cached;
 
   cached = (async () => {
-    const url = `${import.meta.env.BASE_URL}google_10000.txt`;
+    const url = `${import.meta.env.BASE_URL}dictionary.txt`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Failed to load dictionary: ${res.status}`);
     const text = await res.text();
@@ -26,9 +26,7 @@ export function loadDictionary(): Promise<Dictionary> {
       if (word.length < 3 || word.length > 12) continue;
 
       // Try to remove abbreviations
-      if (looksLikeAbbr(word)) {
-        console.log("abbr: ", word);
-      }
+      if (looksLikeAbbr(word) && !isSafeAbbrLookalike(word)) continue;
 
       const length = word.length;
       const bucket = wordsByLength.get(length) ?? [];
@@ -48,4 +46,33 @@ function looksLikeAbbr(word: string) {
   return (
     word.length <= 4 && !/[AEIOU]/.test(word) // no vowels
   );
+}
+
+function isSafeAbbrLookalike(word: string) {
+  const safeWords = [
+    "CRY",
+    "CYST",
+    "DRY",
+    "DRYS",
+    "FLY",
+    "FRY",
+    "GYM",
+    "GYMS",
+    "LYNX",
+    "MYTH",
+    "PLY",
+    "PRY",
+    "SHY",
+    "SKY",
+    "SLY",
+    "SPRY",
+    "SPY",
+    "STY",
+    "SYNC",
+    "TRY",
+    "WHY",
+    "WRY",
+  ];
+
+  return safeWords.includes(word);
 }
