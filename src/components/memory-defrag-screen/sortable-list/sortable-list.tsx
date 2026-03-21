@@ -24,13 +24,18 @@ export function SortableList<T extends WithId>({
     items.map((item) => item.id),
   );
 
+  // Get a stable signature of items in case array changes in-place from parent
+  const itemIds = items.map((item) => item.id).join("|");
+
   // Store items to retrieve when calling itemRenderer
   const itemsById = useMemo(() => {
+    console.log("itemsById");
     return new Map(items.map((item) => [item.id, item]));
-  }, [items]);
+  }, [itemIds]);
 
   // Whenever items would change
   useEffect(() => {
+    console.log("useEffect");
     setListOrder((current) => {
       const nextIds = items.map((item) => item.id);
 
@@ -40,7 +45,7 @@ export function SortableList<T extends WithId>({
 
       return [...kept, ...appended];
     });
-  }, [items]);
+  }, [itemIds]);
 
   // Handle successful drag events
   function handleDragEnd(
@@ -72,7 +77,7 @@ export function SortableList<T extends WithId>({
         const el = itemRenderer(item);
 
         return (
-          <SortableItem key={`sorted-${id}-${index}`} id={id} index={index}>
+          <SortableItem key={id} id={id} index={index}>
             {el}
           </SortableItem>
         );
