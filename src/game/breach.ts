@@ -1,4 +1,5 @@
 import { VERSION } from "../version";
+import { awardHint } from "./hints/award";
 import { getExactLengthHintSpec, getHintSpecs } from "./hints/generate";
 import { HintSpec } from "./hints/spec";
 import { Dictionary } from "./load-dictionary";
@@ -101,7 +102,7 @@ export class Breach {
     if (this.nextLevelPointer < this.levels.length - 1) this.nextLevelPointer++;
 
     if (stats.result === "win") {
-      this.awardHint();
+      awardHint(this);
       this.awardExploitTokens();
     }
 
@@ -115,12 +116,6 @@ export class Breach {
       this.changeScreen("breach-progress");
     }
   };
-
-  private awardHint() {
-    const rnd = Math.floor(Math.random() * this.hintPool.length);
-    const removed = this.hintPool.splice(rnd, 1);
-    this.awardedHints.push(removed[0]);
-  }
 
   private awardExploitTokens() {
     this.exploitTokens += 2;

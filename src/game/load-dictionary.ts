@@ -26,6 +26,7 @@ export function loadDictionary(): Promise<Dictionary> {
       if (word.length < 3 || word.length > 12) continue;
 
       // Try to remove abbreviations
+      if (isKnownAbbr(word)) continue;
       if (looksLikeAbbr(word) && !isSafeAbbrLookalike(word)) continue;
 
       const length = word.length;
@@ -75,4 +76,10 @@ function isSafeAbbrLookalike(word: string) {
   ];
 
   return safeWords.includes(word);
+}
+
+function isKnownAbbr(word: string) {
+  const abbrs = ["CIR"];
+
+  return abbrs.includes(word);
 }

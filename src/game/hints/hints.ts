@@ -59,7 +59,7 @@ export function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${JSON.stringify(x)}`);
 }
 
-function lettersFromMask(mask: number): string[] {
+export function lettersFromMask(mask: number): string[] {
   const letters: string[] = [];
 
   for (let i = 0; i < 26; i++) {

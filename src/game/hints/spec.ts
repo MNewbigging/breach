@@ -1,6 +1,7 @@
 export type Relation = ">" | "=" | "<";
 export type LetterType = "vowel" | "consonant";
 export type HintTier = "weak" | "medium" | "strong";
+export type HintType = HintSpec["type"];
 
 export type HintSpec =
   // Positional
@@ -22,7 +23,7 @@ export type HintSpec =
   | { type: "duplicate-characters"; hasDuplicates: boolean }
   | { type: "distinct-count"; count: number }
   | { type: "min-distinct-count"; min: number }
-  | { type: "letter-count"; letter: string; count: number }
+  | { type: "letter-count"; letter: string; count: number } // pretty strong
   | { type: "contains-one-of"; mask: number }
   | { type: "contains-none-of"; mask: number }
 

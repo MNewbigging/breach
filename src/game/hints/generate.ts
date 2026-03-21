@@ -52,18 +52,20 @@ export function getHintSpecs(password: string, seed: number) {
   const minVowels = minVowelCount(password, rng);
   if (minVowels > 0) specs.push({ type: "vowel-min", minVowels });
 
-  specs.push({
+  const dupeSpec: HintSpec = {
     type: "duplicate-characters",
     hasDuplicates: hasDuplicateChars(password),
-  });
+  };
+  specs.push(dupeSpec);
 
-  specs.push({ type: "distinct-count", count: distinctCount(password) });
-  const minDistinct = minDistinctCount(password, rng);
-  if (minDistinct > 1) {
-    specs.push({
-      type: "min-distinct-count",
-      min: minDistinctCount(password, rng),
-    });
+  // Some hints don't make sense without there being dupe chars
+  if (dupeSpec.hasDuplicates) {
+    specs.push({ type: "distinct-count", count: distinctCount(password) });
+    // Removing for now as it seems a bit pointless
+    // specs.push({
+    //   type: "min-distinct-count",
+    //   min: minDistinctCount(password, rng),
+    // });
   }
 
   const minAM = atLeastFromAM(password, rng);
